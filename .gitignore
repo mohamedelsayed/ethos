@@ -1,0 +1,8 @@
+.env
+/nbproject
+/nbproject/private/
+.settings/
+.project
+vendor
+composer.lock
+app/tmp/cache/models/*
