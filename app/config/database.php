@@ -26,7 +26,6 @@
  * @package       cake
  * @subpackage    cake.config
  */
-
 /**
  * Database configuration class.
  * You can specify multiple configurations for production, development and testing.
@@ -73,15 +72,24 @@
  * database.  Uses database default.
  *
  */
+require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+$dotenv = new Dotenv\Dotenv(dirname(dirname(__DIR__)));
+$dotenv->load();
+define('DB_HOST', getenv('DB_HOST'));
+define('DB_DATABASE', getenv('DB_DATABASE'));
+define('DB_USERNAME', getenv('DB_USERNAME'));
+define('DB_PASSWORD', getenv('DB_PASSWORD'));
+ini_set('max_execution_time', 0);
+
 class DATABASE_CONFIG {
 
     var $default = array(
         'driver' => 'mysql',
         'persistent' => false,
-        'host' => 'localhost',
-        'login' => 'root',
-        'password' => 'root',
-        'database' => 'ethos',
+        'host' => DB_HOST,
+        'login' => DB_USERNAME,
+        'password' => DB_PASSWORD,
+        'database' => DB_DATABASE,
         'prefix' => '',
         'encoding' => 'utf8'
     );
