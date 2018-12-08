@@ -1,4 +1,6 @@
-<?php echo $this->element('front'.DS.'breadcrumb', array('tree' => $tree));?>
+<?php
+
+echo $this->element('front'.DS.'breadcrumb', array('tree' => $tree));?>
 <div id="tab-2" class="tab-content current" style="width: 100%;">
     <div class="tab-content_top" style="width: 100%;min-height: 250px;">
         <div class="top_con">
@@ -8,24 +10,24 @@
                 include_once 'testimonials.php';
             }elseif(isset($whoiswho) && $whoiswho == 1){
                 include_once 'whoiswho.php';
-            }else{?>           
+            }else{?>
                 <?php if(isset($image) && trim($image) != ''){?>
-                    <div class="img_about">
-                        <a><img src="<?php echo $image;?>"/></a>
-                    </div> 
+            <div class="img_about">
+                <a><img src="<?php echo $image;?>"/></a>
+            </div>
                 <?php }?>
                 <?php if(trim(strip_tags($body)) != ''){?>
-                    <div class="page_body_div">
+            <div class="page_body_div">
                         <?php $resize->check_string_images($body);?>
                         <?php echo $body;?>
                         <?php if(isset($pdf_file)){
                             if(trim($pdf_file) != ''){?>
-                                <div class="page_pdf_file">
-                                    <a target="_blank" href="<?php echo $pdf_file;?>"><?php echo $pdf_name;?></a>
-                                </div>
+                <div class="page_pdf_file">
+                    <a target="_blank" href="<?php echo $pdf_file;?>"><?php echo $pdf_name;?></a>
+                </div>
                             <?php }
                         }?>
-                    </div>
+            </div>
                 <?php }?>
             <?php }?>
             <?php if(isset($admissions) && $admissions == 1){
@@ -38,17 +40,17 @@
     include_once 'mission_vision_values.php';
 }?>
 <script type="text/javascript">
-$(document).ready(function(){
-    $('.page_body_div img').each(function(){
-        $(this).css('height', 'auto');
+    $(document).ready(function () {
+        $('.page_body_div img').each(function () {
+            $(this).css('height', 'auto');
+        });
+        $('.page_body_div table').each(function () {
+            $(this).css('width', '100%');
+            $(this).attr('cellspacing', 0);
+            $(this).attr('cellpadding', 0);
+            $(this).attr('border', 0);
+        });
     });
-    $('.page_body_div table').each(function(){
-        $(this).css('width', '100%');
-        $(this).attr('cellspacing', 0);
-        $(this).attr('cellpadding', 0);
-        $(this).attr('border', 0);
-    });
-});
 </script>
 <style type="text/css">
     .page_body_div a{
