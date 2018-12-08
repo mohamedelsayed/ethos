@@ -4,7 +4,7 @@ echo $this->Html->css(array('front/jquery-ui', 'front/admissions'));
 echo $this->Javascript->link(array('front/jquery-ui'));
 $yes_no_options = array('Yes', 'No');
 $image_extensions = '.jpeg,.png,.gif,.jpg';
-$selected = 'selected="selected"';
+$selected = ' selected="selected" ';
 $gender_options = array('Male', 'Female');
 $parental_marital_status_options = array('Married', 'Divorced', 'Separated', 'Widowed');
 echo $this->Form->create('admissions', array('type' => 'file', 'id' => 'admissionsform', 'class' => 'admissions', 'url' => $base_url . '/page/admissionsform/notajax'));

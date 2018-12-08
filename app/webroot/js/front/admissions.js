@@ -86,31 +86,31 @@ jQuery(function () {
         show_textbox_if_value_selected("#"+id_val, '#parental_marital_status_details', 'divorced');
     });
 });
-function validate_admissions_form() {
-    var error_flag = 0;
-    var focused = 0;
-    jQuery("input."+required_input_class+", select."+required_input_class+"").each(function () {
-        validate_required_input(jQuery(this));
-    });
-    jQuery("input."+required_input_class+"[type='checkbox']").each(function () {
-        validate_required_input_checkbox(jQuery(this).attr('id'));
-    });
-//    jQuery("input."+required_input_class+"[type='file']").each(function () {
-//        validate_required_input_image(jQuery(this), this);
+//function validate_admissions_form() {
+//    var error_flag = 0;
+//    var focused = 0;
+//    jQuery("input."+required_input_class+", select."+required_input_class+"").each(function () {
+//        validate_required_input(jQuery(this));
 //    });
-    jQuery('input, select').each(function () {
-        if (jQuery(this).hasClass(required_class)) {
-            error_flag = 1;
-            if (focused == 0) {
-                focused = 1;
-                jQuery(this).focus();
-            }
-        }
-    });
-    if (error_flag === 0) {
-        send_addmission_form();
-    }
-}
+////    jQuery("input."+required_input_class+"[type='checkbox']").each(function () {
+////        validate_required_input_checkbox(jQuery(this).attr('id'));
+////    });
+////    jQuery("input."+required_input_class+"[type='file']").each(function () {
+////        validate_required_input_image(jQuery(this), this);
+////    });
+//    jQuery('input, select').each(function () {
+//        if (jQuery(this).hasClass(required_class)) {
+//            error_flag = 1;
+//            if (focused == 0) {
+//                focused = 1;
+//                jQuery(this).focus();
+//            }
+//        }
+//    });
+//    if (error_flag === 0) {
+//        send_addmission_form();
+//    }
+//}
 function send_addmission_form() {
     var formData = new FormData($('form#admissionsform')[0]);
     jQuery.ajax({
@@ -136,6 +136,7 @@ function send_addmission_form() {
 function validate_required_input(obj) {
     var val = obj.val();
     var input_type = obj.attr('type');
+    var input_id = obj.attr('id');
     var error = 0;
     if (jQuery.trim(val).length !== 0) {
         error = 0;
@@ -156,6 +157,13 @@ function validate_required_input(obj) {
             error = 0;
         }
     }
+    if (input_type == 'checkbox') {
+        if (validate_required_input_checkbox(input_id)) {
+            error = 0;
+        } else {
+            error = 1;
+        }
+    }    
     if (error == 0) {
         if (obj.hasClass(required_class)) {
             obj.removeClass(required_class);
@@ -176,14 +184,17 @@ function isNumeric(n) {
 }
 function validate_required_input_checkbox(obj) {
     var obj_in = jQuery('#' + obj);
-    if (jQuery('#' + obj + ':checked').length > 0) {
-        if (obj_in.hasClass(required_class)) {
-            obj_in.removeClass(required_class);
+    var obj_out = jQuery('.agree_out');
+    if (jQuery('#' + obj + ':checked').length > 0) {        
+        if (obj_out.hasClass(required_class)) {
+            obj_out.removeClass(required_class);
         }
-    } else {
-        if (!(obj_in.hasClass(required_class))) {
-            obj_in.addClass(required_class);
-        }
+        return 1;
+    } else {        
+        if (!(obj_out.hasClass(required_class))) {
+            obj_out.addClass(required_class);
+        }   
+        return 0;
     }
 }
 function validate_required_input_image(obj, objthis) {
@@ -216,7 +227,7 @@ function showTab(n) {
         document.getElementById("prevBtn").style.display = "inline";
     }
     if (n == (x.length - 1)) {
-        document.getElementById("nextBtn").innerHTML = "Submit";
+        document.getElementById("nextBtn").innerHTML = "Send";
     } else {
         document.getElementById("nextBtn").innerHTML = "Next";
     }
@@ -227,20 +238,25 @@ function nextPrev(n) {
     // This function will figure out which tab to display
     var x = document.getElementsByClassName("tab");
     // Exit the function if any field in the current tab is invalid:
-    if (n == 1 && !validateForm())
+    if (n == 1 && !validateForm()){
         return false;
+    }
     // Hide the current tab:
-    x[currentTab].style.display = "none";
+    if(x[currentTab]){
+        x[currentTab].style.display = "none";
+    }
     // Increase or decrease the current tab by 1:
     currentTab = currentTab + n;
     // if you have reached the end of the form... :
     if (currentTab >= x.length) {
         //...the form gets submitted:
-        document.getElementById("regForm").submit();
+//        document.getElementById("regForm").submit();
+        send_addmission_form();
         return false;
+    }else{
+        // Otherwise, display the correct tab:
+        showTab(currentTab);
     }
-    // Otherwise, display the correct tab:
-    showTab(currentTab);
 }
 function validateForm() {
     // This function deals with validation of the form fields
@@ -253,7 +269,7 @@ function validateForm() {
     var obj;
     var error = 0;
     var focused =0;
-    console.log(".tabIn"+currentTab+" ."+required_input_class);
+//    console.log(".tabIn"+currentTab+" ."+required_input_class);
     jQuery(".tabIn"+currentTab+" ."+required_input_class).each(function( index ) {
         obj = jQuery(this);
 //    for (i = 0; i < y.length; i++) {

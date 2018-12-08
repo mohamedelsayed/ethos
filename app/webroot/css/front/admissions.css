@@ -232,6 +232,13 @@ input[type=radio].required, input[type=checkbox].required{
 .invalid {
     background-color: #ffdddd !important;
 }
+/*input[type=radio].invalid, input[type=checkbox].invalid {
+    outline: 1px solid red;
+}*/
+.agree_out{
+    float: left;
+    width: 100%;
+}
 /* Hide all steps by default: */
 .tab {
     display: none;

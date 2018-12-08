@@ -1,3 +1,6 @@
+<?php
+
+$checked = ' checked="checked" ';?>
 <div class="tab tabIn4">
     <div class="pupil_details-title head_div orange_head"><?php echo __('5. Developmental History') ?></div>
     <div class="additional_pupils_informations-table">
@@ -14,7 +17,7 @@
                     <input type="radio" name="developmental_history<?php echo $i; ?>" value="1" />
                 </td>
                 <td class="td_center">
-                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" checked="checked" />
+                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" <?php echo $checked ;?> />
                 </td>
                 <?php $i++; ?>
             </tr>
@@ -24,7 +27,7 @@
                     <input type="radio" name="developmental_history<?php echo $i; ?>" value="1" />
                 </td>
                 <td class="td_center">
-                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" checked="checked" />
+                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" <?php echo $checked ;?> />
                 </td>
                 <?php $i++; ?>
             </tr>
@@ -34,7 +37,7 @@
                     <input type="radio" name="developmental_history<?php echo $i; ?>" value="1" />
                 </td>
                 <td class="td_center">
-                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" checked="checked" />
+                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" <?php echo $checked ;?> />
                 </td>
                 <?php $i++; ?>
             </tr>
@@ -44,7 +47,7 @@
                     <input type="radio" name="developmental_history<?php echo $i; ?>" value="1" />
                 </td>
                 <td class="td_center">
-                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" checked="checked" />
+                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" <?php echo $checked ;?> />
                 </td>
                 <?php $i++; ?>
             </tr>
@@ -54,7 +57,7 @@
                     <input type="radio" name="developmental_history<?php echo $i; ?>" value="1" />
                 </td>
                 <td class="td_center">
-                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" checked="checked" />
+                    <input type="radio" name="developmental_history<?php echo $i; ?>" value="0" <?php echo $checked ;?> />
                 </td>
                 <?php $i++; ?>
             </tr>
@@ -65,7 +68,7 @@
             </tr>
         </table>
     </div>
-    <div class="developmental_history_out">
+    <div class="agree_out">
     <?php /* <input type="hidden" name="date" value="<?php echo date('d-m-Y');?>" /> */ ?>
         <input id="i_agree" type="checkbox" name="i_agree" class="required_input" /><?php echo ('I confirm that the information provided is correct to the best of my knowledge. Failure to disclose relevant information my affect my child’s application.');?>
     </div>
