@@ -253,10 +253,9 @@ function nextPrev(n) {
 //        document.getElementById("regForm").submit();
         send_addmission_form();
         return false;
-    }else{
-        // Otherwise, display the correct tab:
-        showTab(currentTab);
     }
+        // Otherwise, display the correct tab:
+    showTab(currentTab);
 }
 function validateForm() {
     // This function deals with validation of the form fields
