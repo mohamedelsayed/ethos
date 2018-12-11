@@ -304,6 +304,35 @@ class PageController extends AppController {
 
     function admissionsform($type = 'notajax') {
         if (!empty($_POST)) {
+            $data = $_POST;
+            $this->loadModel('Request');
+            $this->data['Request']['title'] = $data['child_name'];
+            if (isset($data['i_agree'])) {
+                unset($data['i_agree']);
+            }
+            if (isset($data['_method'])) {
+                unset($data['_method']);
+            }
+            $this->data['Request']['data'] = serialize($data);
+            $lastRequest = $this->Request->find(
+                    'first', array('order' => array('Request.application_number' => 'DESC', 'Request.id' => 'DESC'))
+            );
+            $year_application_number = (date('y') * 100000) + 1;
+            $last_application_number = 0;
+            if (!empty($lastRequest)) {
+                $last_application_number = $lastRequest['Request']['application_number'];
+            }
+            $application_number = $year_application_number;
+            if ($last_application_number >= $year_application_number) {
+                $application_number = $last_application_number + 1;
+            }
+            $this->data['Request']['application_number'] = $application_number;
+            $this->Request->create();
+            if ($this->Request->save($this->data)) {
+                echo 'done';
+            }
+//            pr($_FILES);
+            exit;
             $upload_dir = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'tmpcv' . DS;
             if (!file_exists($upload_dir)) {
                 mkdir($upload_dir, 0777);

@@ -1,6 +1,8 @@
 var required_class = 'invalid';
 var required_input_class = 'required_input';
 var hiddendiv_class = 'hiddendiv';
+var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
 jQuery(function () {
     jQuery(".datepicker").datepicker({
         changeMonth: true,
@@ -24,66 +26,66 @@ jQuery(function () {
 //            jQuery(elem).attr("placeholder", label_data);
 //        }
 //    });
-    jQuery("form#admissionsform").submit(function (event) {
-        event.preventDefault();
-        validate_admissions_form();
-    });
-    jQuery(document).on("change paste keyup","input."+required_input_class+", select."+required_input_class+"",function() {
+//    jQuery("form#admissionsform").submit(function (event) {
+//        event.preventDefault();
+//        validate_admissions_form();
+//    });
+    jQuery(document).on("change paste keyup", "input." + required_input_class + ", select." + required_input_class + "", function () {
         validate_required_input(jQuery(this));
     });
 //    jQuery(':file').change(function () {
 //        validate_required_input_image(jQuery(this), this);
 //    });
-    jQuery(document).on("change","#year_group_applying_to_input",function() {
+    jQuery(document).on("change", "#year_group_applying_to_input", function () {
         var val = jQuery(this).val();
         var item1 = jQuery("#current_year_group_input");
         var previous_schools_nursery = 'previous_schools_nursery_1_';
         var item2 = jQuery('#previous_school_report');
         var i = 1;
-        if(val >= 3){
+        if (val >= 3) {
             item1.addClass(required_input_class);
             item2.addClass(required_input_class);
-            for(i = 1;i<=4;i++){
-                jQuery('#'+previous_schools_nursery+i).addClass(required_input_class);
+            for (i = 1; i <= 4; i++) {
+                jQuery('#' + previous_schools_nursery + i).addClass(required_input_class);
             }
-        }else{
+        } else {
             item1.removeClass(required_input_class);
             item1.removeClass(required_class);
             item2.removeClass(required_input_class);
             item2.removeClass(required_class);
-            for(i = 1;i<=4;i++){
-                jQuery('#'+previous_schools_nursery+i).removeClass(required_input_class);
-                jQuery('#'+previous_schools_nursery+i).removeClass(required_class);
+            for (i = 1; i <= 4; i++) {
+                jQuery('#' + previous_schools_nursery + i).removeClass(required_input_class);
+                jQuery('#' + previous_schools_nursery + i).removeClass(required_class);
             }
         }
     });
-    jQuery(document).on("change","#have_any_sibling_at_EIS",function() {
+    jQuery(document).on("change", "#have_any_sibling_at_EIS", function () {
         var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#have_any_sibling_at_EIS_pupil', 'yes');
+        show_textbox_if_value_selected("#" + id_val, '#have_any_sibling_at_EIS_pupil', 'yes');
     });
-    jQuery(document).on("change","#have_any_sibling_at_rukan",function() {
+    jQuery(document).on("change", "#have_any_sibling_at_rukan", function () {
         var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#have_any_sibling_at_rukan_pupil', 'yes');
+        show_textbox_if_value_selected("#" + id_val, '#have_any_sibling_at_rukan_pupil', 'yes');
     });
-    jQuery(document).on("change","#are_you_applying_for_any_siblings",function() {
+    jQuery(document).on("change", "#are_you_applying_for_any_siblings", function () {
         var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#are_you_applying_for_any_siblings_details', 'yes');
-    });    
-    jQuery(document).on("change","#has_the_pupil_ever_skipped_year",function() {
-        var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#has_the_pupil_ever_skipped_year_details', 'yes');
-    });    
-    jQuery(document).on("change","#has_the_pupil_ever_been_asked_to_repeat_year",function() {
-        var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#has_the_pupil_ever_been_asked_to_repeat_year_details', 'yes');
-    });    
-    jQuery(document).on("change","#has_the_pupil_ever_applied_to_EIS",function() {
-        var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#has_the_pupil_ever_applied_to_EIS_details', 'yes');
+        show_textbox_if_value_selected("#" + id_val, '#are_you_applying_for_any_siblings_details', 'yes');
     });
-    jQuery(document).on("change","#parental_marital_status",function() {
+    jQuery(document).on("change", "#has_the_pupil_ever_skipped_year", function () {
         var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#"+id_val, '#parental_marital_status_details', 'divorced');
+        show_textbox_if_value_selected("#" + id_val, '#has_the_pupil_ever_skipped_year_details', 'yes');
+    });
+    jQuery(document).on("change", "#has_the_pupil_ever_been_asked_to_repeat_year", function () {
+        var id_val = jQuery(this).attr('id');
+        show_textbox_if_value_selected("#" + id_val, '#has_the_pupil_ever_been_asked_to_repeat_year_details', 'yes');
+    });
+    jQuery(document).on("change", "#has_the_pupil_ever_applied_to_EIS", function () {
+        var id_val = jQuery(this).attr('id');
+        show_textbox_if_value_selected("#" + id_val, '#has_the_pupil_ever_applied_to_EIS_details', 'yes');
+    });
+    jQuery(document).on("change", "#parental_marital_status", function () {
+        var id_val = jQuery(this).attr('id');
+        show_textbox_if_value_selected("#" + id_val, '#parental_marital_status_details', 'divorced');
     });
 });
 //function validate_admissions_form() {
@@ -129,7 +131,7 @@ function send_addmission_form() {
         success: function (result) {
             jQuery('#admissions_ajaxLoading').hide();
             jQuery('#admissions_result').html(result).show();
-            document.getElementById("admissionsform").reset();
+//            document.getElementById("admissionsform").reset();
         }
     });
 }
@@ -163,7 +165,7 @@ function validate_required_input(obj) {
         } else {
             error = 1;
         }
-    }    
+    }
     if (error == 0) {
         if (obj.hasClass(required_class)) {
             obj.removeClass(required_class);
@@ -185,37 +187,35 @@ function isNumeric(n) {
 function validate_required_input_checkbox(obj) {
     var obj_in = jQuery('#' + obj);
     var obj_out = jQuery('.agree_out');
-    if (jQuery('#' + obj + ':checked').length > 0) {        
+    if (jQuery('#' + obj + ':checked').length > 0) {
         if (obj_out.hasClass(required_class)) {
             obj_out.removeClass(required_class);
         }
         return 1;
-    } else {        
+    } else {
         if (!(obj_out.hasClass(required_class))) {
             obj_out.addClass(required_class);
-        }   
+        }
         return 0;
     }
 }
-function validate_required_input_image(obj, objthis) {
-    var file = objthis.files[0];
-    if (typeof file !== typeof undefined && file !== false) {
-        var name = file.name;
-//        var size = file.size;
-//        var type = file.type;
-        var ext = name.substr(name.lastIndexOf('.') + 1);
-        var ext = ext.toLowerCase();
-        if (ext == 'jpeg' || ext == 'png' || ext == 'gif' || ext == 'jpg') {
-            obj.removeClass(required_class);
-        } else {
-            obj.addClass(required_class);
-        }
-    } else {
-        obj.addClass(required_class);
-    }
-}
-var currentTab = 0; // Current tab is set to be the first tab (0)
-showTab(currentTab); // Display the current tab
+//function validate_required_input_image(obj, objthis) {
+//    var file = objthis.files[0];
+//    if (typeof file !== typeof undefined && file !== false) {
+//        var name = file.name;
+////        var size = file.size;
+////        var type = file.type;
+//        var ext = name.substr(name.lastIndexOf('.') + 1);
+//        var ext = ext.toLowerCase();
+//        if (ext == 'jpeg' || ext == 'png' || ext == 'gif' || ext == 'jpg') {
+//            obj.removeClass(required_class);
+//        } else {
+//            obj.addClass(required_class);
+//        }
+//    } else {
+//        obj.addClass(required_class);
+//    }
+//}
 function showTab(n) {
     // This function will display the specified tab of the form ...
     var x = document.getElementsByClassName("tab");
@@ -238,54 +238,46 @@ function nextPrev(n) {
     // This function will figure out which tab to display
     var x = document.getElementsByClassName("tab");
     // Exit the function if any field in the current tab is invalid:
-    if (n == 1 && !validateForm()){
+    if (n == 1 && !validateForm()) {
         return false;
     }
-    // Hide the current tab:
-    if(x[currentTab]){
-        x[currentTab].style.display = "none";
-    }
+    var lastTab = currentTab;
     // Increase or decrease the current tab by 1:
     currentTab = currentTab + n;
     // if you have reached the end of the form... :
     if (currentTab >= x.length) {
-        //...the form gets submitted:
-//        document.getElementById("regForm").submit();
         send_addmission_form();
+        currentTab = currentTab - n;
         return false;
+    } else {
+        if (x[lastTab]) {
+            x[lastTab].style.display = "none";
+        }
+        showTab(currentTab);
     }
-        // Otherwise, display the correct tab:
-    showTab(currentTab);
 }
 function validateForm() {
     // This function deals with validation of the form fields
     var x, y, i, valid = true;
     x = document.getElementsByClassName("tab");
 //    y = x[currentTab].getElementsByTagName("input");
-    y = x[currentTab].getElementsByClassName(required_input_class);    
+    y = x[currentTab].getElementsByClassName(required_input_class);
     // A loop that checks every input field in the current tab:
     i = 0;
     var obj;
     var error = 0;
-    var focused =0;
+    var focused = 0;
 //    console.log(".tabIn"+currentTab+" ."+required_input_class);
-    jQuery(".tabIn"+currentTab+" ."+required_input_class).each(function( index ) {
+    jQuery(".tabIn" + currentTab + " ." + required_input_class).each(function (index) {
         obj = jQuery(this);
-//    for (i = 0; i < y.length; i++) {
-        // If a field is empty...
-//        if (y[i].value == "") {
-            // add an "invalid" class to the field:
-//            y[i].className += " invalid";
-//            // and set the current valid status to false:
-//            valid = false;
-            error= validate_required_input(obj);
-            if(error){
-                valid = false;
-                if(focused == 0){
-                   obj.focus();
-                    focused =1
-                }
+        error = validate_required_input(obj);
+        if (error) {
+            valid = false;
+            if (focused == 0) {
+                obj.focus();
+                focused = 1
             }
+        }
     });
     // If the valid status is true, mark the step as finished and valid:
     if (valid) {
@@ -302,13 +294,13 @@ function fixStepIndicator(n) {
     //... and adds the "active" class to the current step:
     x[n].className += " active";
 }
-function show_textbox_if_value_selected(selector1, selector2, value){
+function show_textbox_if_value_selected(selector1, selector2, value) {
     var val = jQuery(selector1).val();
     var item = jQuery(selector2);
-    if(val.toLowerCase() == value){
+    if (val.toLowerCase() == value) {
         item.addClass(required_input_class);
         item.closest('.input_new').removeClass(hiddendiv_class);
-    }else{
+    } else {
         item.removeClass(required_input_class);
         item.removeClass(required_class);
         item.closest('.input_new').addClass(hiddendiv_class);

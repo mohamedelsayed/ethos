@@ -262,3 +262,12 @@ input[type=radio].required, input[type=checkbox].required{
 .step.finish {
     background-color: #4CAF50;
 }
+.i_agree{
+    float: left;
+    margin-top: 7px;
+}
+.i_agree_label{
+    display: inline-block;
+    width: 95%;
+    white-space: initial;
+}
