@@ -21,7 +21,7 @@ class PageController extends AppController {
     }
 
     function show($cat_id, $childid = 0) {
-        $base_url = $this->Session->read('Setting.url');
+        $base_url = $this->getBaseUrl();
         $tree = array();
         $image = '';
         $this->loadModel('Cat');
@@ -159,7 +159,7 @@ class PageController extends AppController {
         $pdf_name = '';
         if (isset($child_cat['Cat']['pdf_file'])) {
             if (trim($child_cat['Cat']['pdf_file']) != '') {
-                $pdf_file = $this->Session->read('Setting.url') . "/app/webroot/files/upload/" . $child_cat['Cat']['pdf_file'];
+                $pdf_file = $base_url . "/app/webroot/files/upload/" . $child_cat['Cat']['pdf_file'];
                 $pdf_name = str_replace('.pdf', '', $child_cat['Cat']['pdf_file']);
                 $pdf_name = substr($pdf_name, 0, strrpos($pdf_name, "_"));
                 $pdf_name = 'Click here for ' . str_replace('_', ' ', $pdf_name);
@@ -303,8 +303,10 @@ class PageController extends AppController {
     }
 
     function admissionsform($type = 'notajax') {
-        if (!empty($_POST)) {
-            $data = $_POST;
+        $admissionCatId = 23;
+        $data = $_POST;
+        $files = $_FILES;
+        if (!empty($data)) {
             $this->loadModel('Request');
             $this->data['Request']['title'] = $data['child_name'];
             if (isset($data['i_agree'])) {
@@ -313,75 +315,66 @@ class PageController extends AppController {
             if (isset($data['_method'])) {
                 unset($data['_method']);
             }
+            $filesData = [];
+            if (!empty($files)) {
+                foreach ($files as $key => $fileIn) {
+                    $filesData[$key] = $this->uploadAdmissionFile($fileIn);
+                }
+            }
+            $data['filesData'] = $filesData;
+            $parentMail1 = '';
+            if (isset($data['parent_informations23'])) {
+                $parentMail1 = $data['parent_informations23'];
+            }
+            $parentMail2 = '';
+            if (isset($data['parent_informations24'])) {
+                $parentMail2 = $data['parent_informations24'];
+            }
             $this->data['Request']['data'] = serialize($data);
-            $lastRequest = $this->Request->find(
-                    'first', array('order' => array('Request.application_number' => 'DESC', 'Request.id' => 'DESC'))
-            );
-            $year_application_number = (date('y') * 100000) + 1;
-            $last_application_number = 0;
-            if (!empty($lastRequest)) {
-                $last_application_number = $lastRequest['Request']['application_number'];
-            }
-            $application_number = $year_application_number;
-            if ($last_application_number >= $year_application_number) {
-                $application_number = $last_application_number + 1;
-            }
+            $application_number = $this->generateApplicationNumber();
             $this->data['Request']['application_number'] = $application_number;
             $this->Request->create();
+            $saved = false;
             if ($this->Request->save($this->data)) {
-                echo 'done';
+                $saved = true;
             }
-//            pr($_FILES);
-            exit;
-            $upload_dir = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'tmpcv' . DS;
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0777);
-            }
-            $current_year = date('Y');
-            $current_month = date('m');
-            $dir_name_with_year = $upload_dir . '/' . $current_year;
-            if (!file_exists($dir_name_with_year)) {
-                mkdir($dir_name_with_year, 0777);
-            }
-            $dir_name_with_month = $upload_dir . '/' . $current_year . '/' . $current_month;
-            if (!file_exists($dir_name_with_month)) {
-                mkdir($dir_name_with_month, 0777);
-            }
-            $final_upload_dir = $upload_dir . '/' . $current_year . '/' . $current_month . '/';
-            $file_path = '';
-            if (isset($_FILES['file']['name']) && $_FILES['file']['name'] != '') {
-                $file_name = str_replace("#", "_", basename($_FILES['file']['name']));
-                $file_name = str_replace("?", "_", $file_name);
-                $file_name = str_replace(" ", "_", $file_name);
-                $file = $final_upload_dir . $file_name;
-                if (file_exists($file)) {
-                    $file_name = time() . $file_name;
-                }
-                $file = $final_upload_dir . $file_name;
-                if (isset($_FILES['file']['tmp_name']) && $_FILES['file']['tmp_name'] != '') {
-                    if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
-                        $file_path = $file;
-                    }
-                }
-            }
-            $this->loadModel('Setting');
-            $settings = $this->Setting->read(null, 1);
             $this->loadModel('Cat');
-            $cat = $this->Cat->read(null, 23);
+            $cat = $this->Cat->read(null, $admissionCatId);
             $to = $cat['Cat']['to_email'];
             $from = $to;
             $subject = $cat['Cat']['title'];
-            $this->Email->to = $to;
-            $this->Email->subject = $subject;
-            $this->Email->replyTo = $from;
-            $this->Email->from = $subject . '<' . $from . '>';
-            $this->Email->sendAs = 'html';
-            $this->Email->template = 'admissions';
-            if ($file_path != '') {
-                $this->Email->attachments = array($file_path);
+            $body = '<b>this is a test mail.</b>';
+            $mailSent = $this->sendMail($to, $subject, $body, $from);
+            if ($parentMail1 != '') {
+                $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
             }
-            $html = '';
-            $tr_html = '<tr>
+            if ($parentMail2 != '') {
+                $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
+            }
+            if ($mailSent) {
+                echo __('<span style="color:#00FF00;">Thank you for your message. He will get back to you the soonest.</span>', true);
+                //echo __('Thank you for your message. He will get back to you the soonest.', true);
+            } else {
+                echo __('There was a problem sending the Email. Please try again.', true);
+            }
+            if ($type == 'notajax') {
+                $this->redirect($this->getBaseUrl() . '/');
+            } elseif ($type == 'ajax') {
+                $this->autoRender = false;
+            }
+        }
+        exit;
+        $this->Email->to = $to;
+        $this->Email->subject = $subject;
+        $this->Email->replyTo = $from;
+        $this->Email->from = $subject . '<' . $from . '>';
+        $this->Email->sendAs = 'html';
+        $this->Email->template = 'admissions';
+        if ($file_path != '') {
+            $this->Email->attachments = array($file_path);
+        }
+        $html = '';
+        $tr_html = '<tr>
                     <td class="td_left">
                         <font class="element">{{key}}:</font>
                     </td>
@@ -389,38 +382,38 @@ class PageController extends AppController {
                         <font class="element">{{value}}</font>
                     </td>
                 </tr>';
-            $inputs = array('child_name' => 'Child’s Name', 'birth_date' => 'Date of Birth',
-                'year_group_applying_to_input' => 'Year group applying to',
-                'requested_date_of_entry_to_the_school' => 'Requested date of entry to the school',
-                'date' => 'Date');
-            foreach ($inputs as $k => $v) {
-                if ($k == 'date') {
-                    $key = $v;
-                    $value = date('d-m-Y');
-                    $html .= str_replace(array('{{key}}', '{{value}}'), array($key, $value), $tr_html);
-                } elseif (isset($_POST[$k])) {
-                    $key = $v;
-                    $value = $_POST[$k];
-                    $html .= str_replace(array('{{key}}', '{{value}}'), array($key, $value), $tr_html);
-                }
+        $inputs = array('child_name' => 'Child’s Name', 'birth_date' => 'Date of Birth',
+            'year_group_applying_to_input' => 'Year group applying to',
+            'requested_date_of_entry_to_the_school' => 'Requested date of entry to the school',
+            'date' => 'Date');
+        foreach ($inputs as $k => $v) {
+            if ($k == 'date') {
+                $key = $v;
+                $value = date('d-m-Y');
+                $html .= str_replace(array('{{key}}', '{{value}}'), array($key, $value), $tr_html);
+            } elseif (isset($_POST[$k])) {
+                $key = $v;
+                $value = $_POST[$k];
+                $html .= str_replace(array('{{key}}', '{{value}}'), array($key, $value), $tr_html);
             }
-            $space_html = '<tr><td colspan="2" align="center" height="30"></td></tr>';
-            $head_html = '<tr class="head">
+        }
+        $space_html = '<tr><td colspan="2" align="center" height="30"></td></tr>';
+        $head_html = '<tr class="head">
                 <td height="30" colspan="2" class="title_td">
                     <font class="title">
                         <strong>{{head}}</strong>
                     </font>
                 </td>
             </tr>';
-            $head_html = $space_html . $head_html . $space_html;
-            $html .= str_replace(array('{{head}}'), array('1. Pupil Details'), $head_html);
-            for ($i = 1; $i <= 10; $i++) {
-                $pupil_details[$i] = '';
-                if (isset($_POST['pupil_details' . $i])) {
-                    $pupil_details[$i] = $_POST['pupil_details' . $i];
-                }
+        $head_html = $space_html . $head_html . $space_html;
+        $html .= str_replace(array('{{head}}'), array('1. Pupil Details'), $head_html);
+        for ($i = 1; $i <= 10; $i++) {
+            $pupil_details[$i] = '';
+            if (isset($_POST['pupil_details' . $i])) {
+                $pupil_details[$i] = $_POST['pupil_details' . $i];
             }
-            $html .= '<tr><td colspan="2"><table border="1" class="admissions">
+        }
+        $html .= '<tr><td colspan="2"><table border="1" class="admissions">
                 <tr>
                     <td class="td_center is_head">Pupil\'s Name</td>
                     <td class="td_center is_head">Father\'s Name</td>
@@ -455,39 +448,39 @@ class PageController extends AppController {
                     <td colspan="2">' . $pupil_details[10] . '</td>
                 </tr>
             </table></td></tr>';
-            if (isset($_POST['egyptian_ministry_exams']) || isset($_POST['transportation'])) {
-                $html .= '<tr><td colspan="2">';
-                if (isset($_POST['egyptian_ministry_exams'])) {
-                    $html .= '<div class="pupil_details-title head_div head_div_left">1.1. Applicants with foreign non-Arab nationality:</div>
+        if (isset($_POST['egyptian_ministry_exams']) || isset($_POST['transportation'])) {
+            $html .= '<tr><td colspan="2">';
+            if (isset($_POST['egyptian_ministry_exams'])) {
+                $html .= '<div class="pupil_details-title head_div head_div_left">1.1. Applicants with foreign non-Arab nationality:</div>
                     <div>
                         Will the pupil be exempted from the Egyptian Ministry exams? ';
-                    if ($_POST['egyptian_ministry_exams'] == 1) {
-                        $html .= 'YES';
-                    } else {
-                        $html .= 'NO';
-                    }
-                    $html .= '</div>';
+                if ($_POST['egyptian_ministry_exams'] == 1) {
+                    $html .= 'YES';
+                } else {
+                    $html .= 'NO';
                 }
-                if (isset($_POST['transportation'])) {
-                    $html .= '<div class="pupil_details-title head_div head_div_left">
+                $html .= '</div>';
+            }
+            if (isset($_POST['transportation'])) {
+                $html .= '<div class="pupil_details-title head_div head_div_left">
                         1.2. Will the pupil require bus transportation? ';
-                    if ($_POST['transportation'] == 1) {
-                        $html .= 'YES';
-                    } else {
-                        $html .= 'NO';
-                    }
-                    $html .= '</div>';
+                if ($_POST['transportation'] == 1) {
+                    $html .= 'YES';
+                } else {
+                    $html .= 'NO';
                 }
-                $html .= '</td></tr>';
+                $html .= '</div>';
             }
-            $html .= str_replace(array('{{head}}'), array('2. Parent Information'), $head_html);
-            for ($i = 1; $i <= 22; $i++) {
-                $parent_informations[$i] = '';
-                if (isset($_POST['parent_informations' . $i])) {
-                    $parent_informations[$i] = $_POST['parent_informations' . $i];
-                }
+            $html .= '</td></tr>';
+        }
+        $html .= str_replace(array('{{head}}'), array('2. Parent Information'), $head_html);
+        for ($i = 1; $i <= 22; $i++) {
+            $parent_informations[$i] = '';
+            if (isset($_POST['parent_informations' . $i])) {
+                $parent_informations[$i] = $_POST['parent_informations' . $i];
             }
-            $html .= '<tr><td colspan="2">
+        }
+        $html .= '<tr><td colspan="2">
                 <table border="1" class="odd_even_table">
                     <tr>
                         <td class="td_center is_head"></td>
@@ -551,32 +544,32 @@ class PageController extends AppController {
                     </tr>
                 </table>
             </td></tr>';
-            if (isset($_POST['marital_status']) || isset($_POST['marital_status_custody'])) {
-                $html .= '<tr><td colspan="2">';
-                if (isset($_POST['marital_status'])) {
-                    $html .= '<div class="parent_informations-title head_div head_div_left">2.1. Parental marital status:';
-                    if ($_POST['marital_status'] == 1) {
-                        $html .= 'Married';
-                    } else {
-                        $html .= 'Divorced';
-                    }
-                    if (isset($_POST['marital_status_custody']) && trim($_POST['marital_status_custody']) != '') {
-                        $html .= ' (if so, custody is with: ' . $_POST['marital_status_custody'] . ')';
-                    }
-                    $html .= '</div>';
+        if (isset($_POST['marital_status']) || isset($_POST['marital_status_custody'])) {
+            $html .= '<tr><td colspan="2">';
+            if (isset($_POST['marital_status'])) {
+                $html .= '<div class="parent_informations-title head_div head_div_left">2.1. Parental marital status:';
+                if ($_POST['marital_status'] == 1) {
+                    $html .= 'Married';
+                } else {
+                    $html .= 'Divorced';
                 }
-                $html .= '</td></tr>';
+                if (isset($_POST['marital_status_custody']) && trim($_POST['marital_status_custody']) != '') {
+                    $html .= ' (if so, custody is with: ' . $_POST['marital_status_custody'] . ')';
+                }
+                $html .= '</div>';
             }
-            $html .= '<tr><td colspan="2"><div class="parent_informations-title head_div head_div_left">2.2. Siblings:</div></td></tr>';
-            for ($i = 1; $i <= 4; $i++) {
-                for ($j = 1; $j <= 4; $j++) {
-                    $siblings[$i][$j] = '';
-                    if (isset($_POST['parent_informations' . $i])) {
-                        $siblings[$i][$j] = $_POST['siblings_' . $i . '_' . $j];
-                    }
+            $html .= '</td></tr>';
+        }
+        $html .= '<tr><td colspan="2"><div class="parent_informations-title head_div head_div_left">2.2. Siblings:</div></td></tr>';
+        for ($i = 1; $i <= 4; $i++) {
+            for ($j = 1; $j <= 4; $j++) {
+                $siblings[$i][$j] = '';
+                if (isset($_POST['parent_informations' . $i])) {
+                    $siblings[$i][$j] = $_POST['siblings_' . $i . '_' . $j];
                 }
             }
-            $html .= '<tr><td colspan="2">
+        }
+        $html .= '<tr><td colspan="2">
                 <table border="1" class="odd_even_table">
                     <tr>
                         <td class="td_center is_head">Name</td>
@@ -584,83 +577,83 @@ class PageController extends AppController {
                         <td class="td_center is_head">Year</td>
                         <td class="td_center is_head">Current School</td>
                     </tr>';
-            for ($i = 1; $i <= 4; $i++) {
-                $html .= '<tr>';
-                for ($j = 1; $j <= 4; $j++) {
-                    $html .= '<td class="td_center">' . $siblings[$i][$j] . '</td>';
-                }
-                $html .= '</tr>';
+        for ($i = 1; $i <= 4; $i++) {
+            $html .= '<tr>';
+            for ($j = 1; $j <= 4; $j++) {
+                $html .= '<td class="td_center">' . $siblings[$i][$j] . '</td>';
             }
-            $html .= '</table>
+            $html .= '</tr>';
+        }
+        $html .= '</table>
             </td></tr>';
-            $html .= str_replace(array('{{head}}'), array('3.Additional Pupils Information'), $head_html);
-            for ($i = 1; $i <= 20; $i++) {
-                for ($j = 1; $j <= 5; $j++) {
-                    $additional_pupils_informations[$i . '_' . $j] = '';
-                    if (isset($_POST['previous_schools_nursery_' . $i . '_' . $j])) {
-                        $additional_pupils_informations[$i . '_' . $j] = $_POST['previous_schools_nursery_' . $i . '_' . $j];
-                    }
+        $html .= str_replace(array('{{head}}'), array('3.Additional Pupils Information'), $head_html);
+        for ($i = 1; $i <= 20; $i++) {
+            for ($j = 1; $j <= 5; $j++) {
+                $additional_pupils_informations[$i . '_' . $j] = '';
+                if (isset($_POST['previous_schools_nursery_' . $i . '_' . $j])) {
+                    $additional_pupils_informations[$i . '_' . $j] = $_POST['previous_schools_nursery_' . $i . '_' . $j];
                 }
             }
-            $html .= '<tr><td colspan="2">
+        }
+        $html .= '<tr><td colspan="2">
             <table border="1" class="odd_even_table">
             <tr>
                 <td class="td_center is_head">Name of Previous School <br />(Nursery to Y6)<br /> (most recent first)</td>
                 <td class="td_center td_years_attended is_head">Years Attended</td>
                 <td class="td_center td_year_group_form_grade is_head">Year Group/ Form / Grade</td>
                 <td class="td_center is_head">Curriculum Type<br />(US – UK – Egyptian – Other)</td>';
-            //<td class="td_center is_head" style="width: 15%;">School Location</td>
+        //<td class="td_center is_head" style="width: 15%;">School Location</td>
+        $html .= '</tr>';
+        for ($i = 1; $i <= 5; $i++) {
+            $html .= '<tr>';
+            for ($j = 1; $j <= 4; $j++) {
+                $html .= '<td class="td_center">' . $additional_pupils_informations[$i . '_' . $j] . '</td>';
+            }
             $html .= '</tr>';
-            for ($i = 1; $i <= 5; $i++) {
-                $html .= '<tr>';
-                for ($j = 1; $j <= 4; $j++) {
-                    $html .= '<td class="td_center">' . $additional_pupils_informations[$i . '_' . $j] . '</td>';
-                }
-                $html .= '</tr>';
-            }
-            $html .= '</table>
+        }
+        $html .= '</table>
             </td></tr>';
-            $html .= '<tr><td colspan="2">';
-            $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.1 Has the pupil ever skipped a year? ';
-            if ($_POST['pupil_skipped'] == 1) {
-                $html .= 'YES';
-            } else {
-                $html .= 'NO';
-            }
-            if (trim($_POST['pupil_skipped_details']) != '') {
-                $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_skipped_details'];
-            }
-            $html .= '</div>';
-            $html .= '</td></tr>';
-            $html .= '<tr><td colspan="2">';
-            $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.2 Has the pupil ever been asked to repeat a year? ';
-            if ($_POST['pupil_repeat'] == 1) {
-                $html .= 'YES';
-            } else {
-                $html .= 'NO';
-            }
-            if (trim($_POST['pupil_repeat_details']) != '') {
-                $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_repeat_details'];
-            }
-            $html .= '</div>';
-            $html .= '</td></tr>';
-            $html .= '<tr><td colspan="2">';
-            $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.3 Has the pupil ever applied to Ethos International School? ';
-            if ($_POST['pupil_applied'] == 1) {
-                $html .= 'YES';
-            } else {
-                $html .= 'NO';
-            }
-            if (trim($_POST['pupil_applied_details']) != '') {
-                $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_applied_details'];
-            }
-            $html .= '</div>';
-            $html .= '</td></tr>';
-            $html .= '<tr><td colspan="2">';
-            $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.4 In case of emergency and the school is unable to contact the Parents, please notify: ';
-            $html .= '</div>';
-            $html .= '</td></tr>';
-            $html .= '<tr><td colspan="2">
+        $html .= '<tr><td colspan="2">';
+        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.1 Has the pupil ever skipped a year? ';
+        if ($_POST['pupil_skipped'] == 1) {
+            $html .= 'YES';
+        } else {
+            $html .= 'NO';
+        }
+        if (trim($_POST['pupil_skipped_details']) != '') {
+            $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_skipped_details'];
+        }
+        $html .= '</div>';
+        $html .= '</td></tr>';
+        $html .= '<tr><td colspan="2">';
+        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.2 Has the pupil ever been asked to repeat a year? ';
+        if ($_POST['pupil_repeat'] == 1) {
+            $html .= 'YES';
+        } else {
+            $html .= 'NO';
+        }
+        if (trim($_POST['pupil_repeat_details']) != '') {
+            $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_repeat_details'];
+        }
+        $html .= '</div>';
+        $html .= '</td></tr>';
+        $html .= '<tr><td colspan="2">';
+        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.3 Has the pupil ever applied to Ethos International School? ';
+        if ($_POST['pupil_applied'] == 1) {
+            $html .= 'YES';
+        } else {
+            $html .= 'NO';
+        }
+        if (trim($_POST['pupil_applied_details']) != '') {
+            $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_applied_details'];
+        }
+        $html .= '</div>';
+        $html .= '</td></tr>';
+        $html .= '<tr><td colspan="2">';
+        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.4 In case of emergency and the school is unable to contact the Parents, please notify: ';
+        $html .= '</div>';
+        $html .= '</td></tr>';
+        $html .= '<tr><td colspan="2">
                 <table border="1" class="odd_even_table">
                     <tr>
                         <td class="td_center is_head">Name</td>
@@ -668,124 +661,178 @@ class PageController extends AppController {
                         <td class="td_center is_head">Home telephone</td>
                         <td class="td_center is_head">Mobile number</td>
                     </tr>';
-            for ($i = 1; $i <= 2; $i++) {
-                $html .= '<tr>';
-                for ($j = 1; $j <= 4; $j++) {
-                    $html .= '<td class="td_center">';
-                    if (isset($_POST['emergency_' . $i . '_' . $j])) {
-                        $html .= $_POST['emergency_' . $i . '_' . $j] . ' ';
-                    }
-                    $html .= '</td>';
+        for ($i = 1; $i <= 2; $i++) {
+            $html .= '<tr>';
+            for ($j = 1; $j <= 4; $j++) {
+                $html .= '<td class="td_center">';
+                if (isset($_POST['emergency_' . $i . '_' . $j])) {
+                    $html .= $_POST['emergency_' . $i . '_' . $j] . ' ';
                 }
-                $html .= '</tr>';
+                $html .= '</td>';
             }
-            $html .= '</table>
+            $html .= '</tr>';
+        }
+        $html .= '</table>
             </td></tr>';
-            $html .= str_replace(array('{{head}}'), array('4. Developmental History'), $head_html);
-            $html .= '<tr><td colspan="2">';
-            $html .= '<table border="1" class="odd_even_table">
+        $html .= str_replace(array('{{head}}'), array('4. Developmental History'), $head_html);
+        $html .= '<tr><td colspan="2">';
+        $html .= '<table border="1" class="odd_even_table">
             <tr>
                 <td class="td_center td_left is_head">Does your child have any of the following developmental issues</td>
                 <td class="td_center td_years_attended is_head">Yes</td>
                 <td class="td_center td_year_group_form_grade is_head">No</td>
             </tr>';
-            $i = 0;
-            $right_mark = '&#10004;';
-            $html .= '<tr>
+        $i = 0;
+        $right_mark = '&#10004;';
+        $html .= '<tr>
             <td class="td_center td_left">Attention Deficit Disorder / Hyperactive</td>
             <td class="td_center ">';
-            if ($_POST['developmental_history' . $i] == 1) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>
+        if ($_POST['developmental_history' . $i] == 1) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>
             <td class="td_center">';
-            if ($_POST['developmental_history' . $i] == 0) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>';
-            $i++;
-            $html .= '</tr>
+        if ($_POST['developmental_history' . $i] == 0) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>';
+        $i++;
+        $html .= '</tr>
             <tr>
                 <td class="td_center td_left">Speech and Language Disorder</td>
                 <td class="td_center ">';
-            if ($_POST['developmental_history' . $i] == 1) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>
+        if ($_POST['developmental_history' . $i] == 1) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>
             <td class="td_center">';
-            if ($_POST['developmental_history' . $i] == 0) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>';
-            $i++;
-            $html .= '</tr>
+        if ($_POST['developmental_history' . $i] == 0) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>';
+        $i++;
+        $html .= '</tr>
             <tr>
                 <td class="td_center td_left">Developmental Delay</td>
                 <td class="td_center ">';
-            if ($_POST['developmental_history' . $i] == 1) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>
+        if ($_POST['developmental_history' . $i] == 1) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>
             <td class="td_center">';
-            if ($_POST['developmental_history' . $i] == 0) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>';
-            $i++;
-            $html .= '</tr>';
-            $html .= '<tr>
+        if ($_POST['developmental_history' . $i] == 0) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>';
+        $i++;
+        $html .= '</tr>';
+        $html .= '<tr>
                 <td class="td_center td_left">Behavioral Issues</td>
                 <td class="td_center ">';
-            if ($_POST['developmental_history' . $i] == 1) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>
+        if ($_POST['developmental_history' . $i] == 1) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>
             <td class="td_center">';
-            if ($_POST['developmental_history' . $i] == 0) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>';
-            $i++;
-            $html .= '</tr>';
-            $html .= '<tr>
+        if ($_POST['developmental_history' . $i] == 0) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>';
+        $i++;
+        $html .= '</tr>';
+        $html .= '<tr>
                 <td class="td_center td_left">Has your child been diagnosed / assessed for any learning disabilities / challenges</td>
                 <td class="td_center ">';
-            if ($_POST['developmental_history' . $i] == 1) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>
+        if ($_POST['developmental_history' . $i] == 1) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>
             <td class="td_center">';
-            if ($_POST['developmental_history' . $i] == 0) {
-                $html .= $right_mark;
-            }
-            $html .= '</td>';
-            $i++;
-            $html .= '</tr>';
-            $html .= '<tr>
+        if ($_POST['developmental_history' . $i] == 0) {
+            $html .= $right_mark;
+        }
+        $html .= '</td>';
+        $i++;
+        $html .= '</tr>';
+        $html .= '<tr>
                 <td colspan="3" class="td_left">Other/s (please specify ';
-            if ($_POST['developmental_history' . $i] == 0) {
-                $html .= $_POST['developmental_history' . $i];
-            }
-            $html .= ')
+        if ($_POST['developmental_history' . $i] == 0) {
+            $html .= $_POST['developmental_history' . $i];
+        }
+        $html .= ')
                 </td>
             </tr>
             </table>';
-            $html .= '</td></tr>';
-            $this->set('html', $html);
-            $this->set('subject', $subject);
-            //$this->set('url', $settings['Setting']['url']);
-            if ($this->Email->send()) {
-                echo __('<span style="color:#00FF00;">Thank you for your message. He will get back to you the soonest.</span>', true);
-                //echo __('Thank you for your message. He will get back to you the soonest.', true);
-            } else {
-                echo __('There was a problem sending the Email. Please try again.', true);
+        $html .= '</td></tr>';
+        $this->set('html', $html);
+        $this->set('subject', $subject);
+//        if ($this->Email->send()) {
+//            echo __('<span style="color:#00FF00;">Thank you for your message. He will get back to you the soonest.</span>', true);
+//            //echo __('Thank you for your message. He will get back to you the soonest.', true);
+//        } else {
+//            echo __('There was a problem sending the Email. Please try again.', true);
+//        }
+//        if ($type == 'notajax') {
+//            $this->redirect($this->getBaseUrl() . '/');
+//        } elseif ($type == 'ajax') {
+//            $this->autoRender = false;
+//        }
+    }
+
+    public function uploadAdmissionFile($fileData = []) {
+        $upload_dir = ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'files' . DS . 'admissions';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777);
+        }
+        $current_year = date('Y');
+        $current_month = date('m');
+        $dir_name_with_year = $upload_dir . DS . $current_year;
+        if (!file_exists($dir_name_with_year)) {
+            mkdir($dir_name_with_year, 0777);
+        }
+        $dir_name_with_month = $upload_dir . DS . $current_year . DS . $current_month;
+        if (!file_exists($dir_name_with_month)) {
+            mkdir($dir_name_with_month, 0777);
+        }
+        $final_upload_dir = $upload_dir . DS . $current_year . DS . $current_month . DS;
+        $file_path = '';
+        if (isset($fileData['name']) && $fileData['name'] != '') {
+            $file_name = str_replace("#", "_", basename($fileData['name']));
+            $file_name = str_replace("?", "_", $file_name);
+            $file_name = str_replace(" ", "_", $file_name);
+            $file = $final_upload_dir . $file_name;
+            if (file_exists($file)) {
+                $file_name = time() . $file_name;
+            }
+            $file = $final_upload_dir . $file_name;
+            if (isset($fileData['tmp_name']) && $fileData['tmp_name'] != '') {
+                if (move_uploaded_file($fileData['tmp_name'], $file)) {
+                    $file_path = $file;
+                }
             }
         }
-        if ($type == 'notajax') {
-            $this->redirect($this->Session->read('Setting.url') . '/');
-        } elseif ($type == 'ajax') {
-            $this->autoRender = false;
+        $file_path = str_replace(ROOT, '', $file_path);
+        return $file_path;
+    }
+
+    public function generateApplicationNumber() {
+        $this->loadModel('Request');
+        $lastRequest = $this->Request->find(
+                'first', ['order' => [
+                'Request.application_number' => 'DESC',
+                'Request.id' => 'DESC']
+                ]
+        );
+        $year_application_number = (date('y') * 100000) + 1;
+        $last_application_number = 0;
+        if (!empty($lastRequest) && isset($lastRequest['Request']['application_number'])) {
+            $last_application_number = $lastRequest['Request']['application_number'];
         }
+        $application_number = $year_application_number;
+        if ($last_application_number >= $year_application_number) {
+            $application_number = $last_application_number + 1;
+        }
+        return $application_number;
     }
 
 }

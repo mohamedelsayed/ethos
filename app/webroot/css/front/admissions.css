@@ -166,7 +166,7 @@ input[type=radio].required, input[type=checkbox].required{
     display:none;
     width: 80px;
     height:15px;
-    background-image: url('../../img/front/tloading.gif');
+    background-image: url('../../img/front/ajax-loader04.gif');
     background-repeat: no-repeat;
 }
 #admissions_result{

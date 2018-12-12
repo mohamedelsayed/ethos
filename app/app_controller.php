@@ -426,4 +426,39 @@ class AppController extends Controller {
         }
     }
 
+    public function getBaseUrl() {
+//        $this->loadModel('Setting');
+//        $settings = $this->Setting->read(null, 1);
+//        $baseUrl = $settings['Setting']['url'];
+        $baseUrl = $this->Session->read('Setting.url');
+        return $baseUrl;
+    }
+
+    public function sendMail($to, $subject, $body, $from = '') {
+        $this->loadModel('Setting');
+        $settings = $this->Setting->read(null, 1);
+        $html_message = '<b>this is a test mail.</b>';
+        $mail = new \PHPMailer\PHPMailer\PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPAuth = true;
+        $mail->CharSet = "UTF-8";
+        //$mail->SMTPSecure = 'tls';
+        $mail->Host = getenv('MAIL_HOST');
+        $mail->Port = getenv('MAIL_PORT');
+        $mail->Username = getenv('MAIL_USERNAME');
+        $mail->Password = getenv('MAIL_PASSWORD');
+        $mail->From = $from;
+        $mail->FromName = $settings['Setting']['title'];
+        $mail->addAddress($to);
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        $mail->AltBody = strip_tags($body);
+        $mailSent = 0;
+        if ($mail->send()) {
+            $mailSent = 1;
+        }
+        return $mailSent;
+    }
+
 }

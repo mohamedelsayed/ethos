@@ -38,6 +38,7 @@ class RequestsController extends AuthController {
         $request = $this->Request->read(null, $id);
         $data = $request['Request']['data'];
         $request['Request']['data'] = unserialize($data);
+        pr($request);
         $this->set('request', $request);
         $this->set('titleLabel', $this->titleLabel);
         $this->set('statusOptions', $this->statusOptions);
