@@ -121,10 +121,31 @@ class RequestsController extends AuthController {
     }
 
     public function export() {
-        $ids = [32];
+        $ids = [32, 31];
+        $requests = $this->Request->find(
+                'all', array(
+            'conditions' => array('Request.id' => $ids),
+            'order' => array('Request.id' => 'DESC'),
+                )
+        );
+        $data[] = ['Application number', $this->titleLabel, 'Date of Birth'];
+        if (!empty($requests)) {
+            foreach ($requests as $key => $request) {
+                $dataIn = unserialize($request['Request']['data']);
+                $data[] = [$request['Request']['application_number'], $request['Request']['title'], $dataIn['birth_date']];
+            }
+        }
+        $data2[] = ['Application number2', $this->titleLabel, 'Date of Birth2'];
+        if (!empty($requests)) {
+            foreach ($requests as $key => $request) {
+                $dataIn = unserialize($request['Request']['data']);
+                $data2[] = [$request['Request']['application_number'], $request['Request']['title'], $dataIn['birth_date']];
+            }
+        }
+        $this->exportArrayToExcel($data, $data2);
     }
 
-    public function exportArrayToExcel(array $data) {
+    public function exportArrayToExcel(array $data, $data2 = []) {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Translation');
@@ -136,6 +157,15 @@ class RequestsController extends AuthController {
             }
             $i++;
         }
+        $sheet = $spreadsheet->createSheet(1);
+        $i = 1;
+        foreach ($data2 as $key => $data_in) {
+            foreach ($data_in as $key_in => $value_in) {
+                $sheet->setCellValue(strtoupper(substr($letters, $key_in, 1)) . $i, $value_in);
+            }
+            $i++;
+        }
+        $sheet->setTitle('second');
         $writer = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
         $writer->setIncludeCharts(true);
         $exported_file_name_user = 'applications.xls';
