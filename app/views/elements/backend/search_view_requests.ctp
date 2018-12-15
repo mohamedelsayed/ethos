@@ -3,13 +3,17 @@
 </h2>
 <div style="width: 350px;">
     <?php
+    $statusOptions = array_reverse($statusOptions);
+    $statusOptions['all'] = 'All';
+    $statusOptions = array_reverse($statusOptions);
     echo $this->Form->create($currentModel, array('action' => 'index'));
     echo $this->Form->input($currentModel . '.' . $currentField, array('type' => 'text'));
+    echo $this->Form->input($currentModel . '.status', array('type' => 'select', 'options' => $statusOptions));
     echo $this->Form->end(__('Search', true));
     ?>
 </div>
 <style type="text/css">
     form .required label::after{
-        content: ''; 
+        content: '';
     }
 </style>

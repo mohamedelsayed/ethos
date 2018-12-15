@@ -1,12 +1,18 @@
 <div class="requests index">
-    <?php echo $this->element('backend/search_view', array('currentModel' => 'Request', 'currentField' => 'title')); ?>
+    <?php
+    echo $this->element('backend/search_view_requests', array(
+        'currentModel' => 'Request',
+        'currentField' => 'title',
+        'statusOptions' => $statusOptions,
+    ));
+    ?>
     <h2><?php __('Applications'); ?></h2>
     <form id="RequestChangeLimitForm" method="post" action="<?php echo $this->Session->read('Setting.url') . '/requests/ChangeLimit'; ?>" accept-charset="utf-8">
         <div style="width:100%; float: left; ">
-            <div style="width:10%; float: left; ">
-                <input name="data[Request][limit]" type="text" id="RequestLimit">
+            <div style="width:10%; float: left;clear: initial;">
+                <input name="limit" type="number" id="RequestLimit" value="<?php echo $limit; ?>">
             </div>
-            <div style="width:30%; float: left; ">
+            <div style="width:15%; float: left;clear: initial;">
                 <input style="float: right;" type="submit" value="Change limit">
             </div>
         </div>
@@ -34,7 +40,7 @@
                 ?>
                 <tr<?php echo $class; ?>>
                     <?php /* <td><?php echo $request['Request']['id']; ?>&nbsp;</td> */ ?>
-                    <td><input id="selctcItem<?php echo $request['Request']['id']; ?>" type="checkbox" name="selctcItem[]" class="selctcItem" value="<?php echo $request['Request']['id']; ?>" /></td>
+                    <td><input id="selectItem<?php echo $request['Request']['id']; ?>" type="checkbox" name="selectItem[]" class="selectItem" value="<?php echo $request['Request']['id']; ?>" /></td>
                     <td><?php echo $request['Request']['application_number']; ?>&nbsp;</td>
                     <td><?php echo $request['Request']['title']; ?>&nbsp;</td>
                     <td><?php
@@ -57,7 +63,7 @@
             ?>
         </table>
         <div style="width:100%; float: left; ">
-            <input style="float: right;" type="submit" value="Export">
+            <input style="float: right; margin-right: 15px; width: 100px;" type="submit" value="Export">
         </div>
     </form>
     <p>
@@ -84,9 +90,9 @@
     jQuery(function () {
         jQuery(document).on("change", "#selctcAll", function () {
             if (jQuery('#selctcAll:checked').length > 0) {
-                jQuery('.selctcItem').prop('checked', true);
+                jQuery('.selectItem').prop('checked', true);
             } else {
-                jQuery('.selctcItem').prop('checked', false);
+                jQuery('.selectItem').prop('checked', false);
             }
         });
     });

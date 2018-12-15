@@ -19,26 +19,38 @@ class RequestsController extends AuthController {
         2 => 'Resubmitted',
         3 => 'Rejected'
     ];
+    var $limit = 20;
 
     //use upload component.
 //    var $components = array('Upload');
 
     function index() {
+        $limit = $this->limit;
+        if ($this->Session->read('Request.limit') && is_numeric($this->Session->read('Request.limit'))) {
+            if ($this->Session->read('Request.limit') > 0) {
+                $limit = $this->Session->read('Request.limit');
+            }
+        }
         $this->Request->recursive = 0;
         $order = ['Request.application_number' => 'DESC', 'Request.id' => 'DESC'];
+        $conditions = [];
         if (isset($this->data['Request']['title'])) {
-            $this->paginate = array(
-                'conditions' => array('Request.title LIKE' => "%" . $this->data['Request']['title'] . "%"),
-                'order' => $order,
-            );
-        } else {
-            $this->paginate = array(
-                'order' => $order,
-            );
+            $conditions['Request.title LIKE'] = "%" . $this->data['Request']['title'] . "%";
         }
+        if (isset($this->data['Request']['status'])) {
+            if (isset($this->statusOptions[$this->data['Request']['status']])) {
+                $conditions['Request.status'] = $this->data['Request']['status'];
+            }
+        }
+        $this->paginate = array(
+            'conditions' => $conditions,
+            'order' => $order,
+            'limit' => $limit,
+        );
         $this->set('requests', $this->paginate());
         $this->set('titleLabel', $this->titleLabel);
         $this->set('statusOptions', $this->statusOptions);
+        $this->set('limit', $limit);
     }
 
     function view($id = null) {
@@ -105,16 +117,17 @@ class RequestsController extends AuthController {
             $application_number = $request['Request']['application_number'];
             if ($this->Request->save($this->data)) {
                 if ($status == 1) {
-                    $message = 'Your application ' . $application_number . ' has been accepted.';
-                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
+//                    $message = 'Your application ' . $application_number . ' has been accepted.';
+                    $message = 'We welcome your interest in Ethos International School. This is to confirm that your application form is accepted, you can expect to receive a call from a member of the admissions team to invite your child to attend an entrance assessment.';
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $this->Session->setFlash(__('Application has been accepted.', true));
                 } elseif ($status == 3) {
                     $message = 'Your application ' . $application_number . ' has been rejected.';
-                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $this->Session->setFlash(__('Application has been rejected.', true));
                 } elseif ($status == 2) {
                     $message = 'Your application ' . $application_number . ' has been resubmitted.';
-                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $this->Session->setFlash(__('Application has been resubmitted.', true));
                 }
                 if ($parentMail1 != '' && isset($message) && $message != '') {
@@ -138,9 +151,9 @@ class RequestsController extends AuthController {
         if ($id) {
             $ids = [$id];
         }
-        if (isset($_POST['selctcItem'])) {
-            if (!empty($_POST['selctcItem'])) {
-                $ids = array_values($_POST['selctcItem']);
+        if (isset($_POST['selectItem'])) {
+            if (!empty($_POST['selectItem'])) {
+                $ids = array_values($_POST['selectItem']);
             }
         }
         $requests = [];
@@ -246,9 +259,9 @@ class RequestsController extends AuthController {
             }
             $sheet->setTitle('Applications');
         }
-        $writer = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+        $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->setIncludeCharts(true);
-        $exported_file_name_user = 'applications.xls';
+        $exported_file_name_user = 'applications.xlsx';
         $upload_dir = ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'files' . DS . 'admissions';
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777);
@@ -282,6 +295,23 @@ class RequestsController extends AuthController {
             unlink($exported_file);
             exit;
         }
+    }
+
+    function changeLimit() {
+        $limit = 0;
+        if (isset($_POST['limit']) && is_numeric($_POST['limit'])) {
+            if ($_POST['limit'] > 0) {
+                $limit = $_POST['limit'];
+            }
+        }
+        if ($limit > 0) {
+            $request['Request']['limit'] = $limit;
+            $this->Session->write($request);
+            $this->Session->setFlash(__('Limit changed.', true));
+        } else {
+            $this->Session->setFlash(__('Invalid limit.', true));
+        }
+        $this->redirect(array('action' => 'index'));
     }
 
 }
