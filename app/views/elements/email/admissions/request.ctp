@@ -3,15 +3,14 @@
     <body>
         <style type="text/css">
             .element{
-                text-shadow:#000000;
                 font-size:16px;
                 color: #000000;
                 font-family: Verdana, Arial, Helvetica, sans-serif;
-                padding: 0px 10px;
+                padding: 0px 5px;
+                margin: 0px 5px;
             }
             .title{
                 font-family: Verdana, Arial, Helvetica, sans-serif;
-                text-shadow:#000000;
                 font-size:16px;
                 color:#FFFFFF;
             }
@@ -36,8 +35,8 @@
                 </td>
             </tr>-->
             <tr>
-                <td align='left'  colspan='2'>
-                    <font class="element">{{message}}</font>
+                <td class="element"  colspan='2'>
+                    {{message}}
                 </td>
             </tr>
             <tr>

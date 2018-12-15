@@ -3,7 +3,6 @@ $dataIn = [];
 if (isset($request['Request']['data'])) {
     $dataIn = $request['Request']['data'];
 }
-$base_url = $this->Session->read('Setting.url');
 $i = 0;
 $class = ' altrow ';
 echo $this->Html->css(array('backend/admissions'));
