@@ -20,7 +20,7 @@ class AppController extends Controller {
     //const AppSecret = 'fb8c98a3a6f182a9c8dfe030f3ad7acb';
     function beforeFilter() {
         $http_host = $_SERVER['HTTP_HOST'];
-        if (strpos($http_host, 'localhost') === FALSE) {
+        if (strpos($http_host, 'localhost') === FALSE && strpos($http_host, 'mohamedelsayed.net') === FALSE) {
             if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off") {
                 $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                 header('HTTP/1.1 301 Moved Permanently');
