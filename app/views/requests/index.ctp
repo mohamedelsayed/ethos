@@ -1,6 +1,16 @@
 <div class="requests index">
     <?php echo $this->element('backend/search_view', array('currentModel' => 'Request', 'currentField' => 'title')); ?>
     <h2><?php __('Applications'); ?></h2>
+    <form id="RequestChangeLimitForm" method="post" action="<?php echo $this->Session->read('Setting.url') . '/requests/ChangeLimit'; ?>" accept-charset="utf-8">
+        <div style="width:100%; float: left; ">
+            <div style="width:10%; float: left; ">
+                <input name="data[Request][limit]" type="text" id="RequestLimit">
+            </div>
+            <div style="width:30%; float: left; ">
+                <input style="float: right;" type="submit" value="Change limit">
+            </div>
+        </div>
+    </form>
     <form id="RequestExportForm" method="post" action="<?php echo $this->Session->read('Setting.url') . '/requests/export'; ?>" accept-charset="utf-8">
         <table cellpadding="0" cellspacing="0">
             <tr>
