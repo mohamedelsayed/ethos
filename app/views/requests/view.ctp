@@ -23,8 +23,6 @@ echo $this->Html->css(array('backend/admissions'));
             <?php
             if (isset($statusOptions[$request['Request']['status']])) {
                 echo $statusOptions[$request['Request']['status']];
-            } else {
-                echo ' ---';
             }
             ?>
             &nbsp;
