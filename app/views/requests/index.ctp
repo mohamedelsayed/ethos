@@ -39,7 +39,7 @@
                     <td class="actions">
                         <?php echo $this->Html->link(__('View', true), array('action' => 'view', $request['Request']['id'])); ?>
                         <?php /* echo $this->Html->link(__('Edit', true), array('action' => 'edit', $request['Request']['id'])); */ ?>
-                        <?php /* echo $this->Html->link(__('Delete', true), array('action' => 'delete', $request['Request']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $request['Request']['id'])); */ ?>
+                        <?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $request['Request']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $request['Request']['id'])); ?>
                     </td>
                 </tr>
                 <?php

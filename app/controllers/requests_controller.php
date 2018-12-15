@@ -43,7 +43,7 @@ class RequestsController extends AuthController {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid application', true));
+            $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
         }
         $request = $this->Request->read(null, $id);
@@ -61,9 +61,22 @@ class RequestsController extends AuthController {
         $this->set(compact('yearGroups'));
     }
 
+    function delete($id = null) {
+        if (!$id) {
+            $this->Session->setFlash(__('Invalid application.', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        if ($this->Request->delete($id)) {
+            $this->Session->setFlash(__('Application deleted.', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        $this->Session->setFlash(__('Application was not deleted.', true));
+        $this->redirect(array('action' => 'index'));
+    }
+
     function changeStatus($id = null, $status = 0) {
         if (!$id && empty($this->data)) {
-            $this->Session->setFlash(__('Invalid application', true));
+            $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
         }
         $request = $this->Request->read(null, $id);
@@ -115,7 +128,7 @@ class RequestsController extends AuthController {
                 $this->Session->setFlash(__('The request could not be saved. Please, try again.', true));
             }
         } else {
-            $this->Session->setFlash(__('Invalid application', true));
+            $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
         }
     }
@@ -205,7 +218,7 @@ class RequestsController extends AuthController {
             }
             $this->exportArrayToExcel($data);
         } else {
-            $this->Session->setFlash(__('Invalid applications to export', true));
+            $this->Session->setFlash(__('Invalid applications to export.', true));
             $this->redirect(array('action' => 'index'));
         }
     }
