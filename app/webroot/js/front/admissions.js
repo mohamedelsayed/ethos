@@ -4,6 +4,7 @@ var hiddendiv_class = 'hiddendiv';
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
 var ajax_work = 0;
+open_admission_disclaimer_popup();
 jQuery(function () {
     jQuery(".datepicker").datepicker({
         changeMonth: true,
@@ -87,6 +88,12 @@ jQuery(function () {
     jQuery(document).on("change", "#parental_marital_status", function () {
         var id_val = jQuery(this).attr('id');
         show_textbox_if_value_selected("#" + id_val, '#parental_marital_status_details', 'divorced');
+    });
+    jQuery("#mesagepopboxadmissiondisclaimerpopoup").on("click", ".closealert", function () {
+        close_admission_disclaimer_popup();
+    });
+    jQuery('.mesage-pop-bg').click(function () {
+        close_admission_disclaimer_popup();
     });
 });
 //function validate_admissions_form() {
@@ -316,4 +323,11 @@ function show_textbox_if_value_selected(selector1, selector2, value) {
         item.removeClass(required_class);
         item.closest('.input_new').addClass(hiddendiv_class);
     }
+}
+function open_admission_disclaimer_popup() {
+    console.log('aaa');
+    jQuery("#mesagepopboxadmissiondisclaimerpopoup").show();
+}
+function close_admission_disclaimer_popup() {
+    jQuery("#mesagepopboxadmissiondisclaimerpopoup").hide();
 }
