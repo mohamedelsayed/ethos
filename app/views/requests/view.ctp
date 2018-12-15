@@ -1,58 +1,90 @@
+<?php
+if (isset($request['Request']['data'])) {
+    $dataIn = $request['Request']['data'];
+}
+$base_url = $this->Session->read('Setting.url');
+
+$i = 0;
+$class = ' altrow ';
+echo $this->Html->css(array('backend/admissions'));
+?>
 <div class="requests view">
-    <h2><?php __('Request'); ?></h2>
-    <dl><?php
-        $i = 0;
-        $class = ' class="altrow"';
-        ?>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Id'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $request['Request']['id']; ?>
+    <h2><?php __('Application'); ?></h2>
+    <?php /*         <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+      <div class="leftDiv "><?php __('Id'); ?></div>
+      <div class="rightDiv" >
+      <?php echo $request['Request']['id']; ?>
+      </div>            </div>
+     */ ?>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv "><?php __('Application Number'); ?></div>
+        <div class="rightDiv ">
+            <?php echo $request['Request']['application_number']; ?>
             &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php echo $titleLabel; ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $request['Request']['title']; ?>
-            &nbsp;
-        </dd>
-        <?php /*        <dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Image'); ?></dt>
-          <dd<?php if ($i++ % 2 == 0) echo $class;?>>
-          <?php echo $this->element('backend/image_view', array('image'=>array('id'=>$request['Request']['id'], 'image'=>$request['Request']['image']), 'size'=>'master'));?>
-          &nbsp;
-          </dd> */ ?>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Status'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
+        </div>
+    </div>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv "><?php __('Status'); ?></div>
+        <div class="rightDiv ">
             <?php
             if (isset($statusOptions[$request['Request']['status']])) {
                 echo $statusOptions[$request['Request']['status']];
             } else {
-                echo '---';
+                echo ' ---';
             }
             ?>
             &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Application Number'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
-            <?php echo $request['Request']['application_number']; ?>
-            &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Created'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
+        </div>
+    </div>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv" ><?php __('Created'); ?></div>
+        <div class="rightDiv ">
             <?php echo $request['Request']['created']; ?>
             &nbsp;
-        </dd>
-        <dt<?php if ($i % 2 == 0) echo $class; ?>><?php __('Updated'); ?></dt>
-        <dd<?php if ($i++ % 2 == 0) echo $class; ?>>
+        </div>
+    </div>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv" ><?php __('Updated'); ?></div>
+        <div class="rightDiv" >
             <?php echo $request['Request']['updated']; ?>
-            &nbsp;
-        </dd>
-    </dl>
+        </div>
+    </div>
+    <div id="tapss">
+        <ul class="tabs">
+            <li data-tab='tab2' class="current"><a><?php __('Pupil Information') ?></a></li>
+            <li data-tab='tab1'><a><?php __('Previous School(s) / Nursery') ?></a></li>
+            <li data-tab='tab3'><a><?php __('Parents Information') ?></a></li>
+            <li data-tab='tab4'><a><?php __('Emergency Information') ?></a></li>
+            <li data-tab='tab5'><a><?php __('Developmental History') ?></a></li>
+        </ul>
+        <div class="panes">
+            <div class="tabdiv" id="tab2" style="display: block;">
+                <?php require_once 'tab1.ctp'; ?>
+            </div>
+            <div class="tabdiv" id="tab1">
+                <?php require_once 'tab2.ctp'; ?>
+            </div>
+            <div class="tabdiv" id="tab3">
+                <?php require_once 'tab3.ctp'; ?>
+            </div>
+            <div class="tabdiv" id="tab4">
+                <?php require_once 'tab4.ctp'; ?>
+            </div>
+            <div class="tabdiv" id="tab5">
+                <?php require_once 'tab5.ctp'; ?>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="actions">
     <h3><?php __('Actions'); ?></h3>
     <ul>
-        <?php /* <li><?php echo $this->Html->link(__('Edit Request', true), array('action' => 'edit', $request['Request']['id'])); ?> </li> */ ?>
-        <?php /* <li><?php echo $this->Html->link(__('Delete Request', true), array('action' => 'delete', $request['Request']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $request['Request']['id'])); ?> </li> */ ?>
+        <?php if ($request['Request']['status'] != 1) { ?>
+            <li><?php echo $this->Html->link(__('Accept Application', true), array('action' => 'changeStatus', $request['Request']['id'], 1), null, sprintf(__('Are you sure you want to accept # %s?', true), $request['Request']['id'])); ?> </li>
+        <?php } ?>
+        <?php if ($request['Request']['status'] != 3) { ?>
+            <li><?php echo $this->Html->link(__('Reject Application', true), array('action' => 'changeStatus', $request['Request']['id'], 3), null, sprintf(__('Are you sure you want to reject # %s?', true), $request['Request']['id'])); ?> </li>
+        <?php } ?>
         <li><?php echo $this->Html->link(__('List Requests', true), array('action' => 'index')); ?> </li>
-        <?php /* <li><?php echo $this->Html->link(__('New Request', true), array('action' => 'add')); ?> </li> */ ?>
     </ul>
 </div>

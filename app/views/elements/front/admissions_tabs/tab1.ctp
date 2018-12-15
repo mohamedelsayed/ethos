@@ -1,14 +1,14 @@
 <div class="tab tabIn0">
     <div class="pupil_details-title head_div orange_head"><?php echo __('1. Pupil Information') ?></div>
     <div class="input_new">
-        <label for="child_name_input"><?php echo __('Child’s Name'); ?>:</label>
+        <label for="child_name"><?php echo __('Child’s Name'); ?>:</label>
         <span>
-            <input placeholder="<?php echo __(''); ?>..." id="child_name_input" class="input3new admissions_input take_placeholder required_input " type="text" name="child_name" />
+            <input placeholder="<?php echo __(''); ?>..." id="child_name" class="input3new admissions_input take_placeholder required_input " type="text" name="child_name" />
         </span>
     </div>
     <div class="input_description"><?php echo __('(PLEASE GIVE THE EXACT SPELLING AS IT APPEARS ON THE BIRTH CERTIFICATE OR PASSPORT)'); ?></div>
     <div class="input_new">
-        <label for="child_name_input"><?php echo __('Child’s Photo') ?>:</label>
+        <label for="child_photo"><?php echo __('Child’s Photo') ?>:</label>
         <span>
             <input id="child_photo" class="input3new admissions_input required_input" type="file" name="child_photo" accept="<?php echo $image_extensions; ?>" />
         </span>
@@ -39,12 +39,13 @@
             <div class="calendar_select">
                 <select class="select form-control form-select required_input" id="year_group_applying_to_input" name="year_group_applying_to_input">
                     <option value=""></option>
-                    <?php foreach ($yearGroups as $key => $yearGroup) {
+                    <?php
+                    foreach ($yearGroups as $key => $yearGroup) {
                         if ($yearGroup['YearGroup']['applying_to'] == 1) {
                             ?>
                             <option value="<?php echo $yearGroup['YearGroup']['id']; ?>"><?php echo $yearGroup['YearGroup']['title']; ?></option>
                         <?php } ?>
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -55,12 +56,13 @@
             <div class="calendar_select">
                 <select class="select form-control form-select" id="current_year_group_input" name="current_year_group_input">
                     <option value=""></option>
-                    <?php foreach ($yearGroups as $key => $yearGroup) {
+                    <?php
+                    foreach ($yearGroups as $key => $yearGroup) {
                         if ($yearGroup['YearGroup']['current'] == 1) {
                             ?>
                             <option value="<?php echo $yearGroup['YearGroup']['id']; ?>"><?php echo $yearGroup['YearGroup']['title']; ?></option>
-    <?php } ?>
-<?php } ?>
+                        <?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -73,7 +75,7 @@
                     <option value=""></option>
                     <?php foreach ($gender_options as $key => $gender_option) { ?>
                         <option value="<?php echo $gender_option; ?>"><?php echo $gender_option; ?></option>
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -97,14 +99,14 @@
         </span>
     </div>
     <div class="input_new">
-        <label for="require_bus"><?php echo __('Will the pupil require bus transportation'); ?>:</label>
+        <label for="require_bus"><?php echo __('Will the pupil require bus transportation?'); ?></label>
         <span>
             <div class="calendar_select">
                 <select class="select form-control form-select required_input" id="require_bus" name="require_bus">
                     <option value=""></option>
                     <?php foreach ($yes_no_options as $key => $yes_no_option) { ?>
                         <option value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -117,7 +119,7 @@
                     <option value=""></option>
                     <?php foreach ($yes_no_options as $key => $yes_no_option) { ?>
                         <option value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -136,7 +138,7 @@
                         }
                         ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -160,7 +162,7 @@
                         }
                         ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>
@@ -184,7 +186,7 @@
                         }
                         ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
-<?php } ?>
+                    <?php } ?>
                 </select>
             </div>
         </span>

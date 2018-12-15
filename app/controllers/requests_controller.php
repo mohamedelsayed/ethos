@@ -13,16 +13,27 @@ class RequestsController extends AuthController {
     var $name = 'Requests';
     var $uses = array('Request');
     var $titleLabel = "Child's Name";
-    var $statusOptions = ['Pending', 'Accepted', 'Resubmitted', 'Rejected'];
+    var $statusOptions = [
+        0 => 'Pending',
+        1 => 'Accepted',
+        2 => 'Resubmitted',
+        3 => 'Rejected'
+    ];
 
     //use upload component.
 //    var $components = array('Upload');
 
     function index() {
         $this->Request->recursive = 0;
+        $order = ['Request.application_number' => 'DESC', 'Request.id' => 'DESC'];
         if (isset($this->data['Request']['title'])) {
             $this->paginate = array(
                 'conditions' => array('Request.title LIKE' => "%" . $this->data['Request']['title'] . "%"),
+                'order' => $order,
+            );
+        } else {
+            $this->paginate = array(
+                'order' => $order,
             );
         }
         $this->set('requests', $this->paginate());
@@ -32,87 +43,49 @@ class RequestsController extends AuthController {
 
     function view($id = null) {
         if (!$id) {
-            $this->Session->setFlash(__('Invalid request', true));
+            $this->Session->setFlash(__('Invalid application', true));
             $this->redirect(array('action' => 'index'));
         }
         $request = $this->Request->read(null, $id);
         $data = $request['Request']['data'];
         $request['Request']['data'] = unserialize($data);
-        pr($request);
+//        pr($request);
         $this->set('request', $request);
         $this->set('titleLabel', $this->titleLabel);
         $this->set('statusOptions', $this->statusOptions);
+        $this->loadModel('Term');
+        $terms = $this->Term->find('list');
+        $this->set(compact('terms'));
+        $this->loadModel('YearGroup');
+        $yearGroups = $this->YearGroup->find('list');
+        $this->set(compact('yearGroups'));
     }
 
-//    function add() {
-//        if (!empty($this->data)) {
-//            //upload image
-////            $this->data['Request']['image'] = $this->Upload->uploadImage($this->data['Request']['image']);
-//            $this->Request->create();
-//            if ($this->Request->save($this->data)) {
-//                $this->Session->setFlash(__('The request has been saved', true));
-//                $this->redirect(array('action' => 'index'));
-//            } else {
-//                $this->Session->setFlash(__('The request could not be saved. Please, try again.', true));
-//            }
-//        }
-//    }
-//    function edit($id = null) {
-//        if (!$id && empty($this->data)) {
-//            $this->Session->setFlash(__('Invalid request', true));
-//            $this->redirect(array('action' => 'index'));
-//        }
-//        if (!empty($this->data)) {
-//            //upload image
-////            $this->Request->id = $id;
-////            if ($this->data['Request']['image']['name']) {
-////                $this->Upload->filesToDelete = array($this->Request->field('image'));
-////                $this->data['Request']['image'] = $this->Upload->uploadImage($this->data['Request']['image']);
-////        } else{
-////                unset($this->data['Request']['image']);
-////        }
-//            if ($this->Request->save($this->data)) {
-//                $this->Session->setFlash(__('The request has been saved', true));
-//                $this->redirect(array('action' => 'index'));
-//            } else {
-//                $this->Session->setFlash(__('The request could not be saved. Please, try again.', true));
-//            }
-//        }
-//        if (empty($this->data)) {
-//            $this->data = $this->Request->read(null, $id);
-//        }
-//    }
-//    function delete($id = null) {
-//        $forbidden_ids = array();
-//        if (in_array($id, $forbidden_ids)) {
-//            $this->Session->setFlash(__('You cannot delete this Request!', true));
-//            $this->redirect(array('action' => 'index'));
-//        }
-//        if (!$id) {
-//            $this->Session->setFlash(__('Invalid id for request', true));
-//            $this->redirect(array('action' => 'index'));
-//        }
-//        if ($this->Request->delete($id)) {
-//            $this->Session->setFlash(__('Request deleted', true));
-//            $this->redirect(array('action' => 'index'));
-//        }
-//        $this->Session->setFlash(__('Request was not deleted', true));
-//        $this->redirect(array('action' => 'index'));
-//    }
-//    function deleteImage($id) {
-//        if (!$id) {
-//            $this->Session->setFlash(__('Invalid Request', true));
-//            $this->redirect($this->referer(array('action' => 'index')));
-//        }
-//        //to delete image file
-//        $this->Request->id = $id;
-//        $this->Upload->filesToDelete = array($this->Request->field('image'));
-//        if ($this->Request->saveField('image', '')) {
-//            $this->Upload->deleteFile();
-//            $this->Session->setFlash(__('The Request image has been deleted', true));
-//        } else {
-//            $this->Session->setFlash(__('The Request image could not be deleted. Please, try again.', true));
-//        }
-//        $this->redirect($this->referer(array('action' => 'index')));
-//    }
+    function changeStatus($id = null, $status = 0) {
+        if (!$id && empty($this->data)) {
+            $this->Session->setFlash(__('Invalid application', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        $request = $this->Request->read(null, $id);
+        if (!empty($request)) {
+            $this->Request->id = $id;
+            $this->data['Request']['status'] = $status;
+            if ($this->Request->save($this->data)) {
+                if ($status == 1) {
+                    $this->Session->setFlash(__('Application has been accepted.', true));
+                } elseif ($status == 1) {
+                    $this->Session->setFlash(__('Application has been resubmitted.', true));
+                } elseif ($status == 1) {
+                    $this->Session->setFlash(__('Application has been rejected.', true));
+                }
+                $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash(__('The request could not be saved. Please, try again.', true));
+            }
+        } else {
+            $this->Session->setFlash(__('Invalid application', true));
+            $this->redirect(array('action' => 'index'));
+        }
+    }
+
 }

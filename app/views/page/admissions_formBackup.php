@@ -7,13 +7,13 @@ $terms_options = array('Term1', 'Term2', 'Term3');
 echo $this->Form->create('admissions', array('type' => 'file', 'id' => 'admissionsform', 'class' => 'admissions', 'url' => $base_url . '/page/admissionsform/notajax'));
 ?>
 <div class="input_new">
-    <label for="child_name_input">Child’s Name:</label>
+    <label for="child_name">Child’s Name:</label>
     <span>
-        <input id="child_name_input" class="input3new admissions_input take_placeholder required_input " type="text" name="child_name" />
+        <input id="child_name" class="input3new admissions_input take_placeholder required_input " type="text" name="child_name" />
     </span>
 </div>
 <div class="input_new">
-    <label for="child_name_input">Child’s Photo:</label>
+    <label for="child_photo">Child’s Photo:</label>
     <span>
         <input id="child_photo" class="input3new admissions_input " type="file" name="file" />
     </span>

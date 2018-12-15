@@ -364,15 +364,6 @@ class PageController extends AppController {
             }
         }
         exit;
-        $this->Email->to = $to;
-        $this->Email->subject = $subject;
-        $this->Email->replyTo = $from;
-        $this->Email->from = $subject . '<' . $from . '>';
-        $this->Email->sendAs = 'html';
-        $this->Email->template = 'admissions';
-        if ($file_path != '') {
-            $this->Email->attachments = array($file_path);
-        }
         $html = '';
         $tr_html = '<tr>
                     <td class="td_left">

@@ -3,6 +3,7 @@ var required_input_class = 'required_input';
 var hiddendiv_class = 'hiddendiv';
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
+var ajax_work = 0;
 jQuery(function () {
     jQuery(".datepicker").datepicker({
         changeMonth: true,
@@ -115,25 +116,28 @@ jQuery(function () {
 //}
 function send_addmission_form() {
     var formData = new FormData($('form#admissionsform')[0]);
-    jQuery.ajax({
-        url: base_url + '/page/admissionsform/ajax',
-        type: 'POST',
-        //data: jQuery('form#admissionsform').serialize(),
-        data: formData,
-        async: false,
-        cache: false,
-        contentType: false,
-        processData: false,
-        beforeSend: function () {
-            jQuery('#admissions_result').hide();
-            jQuery('#admissions_ajaxLoading').show();
-        },
-        success: function (result) {
-            jQuery('#admissions_ajaxLoading').hide();
-            jQuery('#admissions_result').html(result).show();
-//            document.getElementById("admissionsform").reset();
-        }
-    });
+    if (ajax_work == 0) {
+        jQuery.ajax({
+            url: base_url + '/page/admissionsform/ajax',
+            type: 'POST',
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                ajax_work = 1;
+                jQuery('#admissions_result').hide();
+                jQuery('#admissions_ajaxLoading').show();
+            },
+            success: function (result) {
+                ajax_work = 0;
+                jQuery('#admissions_ajaxLoading').hide();
+                jQuery('#admissions_result').html(result).show();
+                document.getElementById("admissionsform").reset();
+            }
+        });
+    }
 }
 function validate_required_input(obj) {
     var val = obj.val();
