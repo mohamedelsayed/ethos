@@ -10,12 +10,6 @@ echo $this->Html->css(array('backend/admissions'));
 ?>
 <div class="requests view">
     <h2><?php __('Application'); ?></h2>
-    <?php /*         <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-      <div class="leftDiv "><?php __('Id'); ?></div>
-      <div class="rightDiv" >
-      <?php echo $request['Request']['id']; ?>
-      </div>            </div>
-     */ ?>
     <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
         <div class="leftDiv "><?php __('Application Number'); ?></div>
         <div class="rightDiv ">

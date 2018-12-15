@@ -16,7 +16,7 @@
                 color:#FFFFFF;
             }
         </style>
-        <table style="direction: ltr;" class="maintable" width='100%' cellspacing='0' cellpadding='2' bgcolor="#cdcbcc">
+        <table style="direction: ltr;" class="maintable" width='100%' cellspacing='0' cellpadding='2' bgcolor="#ffffff">
             <tr bgcolor='#0d9f49 '>
                 <td height='30' colspan='2'>
                     <font class="title">
@@ -36,7 +36,7 @@
                 </td>
             </tr>-->
             <tr>
-                <td align='left'  colspan='2'>
+                <td align='center'  colspan='2'>
                     <font class="element">{{message}}</font>
                 </td>
             </tr>
