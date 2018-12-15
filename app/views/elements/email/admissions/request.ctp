@@ -7,7 +7,7 @@
                 font-size:16px;
                 color: #000000;
                 font-family: Verdana, Arial, Helvetica, sans-serif;
-                padding: 0px 5px;
+                padding: 0px 10px;
             }
             .title{
                 font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -36,7 +36,7 @@
                 </td>
             </tr>-->
             <tr>
-                <td align='center'  colspan='2'>
+                <td align='left'  colspan='2'>
                     <font class="element">{{message}}</font>
                 </td>
             </tr>

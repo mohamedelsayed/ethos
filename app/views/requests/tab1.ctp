@@ -18,6 +18,19 @@
         </div>
     </div>
 <?php } ?>
+<?php if (isset($dataIn['filesData']['child_birth_certificate']) && $dataIn['filesData']['child_birth_certificate'] != '') { ?>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv "><?php echo __('Child’s birth certificate (electronic)'); ?></div>
+        <div class="rightDiv ">
+            <?php
+            $img_url = $base_url . '/' . $dataIn['filesData']['child_birth_certificate'];
+            ?>
+            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+            <img src="<?php echo $img_url; ?>"/>
+            &nbsp;
+        </div>
+    </div>
+<?php } ?>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
     <div class="leftDiv "><?php echo __('Date of Birth'); ?></div>
     <div class="rightDiv ">

@@ -93,6 +93,47 @@ class RequestsController extends AuthController {
         }
         $request = $this->Request->read(null, $id);
         if (!empty($request)) {
+            if ($status == 2) {
+                $error = 1;
+                $dataResubmit = $this->data;
+                foreach ($dataResubmit['Request'] as $key => $value) {
+                    if ($value == 1 && $key != 'additional_information') {
+                        $error = 0;
+                    }
+                }
+                if ($error == 1) {
+                    $this->Session->setFlash(__('You must select at least one item from ckeckboxs.', true));
+                    $this->redirect(array('action' => 'resubmit/' . $id));
+                } else {
+                    $message = 'We welcome your interest in Ethos International School. This is to confirm that your application form submitted is missing essential supporting documents; you need to resubmit the following by sending an email to forms@ethosedu.com.
+                        <ul>';
+                    $additional_information = '';
+                    foreach ($dataResubmit['Request'] as $key => $value) {
+                        if ($value == 1) {
+                            if ($key == 'child_photo') {
+                                $message .= '<li>Child’s recent photo (passport size)</li>';
+                            }
+                            if ($key == 'child_birth_certificate') {
+                                $message .= '<li>Child’s birth certificate (electronic)</li>';
+                            }
+                            if ($key == 'parents_ids') {
+                                $message .= '<li>Parents IDs</li>';
+                            }
+                            if ($key == 'previous_school_report') {
+                                $message .= '<li>Most recent school report</li>';
+                            }
+                        }
+                        if ($key == 'additional_information') {
+                            $additional_information = trim($value);
+                        }
+                    }
+                    $message .= '</ul>'
+                            . 'Upon submission, we will be receiving a confirmation email that your application form is active.';
+                    if ($additional_information != '') {
+                        $message .= '<br/>' . $additional_information;
+                    }
+                }
+            }
             $this->Request->id = $id;
             $this->data['Request']['status'] = $status;
             $admissionCatId = 23;
@@ -126,7 +167,7 @@ class RequestsController extends AuthController {
                     $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $this->Session->setFlash(__('Application has been rejected.', true));
                 } elseif ($status == 2) {
-                    $message = 'Your application ' . $application_number . ' has been resubmitted.';
+//                    $message = 'Your application ' . $application_number . ' has been resubmitted.';
                     $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $this->Session->setFlash(__('Application has been resubmitted.', true));
                 }
@@ -312,6 +353,20 @@ class RequestsController extends AuthController {
             $this->Session->setFlash(__('Invalid limit.', true));
         }
         $this->redirect(array('action' => 'index'));
+    }
+
+    public function resubmit($id = null) {
+        if (!$id && empty($this->data)) {
+            $this->Session->setFlash(__('Invalid application.', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        $request = $this->Request->read(null, $id);
+        if (!empty($request)) {
+            $this->set('request', $request);
+        } else {
+            $this->Session->setFlash(__('Invalid application.', true));
+            $this->redirect(array('action' => 'index'));
+        }
     }
 
 }

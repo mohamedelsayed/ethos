@@ -15,6 +15,12 @@
     </div>
     <div class="input_description"><?php echo __('PASSPORT SIZE PHOTO OF PUPIL'); ?></div>
     <div class="input_new">
+        <label for="child_birth_certificate"><?php echo __('Child’s birth certificate (electronic)') ?>:</label>
+        <span>
+            <input id="child_birth_certificate" class="input3new admissions_input required_input" type="file" name="child_birth_certificate" accept="<?php echo $image_extensions; ?>" />
+        </span>
+    </div>
+    <div class="input_new">
         <label for="birth_date_input"><?php echo __('Date of Birth') ?>:</label>
         <span>
             <input placeholder="<?php echo __(''); ?>..." id="birth_date_input" type="text" class="input3new admissions_input take_placeholder datepicker required_input" name="birth_date" readonly="readonly">
