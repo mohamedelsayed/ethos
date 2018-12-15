@@ -120,35 +120,100 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function export() {
-        $ids = [32, 31];
-        $requests = $this->Request->find(
-                'all', array(
-            'conditions' => array('Request.id' => $ids),
-            'order' => array('Request.id' => 'DESC'),
-                )
-        );
-        $data[] = ['Application number', $this->titleLabel, 'Date of Birth'];
-        if (!empty($requests)) {
-            foreach ($requests as $key => $request) {
-                $dataIn = unserialize($request['Request']['data']);
-                $data[] = [$request['Request']['application_number'], $request['Request']['title'], $dataIn['birth_date']];
+    public function export($id = null) {
+        $ids = [];
+        if ($id) {
+            $ids = [$id];
+        }
+        if (isset($_POST['selctcItem'])) {
+            if (!empty($_POST['selctcItem'])) {
+                $ids = array_values($_POST['selctcItem']);
             }
         }
-        $data2[] = ['Application number2', $this->titleLabel, 'Date of Birth2'];
+        $requests = [];
+        if (!empty($ids)) {
+            $requests = $this->Request->find('all', array(
+                'conditions' => array('Request.id' => $ids),
+                'order' => array('Request.id' => 'DESC'),)
+            );
+        }
         if (!empty($requests)) {
+            $this->loadModel('Term');
+            $terms = $this->Term->find('list');
+            $this->loadModel('YearGroup');
+            $yearGroups = $this->YearGroup->find('list');
+            $data[] = [
+                'Application Date',
+                "Pupil's Name",
+                'Date of Birth',
+                'Academic Year Entry',
+                'Year Group Applying to',
+                'Current Year Group',
+                'Gender',
+                'Nationality',
+                'Religion',
+                'Bus',
+                'Siblings at EIS',
+                'Siblings at Rukan',
+                'Sibling applying at EIS',
+                'Previous School',
+                "Mother's Name",
+                "Mother's Mobile",
+                "Mother's Email",
+                "Mother's Qualifications",
+                "Father's Name",
+                "Father's Mobile",
+                "Father's Email",
+                "Father's Qualifications",
+                "Marital Status",
+                "Emergancy Contact 1",
+                "Emergancy Contact 2",
+            ];
             foreach ($requests as $key => $request) {
                 $dataIn = unserialize($request['Request']['data']);
-                $data2[] = [$request['Request']['application_number'], $request['Request']['title'], $dataIn['birth_date']];
+                $current_year_group_input = '';
+                if (isset($yearGroups[$dataIn['current_year_group_input']])) {
+                    $current_year_group_input = $yearGroups[$dataIn['current_year_group_input']];
+                }
+                $data[] = [
+                    date('d-m-Y', strtotime($request['Request']['created'])),
+                    $request['Request']['title'],
+                    $dataIn['birth_date'],
+                    $terms[$dataIn['academic_year_entry_input']],
+                    $yearGroups[$dataIn['year_group_applying_to_input']],
+                    $current_year_group_input,
+                    $dataIn['gender_input'],
+                    $dataIn['nationality'],
+                    $dataIn['religion'],
+                    $dataIn['require_bus'],
+                    $dataIn['have_any_sibling_at_EIS'],
+                    $dataIn['have_any_sibling_at_rukan'],
+                    $dataIn['are_you_applying_for_any_siblings'],
+                    $dataIn['previous_schools_nursery_1_1'],
+                    $dataIn['parent_informations2'],
+                    $dataIn['parent_informations22'],
+                    $dataIn['parent_informations24'],
+                    $dataIn['parent_informations8'],
+                    $dataIn['parent_informations1'],
+                    $dataIn['parent_informations21'],
+                    $dataIn['parent_informations23'],
+                    $dataIn['parent_informations7'],
+                    $dataIn['parental_marital_status'],
+                    $dataIn['emergency5'],
+                    $dataIn['emergency6'],
+                ];
             }
+            $this->exportArrayToExcel($data);
+        } else {
+            $this->Session->setFlash(__('Invalid applications to export', true));
+            $this->redirect(array('action' => 'index'));
         }
-        $this->exportArrayToExcel($data, $data2);
     }
 
     public function exportArrayToExcel(array $data, $data2 = []) {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Translation');
+        $sheet->setTitle('Applications');
         $letters = 'abcdefghijklmnopqrstuvwxyz';
         $i = 1;
         foreach ($data as $key => $data_in) {
@@ -157,15 +222,17 @@ class RequestsController extends AuthController {
             }
             $i++;
         }
-        $sheet = $spreadsheet->createSheet(1);
-        $i = 1;
-        foreach ($data2 as $key => $data_in) {
-            foreach ($data_in as $key_in => $value_in) {
-                $sheet->setCellValue(strtoupper(substr($letters, $key_in, 1)) . $i, $value_in);
+        if (!empty($data2)) {
+            $sheet = $spreadsheet->createSheet(1);
+            $i = 1;
+            foreach ($data2 as $key => $data_in) {
+                foreach ($data_in as $key_in => $value_in) {
+                    $sheet->setCellValue(strtoupper(substr($letters, $key_in, 1)) . $i, $value_in);
+                }
+                $i++;
             }
-            $i++;
+            $sheet->setTitle('Applications');
         }
-        $sheet->setTitle('second');
         $writer = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
         $writer->setIncludeCharts(true);
         $exported_file_name_user = 'applications.xls';
