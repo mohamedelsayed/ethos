@@ -306,6 +306,8 @@ class PageController extends AppController {
         $admissionCatId = 23;
         $data = $_POST;
         $files = $_FILES;
+        $dataIn['status'] = 'fail';
+        $dataIn['msg'] = __('There was a problem sending the Email. Please try again.', true);
         if (!empty($data)) {
             $this->loadModel('Request');
             $this->data['Request']['title'] = $data['child_name'];
@@ -342,9 +344,18 @@ class PageController extends AppController {
             $cat = $this->Cat->read(null, $admissionCatId);
             $to = $cat['Cat']['to_email'];
             $from = $to;
-            $subject = $cat['Cat']['title'];
-            $body = '<b>this is a test mail.</b>';
+            $this->loadModel('Setting');
+            $settings = $this->Setting->read(null, 1);
+            $siteTitle = $settings['Setting']['title'];
+            $subject = $cat['Cat']['title'] . ' "' . $siteTitle . '"';
+            $message = 'There is a pending application, check it <a href="' . $this->getBaseUrl() . '/requests">here</a>.';
+            $email_tpl_path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . 'email' . DS . 'admissions' . DS;
+            $tpl = file_get_contents($email_tpl_path . 'request.ctp');
+            $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
             $mailSent = $this->sendMail($to, $subject, $body, $from);
+            $tpl = file_get_contents($email_tpl_path . 'request.ctp');
+            $message = 'We recieved your application and its pending now & we will get back to you the soonest, your application number is: ' . $application_number . '';
+            $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
             if ($parentMail1 != '') {
                 $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
             }
@@ -352,422 +363,18 @@ class PageController extends AppController {
                 $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
             }
             if ($mailSent) {
-                echo __('<span style="color:#00FF00;">Thank you for your message. He will get back to you the soonest.</span>', true);
-                //echo __('Thank you for your message. He will get back to you the soonest.', true);
-            } else {
-                echo __('There was a problem sending the Email. Please try again.', true);
+                $dataIn['status'] = 'success';
+                $dataIn['msg'] = __('Thank you for your message. We will get back to you the soonest, your application number is: ' . $application_number . '', true);
             }
             if ($type == 'notajax') {
                 $this->redirect($this->getBaseUrl() . '/');
             } elseif ($type == 'ajax') {
                 $this->autoRender = false;
+                header('Content-Type: application/json');
+                echo json_encode($dataIn);
+                exit;
             }
         }
-        exit;
-        $html = '';
-        $tr_html = '<tr>
-                    <td class="td_left">
-                        <font class="element">{{key}}:</font>
-                    </td>
-                    <td>
-                        <font class="element">{{value}}</font>
-                    </td>
-                </tr>';
-        $inputs = array('child_name' => 'Child’s Name', 'birth_date' => 'Date of Birth',
-            'year_group_applying_to_input' => 'Year group applying to',
-            'requested_date_of_entry_to_the_school' => 'Requested date of entry to the school',
-            'date' => 'Date');
-        foreach ($inputs as $k => $v) {
-            if ($k == 'date') {
-                $key = $v;
-                $value = date('d-m-Y');
-                $html .= str_replace(array('{{key}}', '{{value}}'), array($key, $value), $tr_html);
-            } elseif (isset($_POST[$k])) {
-                $key = $v;
-                $value = $_POST[$k];
-                $html .= str_replace(array('{{key}}', '{{value}}'), array($key, $value), $tr_html);
-            }
-        }
-        $space_html = '<tr><td colspan="2" align="center" height="30"></td></tr>';
-        $head_html = '<tr class="head">
-                <td height="30" colspan="2" class="title_td">
-                    <font class="title">
-                        <strong>{{head}}</strong>
-                    </font>
-                </td>
-            </tr>';
-        $head_html = $space_html . $head_html . $space_html;
-        $html .= str_replace(array('{{head}}'), array('1. Pupil Details'), $head_html);
-        for ($i = 1; $i <= 10; $i++) {
-            $pupil_details[$i] = '';
-            if (isset($_POST['pupil_details' . $i])) {
-                $pupil_details[$i] = $_POST['pupil_details' . $i];
-            }
-        }
-        $html .= '<tr><td colspan="2"><table border="1" class="admissions">
-                <tr>
-                    <td class="td_center is_head">Pupil\'s Name</td>
-                    <td class="td_center is_head">Father\'s Name</td>
-                    <td class="td_center is_head">Middle Name</td>
-                    <td class="td_center is_head">Family Name</td>
-
-                </tr>
-                <tr>
-                    <td>' . $pupil_details[1] . '</td>
-                    <td>' . $pupil_details[2] . '</td>
-                    <td>' . $pupil_details[3] . '</td>
-                    <td>' . $pupil_details[4] . '</td>
-                </tr>
-                <tr>
-                    <td class="td_center is_head">Date of Birth</td>
-                    <td class="td_center is_head">Nationality</td>
-                    <td class="td_center is_head">Gender</td>
-                    <td class="td_center is_head">Religion</td>
-                </tr>
-                <tr>
-                    <td>' . $pupil_details[5] . '</td>
-                    <td>' . $pupil_details[6] . '</td>
-                    <td>' . $pupil_details[7] . '</td>
-                    <td>' . $pupil_details[8] . '</td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="td_center is_head">Mother Tongue</td>
-                    <td colspan="2" class="td_center is_head">Second Language</td>
-                </tr>
-                <tr>
-                    <td colspan="2">' . $pupil_details[9] . '</td>
-                    <td colspan="2">' . $pupil_details[10] . '</td>
-                </tr>
-            </table></td></tr>';
-        if (isset($_POST['egyptian_ministry_exams']) || isset($_POST['transportation'])) {
-            $html .= '<tr><td colspan="2">';
-            if (isset($_POST['egyptian_ministry_exams'])) {
-                $html .= '<div class="pupil_details-title head_div head_div_left">1.1. Applicants with foreign non-Arab nationality:</div>
-                    <div>
-                        Will the pupil be exempted from the Egyptian Ministry exams? ';
-                if ($_POST['egyptian_ministry_exams'] == 1) {
-                    $html .= 'YES';
-                } else {
-                    $html .= 'NO';
-                }
-                $html .= '</div>';
-            }
-            if (isset($_POST['transportation'])) {
-                $html .= '<div class="pupil_details-title head_div head_div_left">
-                        1.2. Will the pupil require bus transportation? ';
-                if ($_POST['transportation'] == 1) {
-                    $html .= 'YES';
-                } else {
-                    $html .= 'NO';
-                }
-                $html .= '</div>';
-            }
-            $html .= '</td></tr>';
-        }
-        $html .= str_replace(array('{{head}}'), array('2. Parent Information'), $head_html);
-        for ($i = 1; $i <= 22; $i++) {
-            $parent_informations[$i] = '';
-            if (isset($_POST['parent_informations' . $i])) {
-                $parent_informations[$i] = $_POST['parent_informations' . $i];
-            }
-        }
-        $html .= '<tr><td colspan="2">
-                <table border="1" class="odd_even_table">
-                    <tr>
-                        <td class="td_center is_head"></td>
-                        <td class="td_center is_head">Mother</td>
-                        <td class="td_center is_head">Father</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Name</td>
-                        <td class="td_center">' . $parent_informations[1] . '</td>
-                        <td class="td_center">' . $parent_informations[2] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Occupation</td>
-                        <td class="td_center">' . $parent_informations[3] . '</td>
-                        <td class="td_center">' . $parent_informations[4] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Employer</td>
-                        <td class="td_center">' . $parent_informations[5] . '</td>
-                        <td class="td_center">' . $parent_informations[6] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Qualification</td>
-                        <td class="td_center">' . $parent_informations[7] . '</td>
-                        <td class="td_center">' . $parent_informations[8] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Nationality</td>
-                        <td class="td_center">' . $parent_informations[9] . '</td>
-                        <td class="td_center">' . $parent_informations[10] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">ID Number</td>
-                        <td class="td_center">' . $parent_informations[11] . '</td>
-                        <td class="td_center">' . $parent_informations[12] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Date of Birth</td>
-                        <td class="td_center">' . $parent_informations[13] . '</td>
-                        <td class="td_center">' . $parent_informations[14] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Address</td>
-                        <td class="td_center">' . $parent_informations[15] . '</td>
-                        <td class="td_center">' . $parent_informations[16] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Home Telephone</td>
-                        <td class="td_center">' . $parent_informations[21] . '</td>
-                        <td class="td_center">' . $parent_informations[22] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Mobile</td>
-                        <td class="td_center">' . $parent_informations[17] . '</td>
-                        <td class="td_center">' . $parent_informations[18] . '</td>
-                    </tr>
-                    <tr>
-                        <td class="td_left is_head">Email</td>
-                        <td class="td_center">' . $parent_informations[19] . '</td>
-                        <td class="td_center">' . $parent_informations[20] . '</td>
-                    </tr>
-                </table>
-            </td></tr>';
-        if (isset($_POST['marital_status']) || isset($_POST['marital_status_custody'])) {
-            $html .= '<tr><td colspan="2">';
-            if (isset($_POST['marital_status'])) {
-                $html .= '<div class="parent_informations-title head_div head_div_left">2.1. Parental marital status:';
-                if ($_POST['marital_status'] == 1) {
-                    $html .= 'Married';
-                } else {
-                    $html .= 'Divorced';
-                }
-                if (isset($_POST['marital_status_custody']) && trim($_POST['marital_status_custody']) != '') {
-                    $html .= ' (if so, custody is with: ' . $_POST['marital_status_custody'] . ')';
-                }
-                $html .= '</div>';
-            }
-            $html .= '</td></tr>';
-        }
-        $html .= '<tr><td colspan="2"><div class="parent_informations-title head_div head_div_left">2.2. Siblings:</div></td></tr>';
-        for ($i = 1; $i <= 4; $i++) {
-            for ($j = 1; $j <= 4; $j++) {
-                $siblings[$i][$j] = '';
-                if (isset($_POST['parent_informations' . $i])) {
-                    $siblings[$i][$j] = $_POST['siblings_' . $i . '_' . $j];
-                }
-            }
-        }
-        $html .= '<tr><td colspan="2">
-                <table border="1" class="odd_even_table">
-                    <tr>
-                        <td class="td_center is_head">Name</td>
-                        <td class="td_center is_head">Age</td>
-                        <td class="td_center is_head">Year</td>
-                        <td class="td_center is_head">Current School</td>
-                    </tr>';
-        for ($i = 1; $i <= 4; $i++) {
-            $html .= '<tr>';
-            for ($j = 1; $j <= 4; $j++) {
-                $html .= '<td class="td_center">' . $siblings[$i][$j] . '</td>';
-            }
-            $html .= '</tr>';
-        }
-        $html .= '</table>
-            </td></tr>';
-        $html .= str_replace(array('{{head}}'), array('3.Additional Pupils Information'), $head_html);
-        for ($i = 1; $i <= 20; $i++) {
-            for ($j = 1; $j <= 5; $j++) {
-                $additional_pupils_informations[$i . '_' . $j] = '';
-                if (isset($_POST['previous_schools_nursery_' . $i . '_' . $j])) {
-                    $additional_pupils_informations[$i . '_' . $j] = $_POST['previous_schools_nursery_' . $i . '_' . $j];
-                }
-            }
-        }
-        $html .= '<tr><td colspan="2">
-            <table border="1" class="odd_even_table">
-            <tr>
-                <td class="td_center is_head">Name of Previous School <br />(Nursery to Y6)<br /> (most recent first)</td>
-                <td class="td_center td_years_attended is_head">Years Attended</td>
-                <td class="td_center td_year_group_form_grade is_head">Year Group/ Form / Grade</td>
-                <td class="td_center is_head">Curriculum Type<br />(US – UK – Egyptian – Other)</td>';
-        //<td class="td_center is_head" style="width: 15%;">School Location</td>
-        $html .= '</tr>';
-        for ($i = 1; $i <= 5; $i++) {
-            $html .= '<tr>';
-            for ($j = 1; $j <= 4; $j++) {
-                $html .= '<td class="td_center">' . $additional_pupils_informations[$i . '_' . $j] . '</td>';
-            }
-            $html .= '</tr>';
-        }
-        $html .= '</table>
-            </td></tr>';
-        $html .= '<tr><td colspan="2">';
-        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.1 Has the pupil ever skipped a year? ';
-        if ($_POST['pupil_skipped'] == 1) {
-            $html .= 'YES';
-        } else {
-            $html .= 'NO';
-        }
-        if (trim($_POST['pupil_skipped_details']) != '') {
-            $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_skipped_details'];
-        }
-        $html .= '</div>';
-        $html .= '</td></tr>';
-        $html .= '<tr><td colspan="2">';
-        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.2 Has the pupil ever been asked to repeat a year? ';
-        if ($_POST['pupil_repeat'] == 1) {
-            $html .= 'YES';
-        } else {
-            $html .= 'NO';
-        }
-        if (trim($_POST['pupil_repeat_details']) != '') {
-            $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_repeat_details'];
-        }
-        $html .= '</div>';
-        $html .= '</td></tr>';
-        $html .= '<tr><td colspan="2">';
-        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.3 Has the pupil ever applied to Ethos International School? ';
-        if ($_POST['pupil_applied'] == 1) {
-            $html .= 'YES';
-        } else {
-            $html .= 'NO';
-        }
-        if (trim($_POST['pupil_applied_details']) != '') {
-            $html .= ' If yes, which year and when? (Please give details): ' . $_POST['pupil_applied_details'];
-        }
-        $html .= '</div>';
-        $html .= '</td></tr>';
-        $html .= '<tr><td colspan="2">';
-        $html .= '<div class="additional_pupils_informations-title head_div head_div_left">3.4 In case of emergency and the school is unable to contact the Parents, please notify: ';
-        $html .= '</div>';
-        $html .= '</td></tr>';
-        $html .= '<tr><td colspan="2">
-                <table border="1" class="odd_even_table">
-                    <tr>
-                        <td class="td_center is_head">Name</td>
-                        <td class="td_center is_head">Relation to Pupil</td>
-                        <td class="td_center is_head">Home telephone</td>
-                        <td class="td_center is_head">Mobile number</td>
-                    </tr>';
-        for ($i = 1; $i <= 2; $i++) {
-            $html .= '<tr>';
-            for ($j = 1; $j <= 4; $j++) {
-                $html .= '<td class="td_center">';
-                if (isset($_POST['emergency_' . $i . '_' . $j])) {
-                    $html .= $_POST['emergency_' . $i . '_' . $j] . ' ';
-                }
-                $html .= '</td>';
-            }
-            $html .= '</tr>';
-        }
-        $html .= '</table>
-            </td></tr>';
-        $html .= str_replace(array('{{head}}'), array('4. Developmental History'), $head_html);
-        $html .= '<tr><td colspan="2">';
-        $html .= '<table border="1" class="odd_even_table">
-            <tr>
-                <td class="td_center td_left is_head">Does your child have any of the following developmental issues</td>
-                <td class="td_center td_years_attended is_head">Yes</td>
-                <td class="td_center td_year_group_form_grade is_head">No</td>
-            </tr>';
-        $i = 0;
-        $right_mark = '&#10004;';
-        $html .= '<tr>
-            <td class="td_center td_left">Attention Deficit Disorder / Hyperactive</td>
-            <td class="td_center ">';
-        if ($_POST['developmental_history' . $i] == 1) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>
-            <td class="td_center">';
-        if ($_POST['developmental_history' . $i] == 0) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>';
-        $i++;
-        $html .= '</tr>
-            <tr>
-                <td class="td_center td_left">Speech and Language Disorder</td>
-                <td class="td_center ">';
-        if ($_POST['developmental_history' . $i] == 1) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>
-            <td class="td_center">';
-        if ($_POST['developmental_history' . $i] == 0) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>';
-        $i++;
-        $html .= '</tr>
-            <tr>
-                <td class="td_center td_left">Developmental Delay</td>
-                <td class="td_center ">';
-        if ($_POST['developmental_history' . $i] == 1) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>
-            <td class="td_center">';
-        if ($_POST['developmental_history' . $i] == 0) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>';
-        $i++;
-        $html .= '</tr>';
-        $html .= '<tr>
-                <td class="td_center td_left">Behavioral Issues</td>
-                <td class="td_center ">';
-        if ($_POST['developmental_history' . $i] == 1) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>
-            <td class="td_center">';
-        if ($_POST['developmental_history' . $i] == 0) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>';
-        $i++;
-        $html .= '</tr>';
-        $html .= '<tr>
-                <td class="td_center td_left">Has your child been diagnosed / assessed for any learning disabilities / challenges</td>
-                <td class="td_center ">';
-        if ($_POST['developmental_history' . $i] == 1) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>
-            <td class="td_center">';
-        if ($_POST['developmental_history' . $i] == 0) {
-            $html .= $right_mark;
-        }
-        $html .= '</td>';
-        $i++;
-        $html .= '</tr>';
-        $html .= '<tr>
-                <td colspan="3" class="td_left">Other/s (please specify ';
-        if ($_POST['developmental_history' . $i] == 0) {
-            $html .= $_POST['developmental_history' . $i];
-        }
-        $html .= ')
-                </td>
-            </tr>
-            </table>';
-        $html .= '</td></tr>';
-        $this->set('html', $html);
-        $this->set('subject', $subject);
-//        if ($this->Email->send()) {
-//            echo __('<span style="color:#00FF00;">Thank you for your message. He will get back to you the soonest.</span>', true);
-//            //echo __('Thank you for your message. He will get back to you the soonest.', true);
-//        } else {
-//            echo __('There was a problem sending the Email. Please try again.', true);
-//        }
-//        if ($type == 'notajax') {
-//            $this->redirect($this->getBaseUrl() . '/');
-//        } elseif ($type == 'ajax') {
-//            $this->autoRender = false;
-//        }
     }
 
     public function uploadAdmissionFile($fileData = []) {

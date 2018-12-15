@@ -437,7 +437,6 @@ class AppController extends Controller {
     public function sendMail($to, $subject, $body, $from = '') {
         $this->loadModel('Setting');
         $settings = $this->Setting->read(null, 1);
-        $html_message = '<b>this is a test mail.</b>';
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth = true;

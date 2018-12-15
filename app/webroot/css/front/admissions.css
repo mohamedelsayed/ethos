@@ -271,3 +271,9 @@ input[type=radio].required, input[type=checkbox].required{
     width: 95%;
     white-space: initial;
 }
+.admissions_result_success{
+    color: #0d9f49 !important;;
+}
+.admissions_result_fail{
+    color: #ff0000 !important;;
+}

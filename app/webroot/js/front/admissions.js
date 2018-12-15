@@ -133,8 +133,15 @@ function send_addmission_form() {
             success: function (result) {
                 ajax_work = 0;
                 jQuery('#admissions_ajaxLoading').hide();
-                jQuery('#admissions_result').html(result).show();
-                document.getElementById("admissionsform").reset();
+                if (result.status == 'success') {
+                    jQuery('#admissions_result').html(result.msg).show().removeClass('admissions_result_fail').addClass('admissions_result_success');
+                    document.getElementById("admissionsform").reset();
+                    currentTab = 0;
+                    jQuery('.tabIn4').hide();
+                    showTab(currentTab);
+                } else {
+                    jQuery('#admissions_result').html(result.msg).show().removeClass('admissions_result_success').addClass('admissions_result_fail');
+                }
             }
         });
     }

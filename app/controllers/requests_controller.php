@@ -70,13 +70,45 @@ class RequestsController extends AuthController {
         if (!empty($request)) {
             $this->Request->id = $id;
             $this->data['Request']['status'] = $status;
+            $admissionCatId = 23;
+            $this->loadModel('Cat');
+            $cat = $this->Cat->read(null, $admissionCatId);
+            $from = $cat['Cat']['to_email'];
+            $this->loadModel('Setting');
+            $settings = $this->Setting->read(null, 1);
+            $siteTitle = $settings['Setting']['title'];
+            $subject = $cat['Cat']['title'] . ' "' . $siteTitle . '"';
+            $email_tpl_path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . 'email' . DS . 'admissions' . DS;
+            $tpl = file_get_contents($email_tpl_path . 'request.ctp');
+            $dataIn = unserialize($request['Request']['data']);
+            $parentMail1 = '';
+            if (isset($dataIn['parent_informations23'])) {
+                $parentMail1 = $dataIn['parent_informations23'];
+            }
+            $parentMail2 = '';
+            if (isset($dataIn['parent_informations24'])) {
+                $parentMail2 = $dataIn['parent_informations24'];
+            }
+            $application_number = $request['Request']['application_number'];
             if ($this->Request->save($this->data)) {
                 if ($status == 1) {
+                    $message = 'Your application ' . $application_number . ' has been accepted.';
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
                     $this->Session->setFlash(__('Application has been accepted.', true));
-                } elseif ($status == 1) {
-                    $this->Session->setFlash(__('Application has been resubmitted.', true));
-                } elseif ($status == 1) {
+                } elseif ($status == 3) {
+                    $message = 'Your application ' . $application_number . ' has been rejected.';
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
                     $this->Session->setFlash(__('Application has been rejected.', true));
+                } elseif ($status == 2) {
+                    $message = 'Your application ' . $application_number . ' has been resubmitted.';
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array($subject, $message), $tpl);
+                    $this->Session->setFlash(__('Application has been resubmitted.', true));
+                }
+                if ($parentMail1 != '' && isset($message) && $message != '') {
+                    $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
+                }
+                if ($parentMail2 != '') {
+                    $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
                 }
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -85,6 +117,60 @@ class RequestsController extends AuthController {
         } else {
             $this->Session->setFlash(__('Invalid application', true));
             $this->redirect(array('action' => 'index'));
+        }
+    }
+
+    public function export() {
+        $ids = [32];
+    }
+
+    public function exportArrayToExcel(array $data) {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Translation');
+        $letters = 'abcdefghijklmnopqrstuvwxyz';
+        $i = 1;
+        foreach ($data as $key => $data_in) {
+            foreach ($data_in as $key_in => $value_in) {
+                $sheet->setCellValue(strtoupper(substr($letters, $key_in, 1)) . $i, $value_in);
+            }
+            $i++;
+        }
+        $writer = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+        $writer->setIncludeCharts(true);
+        $exported_file_name_user = 'applications.xls';
+        $upload_dir = ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'files' . DS . 'admissions';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777);
+        }
+        $current_year = date('Y');
+        $current_month = date('m');
+        $dir_name_with_year = $upload_dir . DS . $current_year;
+        if (!file_exists($dir_name_with_year)) {
+            mkdir($dir_name_with_year, 0777);
+        }
+        $dir_name_with_month = $upload_dir . DS . $current_year . DS . $current_month;
+        if (!file_exists($dir_name_with_month)) {
+            mkdir($dir_name_with_month, 0777);
+        }
+        $final_upload_dir = $upload_dir . DS . $current_year . DS . $current_month . DS;
+        $exported_file = $final_upload_dir . DS . $exported_file_name_user;
+        $writer->save($exported_file);
+        $file = $exported_file;
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . $exported_file_name_user);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            unlink($exported_file);
+            exit;
         }
     }
 
