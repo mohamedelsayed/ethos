@@ -29,7 +29,7 @@
                     <li class="heading">
                         <a href="<?php echo $this->Session->read('Setting.url') . '/contents/edit/' . $content['Content']['id']; ?>"><?php echo $content['Content']['title']; ?></a>
                     </li>
-                <?php } ?> 
+                <?php } ?>
                 <li class="heading"><a href="<?php echo $this->Session->read('Setting.url') . '/testimonials'; ?>"><?php echo __('Testimonials'); ?></a></li>
                 <li class="heading"><a href="<?php echo $this->Session->read('Setting.url') . '/team_members'; ?>"><?php echo __('Members'); ?></a></li>
                 <li class="heading"><a><?php echo __('Careers'); ?></a>
@@ -57,6 +57,7 @@
                 <li class="heading"><a><?php echo __('Admission System'); ?></a>
                     <ul>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/requests'; ?>"><?php echo __('Applications'); ?></a></li>
+                        <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/email_templates'; ?>"><?php echo __('Email Templates'); ?></a></li>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/terms'; ?>"><?php echo __('Terms'); ?></a></li>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/year_groups'; ?>"><?php echo __('Year Groups'); ?></a></li>
                     </ul>

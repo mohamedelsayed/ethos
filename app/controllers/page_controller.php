@@ -328,9 +328,17 @@ class PageController extends AppController {
             if (isset($data['parent_informations23'])) {
                 $parentMail1 = $data['parent_informations23'];
             }
+            $parentName1 = '';
+            if (isset($data['parent_informations1'])) {
+                $parentName1 = $data['parent_informations1'];
+            }
             $parentMail2 = '';
             if (isset($data['parent_informations24'])) {
                 $parentMail2 = $data['parent_informations24'];
+            }
+            $parentName2 = '';
+            if (isset($data['parent_informations2'])) {
+                $parentName2 = $data['parent_informations2'];
             }
             $this->data['Request']['data'] = serialize($data);
             $application_number = $this->generateApplicationNumber();
@@ -348,19 +356,22 @@ class PageController extends AppController {
             $settings = $this->Setting->read(null, 1);
             $siteTitle = $settings['Setting']['title'];
             $subject = $cat['Cat']['title'] . ' "' . $siteTitle . '"';
-            $message = 'There is a pending application with number: ' . $application_number . ', check it <a href="' . $this->getBaseUrl() . '/requests">here</a>.';
+            $messageIn = $this->getEmailTemplateBody('notification_admin');
+            $message = str_replace(array('{{name}}', '{{application_number}}'), array('Admin', $application_number), $messageIn);
             $email_tpl_path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . 'email' . DS . 'admissions' . DS;
             $tpl = file_get_contents($email_tpl_path . 'request.ctp');
             $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
             $mailSent = $this->sendMail($to, $subject, $body, $from);
             $tpl = file_get_contents($email_tpl_path . 'request.ctp');
-//            $message = 'We recieved your application and its pending now & we will get back to you the soonest, your application number is: ' . $application_number . '';
-            $message = 'Thank you for applying at Ethos International School. Please note that your application will become active only after all of the essential supporting documents are reviewed. You will receive a confirmation email shortly.';
-            $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
+            $messageIn = $this->getEmailTemplateBody('notification');
             if ($parentMail1 != '') {
+                $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName1, $application_number), $messageIn);
+                $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                 $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
             }
             if ($parentMail2 != '') {
+                $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName2, $application_number), $messageIn);
+                $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                 $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
             }
             if ($mailSent) {

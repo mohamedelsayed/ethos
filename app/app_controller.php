@@ -460,4 +460,16 @@ class AppController extends Controller {
         return $mailSent;
     }
 
+    public function getEmailTemplateBody($identifier = '') {
+        $this->loadModel('EmailTemplate');
+        $emailTemplate = $this->EmailTemplate->find('first', array(
+            'conditions' => array('EmailTemplate.identifier' => $identifier))
+        );
+        $body = '';
+        if (isset($emailTemplate['EmailTemplate']['body'])) {
+            $body = $emailTemplate['EmailTemplate']['body'];
+        }
+        return $body;
+    }
+
 }

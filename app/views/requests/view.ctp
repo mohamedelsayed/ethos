@@ -34,12 +34,6 @@ echo $this->Html->css(array('backend/admissions'));
             &nbsp;
         </div>
     </div>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv" ><?php __('Updated'); ?></div>
-        <div class="rightDiv" >
-            <?php echo $request['Request']['updated']; ?>
-        </div>
-    </div>
     <div id="tapss">
         <ul class="tabs">
             <li data-tab='tab2' class="current"><a><?php __('Pupil Information') ?></a></li>

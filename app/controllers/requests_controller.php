@@ -21,9 +21,6 @@ class RequestsController extends AuthController {
     ];
     var $limit = 20;
 
-    //use upload component.
-//    var $components = array('Upload');
-
     function index() {
         $limit = $this->limit;
         if ($this->Session->read('Request.limit') && is_numeric($this->Session->read('Request.limit'))) {
@@ -93,6 +90,8 @@ class RequestsController extends AuthController {
         }
         $request = $this->Request->read(null, $id);
         if (!empty($request)) {
+            $additional_information = '';
+            $checklist = '';
             if ($status == 2) {
                 $error = 1;
                 $dataResubmit = $this->data;
@@ -105,9 +104,8 @@ class RequestsController extends AuthController {
                     $this->Session->setFlash(__('You must select at least one item from ckeckboxs.', true));
                     $this->redirect(array('action' => 'resubmit/' . $id));
                 } else {
-                    $message = 'We welcome your interest in Ethos International School. This is to confirm that your application form submitted is missing essential supporting documents; you need to resubmit the following by sending an email to forms@ethosedu.com.
+                    $message = '
                         <ul>';
-                    $additional_information = '';
                     foreach ($dataResubmit['Request'] as $key => $value) {
                         if ($value == 1) {
                             if ($key == 'child_photo') {
@@ -127,11 +125,8 @@ class RequestsController extends AuthController {
                             $additional_information = trim($value);
                         }
                     }
-                    $message .= '</ul>'
-                            . 'Upon submission, we will be receiving a confirmation email that your application form is active.';
-                    if ($additional_information != '') {
-                        $message .= '<br/>' . $additional_information;
-                    }
+                    $message .= '</ul>';
+                    $checklist = $message;
                 }
             }
             $this->Request->id = $id;
@@ -155,26 +150,42 @@ class RequestsController extends AuthController {
             if (isset($dataIn['parent_informations24'])) {
                 $parentMail2 = $dataIn['parent_informations24'];
             }
+            $parentName1 = '';
+            if (isset($dataIn['parent_informations1'])) {
+                $parentName1 = $dataIn['parent_informations1'];
+            }
+            $parentName2 = '';
+            if (isset($dataIn['parent_informations2'])) {
+                $parentName2 = $dataIn['parent_informations2'];
+            }
             $application_number = $request['Request']['application_number'];
             if ($this->Request->save($this->data)) {
                 if ($status == 1) {
-//                    $message = 'Your application ' . $application_number . ' has been accepted.';
-                    $message = 'We welcome your interest in Ethos International School. This is to confirm that your application form is accepted, you can expect to receive a call from a member of the admissions team to invite your child to attend an entrance assessment.';
-                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
+                    $messageIn = $this->getEmailTemplateBody('confirmation-accepted');
                     $this->Session->setFlash(__('Application has been accepted.', true));
                 } elseif ($status == 3) {
-                    $message = 'Your application ' . $application_number . ' has been rejected.';
-                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
+                    $messageIn = $this->getEmailTemplateBody('confirmation-rejected');
                     $this->Session->setFlash(__('Application has been rejected.', true));
                 } elseif ($status == 2) {
-//                    $message = 'Your application ' . $application_number . ' has been resubmitted.';
-                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
+                    $messageIn = $this->getEmailTemplateBody('confirmation-resubmitted');
                     $this->Session->setFlash(__('Application has been resubmitted.', true));
                 }
-                if ($parentMail1 != '' && isset($message) && $message != '') {
+                if ($parentMail1 != '' && isset($messageIn) && $messageIn != '') {
+                    $message = str_replace(array('{{name}}', '{{application_number}}', '{{checklist}}')
+                            , array($parentName1, $application_number, $checklist), $messageIn);
+                    if ($additional_information != '') {
+                        $message .= '<br/>' . $additional_information;
+                    }
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
                 }
-                if ($parentMail2 != '') {
+                if ($parentMail2 != '' && isset($messageIn) && $messageIn != '') {
+                    $message = str_replace(array('{{name}}', '{{application_number}}', '{{checklist}}')
+                            , array($parentName2, $application_number, $checklist), $messageIn);
+                    if ($additional_information != '') {
+                        $message .= '<br/>' . $additional_information;
+                    }
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
                     $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
                 }
                 $this->redirect(array('action' => 'index'));
