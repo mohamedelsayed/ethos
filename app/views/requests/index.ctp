@@ -25,7 +25,6 @@
                 <th><?php echo $this->Paginator->sort($titleLabel, 'title'); ?></th>
                 <th><?php echo $this->Paginator->sort('status'); ?></th>
                 <th><?php echo $this->Paginator->sort('created'); ?></th>
-                <th><?php echo $this->Paginator->sort('updated'); ?></th>
                 <th class="actions"><?php __('Actions'); ?></th>
             </tr>
             <?php
@@ -49,7 +48,6 @@
                         }
                         ?>&nbsp;</td>
                     <td><?php echo $request['Request']['created']; ?>&nbsp;</td>
-                    <td><?php echo $request['Request']['updated']; ?>&nbsp;</td>
                     <td class="actions">
                         <?php echo $this->Html->link(__('View', true), array('action' => 'view', $request['Request']['id'])); ?>
                         <?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $request['Request']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $request['Request']['id'])); ?>
