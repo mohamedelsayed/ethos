@@ -11,21 +11,21 @@ class EmailTemplate extends AppModel {
     var $name = 'EmailTemplate';
     var $displayField = 'title';
     var $validate = array(
-        'title' => array(
-            'notempty' => array(
-                'rule' => array('notempty'),
-                'message' => 'Title cannot be left blank',),
-        ),
-        'body' => array(
-            'notempty' => array(
-                'rule' => array('notempty'),
-                'message' => 'Body cannot be left blank',),
-        ),
-        'identifier' => array(
-            'notempty' => array(
-                'rule' => array('notempty'),
-                'message' => 'Identifier cannot be left blank',),
-        ),
+//        'title' => array(
+//            'notempty' => array(
+//                'rule' => array('notempty'),
+//                'message' => 'Title cannot be left blank',),
+//        ),
+//        'body' => array(
+//            'notempty' => array(
+//                'rule' => array('notempty'),
+//                'message' => 'Body cannot be left blank',),
+//        ),
+//        'identifier' => array(
+//            'notempty' => array(
+//                'rule' => array('notempty'),
+//                'message' => 'Identifier cannot be left blank',),
+//        ),
 //        'weight' => array(
 //            'numeric' => array(
 //                'rule' => array('numeric'),

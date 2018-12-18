@@ -4,20 +4,20 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs
  * @since         CakePHP(tm) v 1.2.0.5432
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
-App::import('Core', array('Object', 'Controller', 'Model'));
+App::import('Core', array('CakeObject', 'Controller', 'Model'));
 
 /**
  * RequestActionPost class
@@ -93,6 +93,15 @@ class RequestActionController extends Controller {
 	}
 
 /**
+ * returns $this->here
+ *
+ * @return void
+ */
+	function return_here() {
+		return $this->here;
+	}
+
+/**
  * paginate_request_action method
  *
  * @access public
@@ -162,7 +171,7 @@ class RequestActionPersistentController extends Controller {
  * @package       cake
  * @subpackage    cake.tests.cases.libs
  */
-class TestObject extends Object {
+class TestCakeObject extends CakeObject {
 
 /**
  * firstName property
@@ -332,7 +341,7 @@ class ObjectTest extends CakeTestCase {
  * @return void
  */
 	function setUp() {
-		$this->object = new TestObject();
+		$this->object = new TestCakeObject();
 	}
 
 /**
@@ -428,7 +437,7 @@ class ObjectTest extends CakeTestCase {
 
 		@unlink(CACHE . 'persistent' . DS . 'testmodel.php');
 
-		$model =& new ObjectTestModel();
+		$model = new ObjectTestModel();
 		$expected = ClassRegistry::keys();
 
 		ClassRegistry::flush();
@@ -587,7 +596,7 @@ class ObjectTest extends CakeTestCase {
  */
 	function testToString() {
 		$result = strtolower($this->object->toString());
-		$this->assertEqual($result, 'testobject');
+		$this->assertEqual($result, 'testcakeobject');
 	}
 
 /**
@@ -617,42 +626,42 @@ class ObjectTest extends CakeTestCase {
 		$expected[] = array('crazyMethod' => array(1, 2, 3, 4, 5, 6, 7));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object = new TestObject();
+		$this->object = new TestCakeObject();
 		$this->assertIdentical($this->object->methodCalls, array());
 
-		$this->object->dispatchMethod('emptyMethod');
+		$this->object->dispatchMethod($this->object, 'emptyMethod');
 		$expected = array('emptyMethod');
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('oneParamMethod', array('Hello'));
+		$this->object->dispatchMethod($this->object, 'oneParamMethod', array('Hello'));
 		$expected[] = array('oneParamMethod' => array('Hello'));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('twoParamMethod', array(true, false));
+		$this->object->dispatchMethod($this->object, 'twoParamMethod', array(true, false));
 		$expected[] = array('twoParamMethod' => array(true, false));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('threeParamMethod', array(true, false, null));
+		$this->object->dispatchMethod($this->object, 'threeParamMethod', array(true, false, null));
 		$expected[] = array('threeParamMethod' => array(true, false, null));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('fourParamMethod', array(1, 2, 3, 4));
+		$this->object->dispatchMethod($this->object, 'fourParamMethod', array(1, 2, 3, 4));
 		$expected[] = array('fourParamMethod' => array(1, 2, 3, 4));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('fiveParamMethod', array(1, 2, 3, 4, 5));
+		$this->object->dispatchMethod($this->object, 'fiveParamMethod', array(1, 2, 3, 4, 5));
 		$expected[] = array('fiveParamMethod' => array(1, 2, 3, 4, 5));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('crazyMethod', array(1, 2, 3, 4, 5, 6, 7));
+		$this->object->dispatchMethod($this->object, 'crazyMethod', array(1, 2, 3, 4, 5, 6, 7));
 		$expected[] = array('crazyMethod' => array(1, 2, 3, 4, 5, 6, 7));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('methodWithOptionalParam', array('Hello'));
+		$this->object->dispatchMethod($this->object, 'methodWithOptionalParam', array('Hello'));
 		$expected[] = array('methodWithOptionalParam' => array("Hello"));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 
-		$this->object->dispatchMethod('methodWithOptionalParam');
+		$this->object->dispatchMethod($this->object, 'methodWithOptionalParam');
 		$expected[] = array('methodWithOptionalParam' => array(null));
 		$this->assertIdentical($this->object->methodCalls, $expected);
 	}
@@ -664,68 +673,28 @@ class ObjectTest extends CakeTestCase {
  * @return void
  */
 	function testRequestAction() {
+		App::build(array(
+			'models' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'models' . DS),
+			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS),
+			'controllers' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS)
+		));
 		$result = $this->object->requestAction('');
 		$this->assertFalse($result);
 
 		$result = $this->object->requestAction('/request_action/test_request_action');
 		$expected = 'This is a test';
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction(array('controller' => 'request_action', 'action' => 'test_request_action'));
-		$expected = 'This is a test';
-		$this->assertEqual($result, $expected);
+		$this->assertEqual($result, $expected);;
 
 		$result = $this->object->requestAction('/request_action/another_ra_test/2/5');
 		$expected = 7;
 		$this->assertEqual($result, $expected);
 
-		$result = $this->object->requestAction(array('controller' => 'request_action', 'action' => 'another_ra_test'), array('pass' => array('5', '7')));
-		$expected = 12;
-		$this->assertEqual($result, $expected);
-
-		App::build(array(
-			'plugins' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS),
-			'models' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'models' . DS),
-			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS),
-			'controllers' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS)
-		));
-		App::objects('plugin', null, false);
-		Router::reload();
-
 		$result = $this->object->requestAction('/tests_apps/index', array('return'));
-		$expected = 'This is the TestsAppsController index view';
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction(array('controller' => 'tests_apps', 'action' => 'index'), array('return'));
 		$expected = 'This is the TestsAppsController index view';
 		$this->assertEqual($result, $expected);
 
 		$result = $this->object->requestAction('/tests_apps/some_method');
 		$expected = 5;
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction(array('controller' => 'tests_apps', 'action' => 'some_method'));
-		$expected = 5;
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction('/test_plugin/tests/index', array('return'));
-		$expected = 'test plugin index';
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction('/test_plugin/tests/index/some_param', array('return'));
-		$expected = 'test plugin index';
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction(array('controller' => 'tests', 'action' => 'index', 'plugin' => 'test_plugin'), array('return'));
-		$expected = 'test plugin index';
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction('/test_plugin/tests/some_method');
-		$expected = 25;
-		$this->assertEqual($result, $expected);
-
-		$result = $this->object->requestAction(array('controller' => 'tests', 'action' => 'some_method', 'plugin' => 'test_plugin'));
-		$expected = 25;
 		$this->assertEqual($result, $expected);
 
 		$result = $this->object->requestAction('/request_action/paginate_request_action');
@@ -734,19 +703,103 @@ class ObjectTest extends CakeTestCase {
 		$result = $this->object->requestAction('/request_action/normal_request_action');
 		$expected = 'Hello World';
 		$this->assertEqual($result, $expected);
+		
+		App::build();
+	}
 
-		$result = $this->object->requestAction(array('controller'=>'request_action', 'action'=>'normal_request_action'));
+/**
+ * test requestAction() and plugins.
+ *
+ * @return void
+ */
+	function testRequestActionPlugins() {
+		App::build(array(
+			'plugins' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS),
+		));
+		App::objects('plugin', null, false);
+		Router::reload();
+		
+		$result = $this->object->requestAction('/test_plugin/tests/index', array('return'));
+		$expected = 'test plugin index';
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction('/test_plugin/tests/index/some_param', array('return'));
+		$expected = 'test plugin index';
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction(
+			array('controller' => 'tests', 'action' => 'index', 'plugin' => 'test_plugin'), array('return')
+		);
+		$expected = 'test plugin index';
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction('/test_plugin/tests/some_method');
+		$expected = 25;
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction(
+			array('controller' => 'tests', 'action' => 'some_method', 'plugin' => 'test_plugin')
+		);
+		$expected = 25;
+		$this->assertEqual($result, $expected);
+		
+		App::build();
+		App::objects('plugin', null, false);
+	}
+
+/**
+ * test requestAction() with arrays.
+ *
+ * @return void
+ */
+	function testRequestActionArray() {
+		App::build(array(
+			'models' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'models' . DS),
+			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS),
+			'controllers' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'controllers' . DS)
+		));
+	
+		$result = $this->object->requestAction(
+			array('controller' => 'request_action', 'action' => 'test_request_action')
+		);
+		$expected = 'This is a test';
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction(
+			array('controller' => 'request_action', 'action' => 'another_ra_test'), 
+			array('pass' => array('5', '7'))
+		);
+		$expected = 12;
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction(
+			array('controller' => 'tests_apps', 'action' => 'index'), array('return')
+		);
+		$expected = 'This is the TestsAppsController index view';
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction(array('controller' => 'tests_apps', 'action' => 'some_method'));
+		$expected = 5;
+		$this->assertEqual($result, $expected);
+
+		$result = $this->object->requestAction(
+			array('controller' => 'request_action', 'action' => 'normal_request_action')
+		);
 		$expected = 'Hello World';
 		$this->assertEqual($result, $expected);
 
-		$result = $this->object->requestAction(array('controller'=>'request_action', 'action'=>'paginate_request_action'));
+		$result = $this->object->requestAction(
+			array('controller' => 'request_action', 'action' => 'paginate_request_action')
+		);
 		$this->assertTrue($result);
 
-		$result = $this->object->requestAction(array('controller'=>'request_action', 'action'=>'paginate_request_action'), array('pass' => array(5), 'named' => array('param' => 'value')));
+		$result = $this->object->requestAction(
+			array('controller' => 'request_action', 'action' => 'paginate_request_action'),
+			array('pass' => array(5), 'named' => array('param' => 'value'))
+		);
 		$this->assertTrue($result);
 
 		App::build();
-		App::objects('plugin', null, false);
 	}
 
 /**
@@ -768,7 +821,10 @@ class ObjectTest extends CakeTestCase {
 		$expected = array('sort' => 'desc', 'limit' => 5,);
 		$this->assertEqual($result['named'], $expected);
 
-		$result = $this->object->requestAction(array('controller' => 'request_action', 'action' => 'params_pass'), array('named' => array('sort' => 'desc', 'limit' => 5)));
+		$result = $this->object->requestAction(
+			array('controller' => 'request_action', 'action' => 'params_pass'), 
+			array('named' => array('sort' => 'desc', 'limit' => 5))
+		);
 		$this->assertEqual($result['named'], $expected);
 	}
 

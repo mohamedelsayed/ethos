@@ -17,7 +17,7 @@
             </div>
         </div>
     </form>
-    <form id="RequestExportForm" method="post" action="<?php echo $this->Session->read('Setting.url') . '/requests/export'; ?>" accept-charset="utf-8">
+    <form id="RequestExportForm" method="post" action="<?php echo $this->Session->read('Setting.url') . '/requests/exportAction'; ?>" accept-charset="utf-8">
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><input id="selctcAll" type="checkbox" name="selctcAll" class="selctcAll" /></th>

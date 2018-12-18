@@ -4,14 +4,14 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.cake.tests.cases.libs.controller.components
  * @since         CakePHP(tm) v 1.2.0.5347
@@ -488,7 +488,7 @@ class AuthTest extends CakeTestCase {
 		Configure::write('Acl.database', 'test_suite');
 		Configure::write('Acl.classname', 'DbAcl');
 
-		$this->Controller =& new AuthTestController();
+		$this->Controller = new AuthTestController();
 		$this->Controller->Component->init($this->Controller);
 		$this->Controller->Component->initialize($this->Controller);
 		$this->Controller->beforeFilter();
@@ -553,13 +553,56 @@ class AuthTest extends CakeTestCase {
 	}
 
 /**
+ * testIdentify method
+ *
+ * @access public
+ * @return void
+ */
+	function testIdentify() {
+		$this->AuthUser = new AuthUser();
+		$user['id'] = 1;
+		$user['username'] = 'mariano';
+		$user['password'] = Security::hash(Configure::read('Security.salt') . 'cake');
+		$this->AuthUser->save($user, false);
+
+		$this->Controller->Auth->initialize($this->Controller);
+		$this->Controller->Auth->userModel = 'AuthUser';
+		$this->Controller->Auth->startup($this->Controller);
+		$this->assertTrue($this->Controller->Auth->identify($user));
+	}
+
+/**
+ * testIdentifyWithConditions method
+ *
+ * @access public
+ * @return void
+ */
+	function testIdentifyWithConditions() {
+		$this->AuthUser = new AuthUser();
+		$user['id'] = 1;
+		$user['username'] = 'mariano';
+		$user['password'] = Security::hash(Configure::read('Security.salt') . 'cake');
+		$this->AuthUser->save($user, false);
+
+		$this->Controller->Auth->initialize($this->Controller);
+		$this->Controller->Auth->startup($this->Controller);
+		$this->Controller->Auth->userModel = 'AuthUser';
+
+		$this->assertFalse($this->Controller->Auth->identify($user, array('AuthUser.id >' => 2)));
+
+		$this->Controller->Auth->userScope = array('id >' => 2);
+		$this->assertFalse($this->Controller->Auth->identify($user));
+		$this->assertTrue($this->Controller->Auth->identify($user, false));
+	}
+
+/**
  * testLogin method
  *
  * @access public
  * @return void
  */
 	function testLogin() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user['id'] = 1;
 		$user['username'] = 'mariano';
 		$user['password'] = Security::hash(Configure::read('Security.salt') . 'cake');
@@ -656,7 +699,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testAuthorizeFalse() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user = $this->AuthUser->find();
 		$this->Controller->Session->write('Auth', $user);
 		$this->Controller->Auth->userModel = 'AuthUser';
@@ -682,7 +725,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testAuthorizeController() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user = $this->AuthUser->find();
 		$this->Controller->Session->write('Auth', $user);
 		$this->Controller->Auth->userModel = 'AuthUser';
@@ -706,7 +749,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testAuthorizeModel() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user = $this->AuthUser->find();
 		$this->Controller->Session->write('Auth', $user);
 
@@ -732,7 +775,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testAuthorizeCrud() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user = $this->AuthUser->find();
 		$this->Controller->Session->write('Auth', $user);
 
@@ -793,13 +836,13 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testAuthorizeActions() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user = $this->AuthUser->find();
 		$this->Controller->Session->write('Auth', $user);
 		$this->Controller->params['controller'] = 'auth_test';
 		$this->Controller->params['action'] = 'add';
 
-		$this->Controller->Acl =& new AuthTestMockAclComponent();
+		$this->Controller->Acl = new AuthTestMockAclComponent();
 		$this->Controller->Acl->setReturnValue('check', true);
 
 		$this->Controller->Auth->initialize($this->Controller);
@@ -977,17 +1020,6 @@ class AuthTest extends CakeTestCase {
 
 		$this->Controller->Session->delete('Auth');
 
-		$this->Controller->params['url']['url'] = 'admin/';
-		$this->Controller->Auth->initialize($this->Controller);
-		$this->Controller->Auth->userModel = 'AuthUser';
-		$this->Controller->Auth->loginRedirect = null;
-		$this->Controller->Auth->startup($this->Controller);
-		$expected = Router::normalize('admin/');
-		$this->assertTrue($this->Controller->Session->check('Message.auth'));
-		$this->assertEqual($expected, $this->Controller->Auth->redirect());
-
-		$this->Controller->Session->delete('Auth');
-
 		//empty referer no session
 		$_SERVER['HTTP_REFERER'] = false;
 		$_ENV['HTTP_REFERER'] = false;
@@ -1139,7 +1171,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testEmptyUsernameOrPassword() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user['id'] = 1;
 		$user['username'] = 'mariano';
 		$user['password'] = Security::hash(Configure::read('Security.salt') . 'cake');
@@ -1170,7 +1202,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testInjection() {
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$this->AuthUser->id = 2;
 		$this->AuthUser->saveField('password', Security::hash(Configure::read('Security.salt') . 'cake'));
 
@@ -1251,7 +1283,7 @@ class AuthTest extends CakeTestCase {
 					'password' => 'bruceWayne',
 				)
 			);
-			$data =& new Xml($xml);
+			$data = new Xml($xml);
 			$return = $this->Controller->Auth->hashPasswords($data);
 			$expected = $data;
 			$this->assertEqual($return, $expected);
@@ -1279,7 +1311,7 @@ class AuthTest extends CakeTestCase {
 			'argSeparator' => ':', 'namedArgs' => array()
 		)));
 
-		$this->AuthUser =& new AuthUser();
+		$this->AuthUser = new AuthUser();
 		$user = array(
 			'id' => 1, 'username' => 'felix',
 			'password' => Security::hash(Configure::read('Security.salt') . 'cake'
@@ -1325,7 +1357,7 @@ class AuthTest extends CakeTestCase {
 	function testCustomField() {
 		Router::reload();
 
-		$this->AuthUserCustomField =& new AuthUserCustomField();
+		$this->AuthUserCustomField = new AuthUserCustomField();
 		$user = array(
 			'id' => 1, 'email' => 'harking@example.com',
 			'password' => Security::hash(Configure::read('Security.salt') . 'cake'
@@ -1431,6 +1463,16 @@ class AuthTest extends CakeTestCase {
 		$this->assertEqual($user, $expected);
 		$sessionKey = $this->Controller->Auth->sessionKey;
 		$this->assertEqual('Auth.TestPluginAuthUser', $sessionKey);
+		
+		$this->Controller->Auth->loginAction = null;
+		$this->Controller->Auth->__setDefaults();
+		$loginAction = $this->Controller->Auth->loginAction;
+		$expected = array(
+		    'controller'	=> 'test_plugin_auth_users',
+		    'action'		=> 'login',
+		    'plugin'		=> 'test_plugin'
+		);
+		$this->assertEqual($loginAction, $expected);
 
 		// Reverting changes
 		Cache::delete('object_map', '_cake_core_');
@@ -1453,7 +1495,7 @@ class AuthTest extends CakeTestCase {
 		}
 
 		ob_start();
-		$Dispatcher =& new Dispatcher();
+		$Dispatcher = new Dispatcher();
 		$Dispatcher->dispatch('/ajax_auth/add', array('return' => 1));
 		$result = ob_get_clean();
 		$this->assertEqual("Ajax!\nthis is the test element", str_replace("\r\n", "\n", $result));
@@ -1537,7 +1579,7 @@ class AuthTest extends CakeTestCase {
  * @return void
  */
 	function testComponentSettings() {
-		$this->Controller =& new AuthTestController();
+		$this->Controller = new AuthTestController();
 		$this->Controller->components = array(
 			'Auth' => array(
 				'fields' => array('username' => 'email', 'password' => 'password'),
@@ -1551,7 +1593,7 @@ class AuthTest extends CakeTestCase {
 		$this->Controller->Component->initialize($this->Controller);
 		Router::reload();
 
-		$this->AuthUserCustomField =& new AuthUserCustomField();
+		$this->AuthUserCustomField = new AuthUserCustomField();
 		$user = array(
 			'id' => 1, 'email' => 'harking@example.com',
 			'password' => Security::hash(Configure::read('Security.salt') . 'cake'

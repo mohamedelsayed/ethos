@@ -4,10 +4,10 @@
         <legend><?php __('Edit EmailTemplate'); ?></legend>
         <?php
         echo $this->Form->input('id');
-        echo $this->Form->input('title', array("label" => $titleLabel));
-        echo $this->Form->input('EmailTemplate.body', array('class' => 'ckeditor'));
+        echo $this->Form->input('title', array("label" => $titleLabel, 'required' => 'required'));
+        echo $this->Form->input('EmailTemplate.body', array('class' => 'ckeditor', 'required' => 'required'));
 //        echo $this->Form->input('body');
-        echo $this->Form->input('identifier', ['type' => 'hidden']);
+        echo $this->Form->input('identifier', ['type' => 'hidden', 'required' => 'required']);
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Submit', true)); ?>

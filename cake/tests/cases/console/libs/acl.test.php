@@ -5,12 +5,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP :  Rapid Development Framework (http://cakephp.org)
- * Copyright 2006-2010, Cake Software Foundation, Inc.
+ * Copyright 2005-2012, Cake Software Foundation, Inc.
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2006-2010, Cake Software Foundation, Inc.
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc.
  * @link          http://cakephp.org CakePHP Project
  * @package       cake
  * @subpackage    cake.tests.cases.console.libs.tasks
@@ -93,11 +93,11 @@ class AclShellTest extends CakeTestCase {
  * @access public
  */
 	function startTest() {
-		$this->Dispatcher =& new TestAclShellMockShellDispatcher();
-		$this->Task =& new MockAclShell($this->Dispatcher);
+		$this->Dispatcher = new TestAclShellMockShellDispatcher();
+		$this->Task = new MockAclShell($this->Dispatcher);
 		$this->Task->Dispatch =& $this->Dispatcher;
 		$this->Task->params['datasource'] = 'test_suite';
-		$this->Task->Acl =& new AclComponent();
+		$this->Task->Acl = new AclComponent();
 		$controller = null;
 		$this->Task->Acl->startup($controller);
 	}

@@ -6,12 +6,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -70,7 +70,7 @@ class Cache {
 	function &getInstance() {
 		static $instance = array();
 		if (!$instance) {
-			$instance[0] =& new Cache();
+			$instance[0] = new Cache();
 		}
 		return $instance[0];
 	}
@@ -88,6 +88,21 @@ class Cache {
  * To get the settings for a configuration, and set it as the currently selected configuration
  *
  * `Cache::config('default');`
+ *
+ * The following keys are used in core cache engines:
+ *
+ * - `duration` Specify how long items in this cache configuration last.
+ * - `prefix` Prefix appended to all entries. Good for when you need to share a keyspace
+ *    with either another cache config or annother application.
+ * - `probability` Probability of hitting a cache gc cleanup.  Setting to 0 will disable 
+ *    cache::gc from ever being called automatically.
+ * - `servers' Used by memcache. Give the address of the memcached servers to use.
+ * - `compress` Used by memcache.  Enables memcache's compressed format.
+ * - `serialize` Used by FileCache.  Should cache objects be serialized first.
+ * - `path` Used by FileCache.  Path to where cachefiles should be saved.
+ * - `lock` Used by FileCache.  Should files be locked before writing to them?
+ * - `user` Used by Xcache.  Username for XCache
+ * - `password` Used by Xcache.  Password for XCache
  *
  * @see app/config/core.php for configuration settings
  * @param string $name Name of the configuration
@@ -147,9 +162,9 @@ class Cache {
 			return false;
 		}
 		$cacheClass = $class . 'Engine';
-		$this->_engines[$name] =& new $cacheClass();
+		$this->_engines[$name] = new $cacheClass();
 		if ($this->_engines[$name]->init($config)) {
-			if (time() % $this->_engines[$name]->settings['probability'] === 0) {
+			if ($this->_engines[$name]->settings['probability'] && time() % $this->_engines[$name]->settings['probability'] === 0) {
 				$this->_engines[$name]->gc();
 			}
 			return true;
@@ -296,7 +311,7 @@ class Cache {
 		}
 		$key = $self->_engines[$config]->key($key);
 
-		if (!$key || is_resource($value) || $settings['duration'] < 1) {
+		if (!$key || is_resource($value)) {
 			return false;
 		}
 
@@ -532,6 +547,18 @@ class Cache {
 			return $self->_engines[$name]->settings();
 		}
 		return array();
+	}
+
+/**
+ * Write the session when session data is persisted with cache.
+ *
+ * @return void
+ * @access public
+ */ 
+	function __destruct() {
+		if (Configure::read('Session.save') == 'cache' && function_exists('session_write_close')) {
+			session_write_close();
+		}
 	}
 }
 

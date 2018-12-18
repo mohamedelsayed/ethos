@@ -134,7 +134,7 @@ class RequestsController extends AuthController {
             $admissionCatId = 23;
             $this->loadModel('Cat');
             $cat = $this->Cat->read(null, $admissionCatId);
-            $from = $cat['Cat']['to_email'];
+//            $from = $cat['Cat']['to_email'];
             $this->loadModel('Setting');
             $settings = $this->Setting->read(null, 1);
             $siteTitle = $settings['Setting']['title'];
@@ -177,7 +177,7 @@ class RequestsController extends AuthController {
                         $message .= '<br/>' . $additional_information;
                     }
                     $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-                    $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
+                    $mailSent = $this->sendMail($parentMail1, $subject, $body);
                 }
                 if ($parentMail2 != '' && isset($messageIn) && $messageIn != '') {
                     $message = str_replace(array('{{name}}', '{{application_number}}', '{{checklist}}')
@@ -186,7 +186,7 @@ class RequestsController extends AuthController {
                         $message .= '<br/>' . $additional_information;
                     }
                     $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-                    $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
+                    $mailSent = $this->sendMail($parentMail2, $subject, $body);
                 }
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -198,7 +198,7 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function export($id = null) {
+    public function exportAction($id = null) {
         $ids = [];
         if ($id) {
             $ids = [$id];

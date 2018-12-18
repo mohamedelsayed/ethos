@@ -84,7 +84,7 @@ ini_set('max_execution_time', 0);
 class DATABASE_CONFIG {
 
     var $default = array(
-        'driver' => 'mysql',
+        'driver' => 'mysqli',
         'persistent' => false,
         'host' => DB_HOST,
         'login' => DB_USERNAME,

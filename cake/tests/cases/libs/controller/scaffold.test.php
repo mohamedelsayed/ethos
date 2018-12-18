@@ -4,14 +4,14 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs.controller
  * @since         CakePHP(tm) v 1.2.0.5436
@@ -280,7 +280,7 @@ class ScaffoldViewTest extends CakeTestCase {
  * @return void
  */
 	function startTest() {
-		$this->Controller =& new ScaffoldMockController();
+		$this->Controller = new ScaffoldMockController();
 
 		App::build(array(
 			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS),
@@ -311,7 +311,7 @@ class ScaffoldViewTest extends CakeTestCase {
 		Configure::write('Routing.prefixes', array('admin'));
 
 		$this->Controller->action = 'index';
-		$ScaffoldView =& new TestScaffoldView($this->Controller);
+		$ScaffoldView = new TestScaffoldView($this->Controller);
 		$result = $ScaffoldView->testGetFilename('index');
 		$expected = TEST_CAKE_CORE_INCLUDE_PATH . 'libs' . DS . 'view' . DS . 'scaffolds' . DS . 'index.ctp';
 		$this->assertEqual($result, $expected);
@@ -348,11 +348,11 @@ class ScaffoldViewTest extends CakeTestCase {
 		$expected = 'cake' . DS . 'libs' . DS . 'view' . DS . 'errors' . DS . 'scaffold_error.ctp';
 		$this->assertEqual($result, $expected);
 
-		$Controller =& new ScaffoldMockController();
+		$Controller = new ScaffoldMockController();
 		$Controller->scaffold = 'admin';
 		$Controller->viewPath = 'posts';
 		$Controller->action = 'admin_edit';
-		$ScaffoldView =& new TestScaffoldView($Controller);
+		$ScaffoldView = new TestScaffoldView($Controller);
 		$result = $ScaffoldView->testGetFilename('admin_edit');
 		$expected = TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' .DS . 'views' . DS . 'posts' . DS . 'scaffold.edit.ctp';
 		$this->assertEqual($result, $expected);
@@ -361,12 +361,12 @@ class ScaffoldViewTest extends CakeTestCase {
 		$expected = TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' .DS . 'views' . DS . 'posts' . DS . 'scaffold.edit.ctp';
 		$this->assertEqual($result, $expected);
 
-		$Controller =& new ScaffoldMockController();
+		$Controller = new ScaffoldMockController();
 		$Controller->scaffold = 'admin';
 		$Controller->viewPath = 'tests';
 		$Controller->plugin = 'test_plugin';
 		$Controller->action = 'admin_add';
-		$ScaffoldView =& new TestScaffoldView($Controller);
+		$ScaffoldView = new TestScaffoldView($Controller);
 		$result = $ScaffoldView->testGetFilename('admin_add');
 		$expected = TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins'
 			. DS .'test_plugin' . DS . 'views' . DS . 'tests' . DS . 'scaffold.edit.ctp';
@@ -389,7 +389,7 @@ class ScaffoldViewTest extends CakeTestCase {
 		$this->Controller->action = 'index';
 		$this->Controller->viewPath = 'posts';
 		$this->Controller->theme = 'test_theme';
-		$ScaffoldView =& new TestScaffoldView($this->Controller);
+		$ScaffoldView = new TestScaffoldView($this->Controller);
 
 		$result = $ScaffoldView->testGetFilename('index');
 		$expected = TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views' . DS 
@@ -509,7 +509,7 @@ class ScaffoldViewTest extends CakeTestCase {
 		new Scaffold($this->Controller, $params);
 		$result = ob_get_clean();
 
-		$this->assertPattern('/<form id="ScaffoldMockEditForm" method="post" action="\/scaffold_mock\/edit\/1"/', $result);
+		$this->assertPattern('/<form action="\/scaffold_mock\/edit\/1" id="ScaffoldMockEditForm" method="post"/', $result);
 		$this->assertPattern('/<legend>Edit Scaffold Mock<\/legend>/', $result);
 
 		$this->assertPattern('/input type="hidden" name="data\[ScaffoldMock\]\[id\]" value="1" id="ScaffoldMockId"/', $result);
@@ -685,7 +685,7 @@ class ScaffoldTest extends CakeTestCase {
  * @return void
  */
 	function startTest() {
-		$this->Controller =& new ScaffoldMockController();
+		$this->Controller = new ScaffoldMockController();
 	}
 
 /**
@@ -726,10 +726,11 @@ class ScaffoldTest extends CakeTestCase {
 		$this->Controller->controller = 'scaffold_mock';
 		$this->Controller->base = '/';
 		$this->Controller->constructClasses();
-		$Scaffold =& new TestScaffoldMock($this->Controller, $params);
+		$Scaffold = new TestScaffoldMock($this->Controller, $params);
 		$result = $Scaffold->getParams();
 		$this->assertEqual($result['action'], 'admin_edit');
 	}
+
 /**
  * test that the proper names and variable values are set by Scaffold
  *
@@ -756,7 +757,7 @@ class ScaffoldTest extends CakeTestCase {
 		$this->Controller->controller = 'scaffold_mock';
 		$this->Controller->base = '/';
 		$this->Controller->constructClasses();
-		$Scaffold =& new TestScaffoldMock($this->Controller, $params);
+		$Scaffold = new TestScaffoldMock($this->Controller, $params);
 		$result = $Scaffold->controller->viewVars;
 
 		$this->assertEqual($result['title_for_layout'], 'Scaffold :: Admin Edit :: Scaffold Mock');
@@ -768,6 +769,21 @@ class ScaffoldTest extends CakeTestCase {
 		$this->assertEqual($result['singularVar'], 'scaffoldMock');
 		$this->assertEqual($result['pluralVar'], 'scaffoldMock');
 		$this->assertEqual($result['scaffoldFields'], array('id', 'user_id', 'title', 'body', 'published', 'created', 'updated'));
+	}
+
+/**
+ * test that Scaffold overrides the view property even if its set to 'Theme'
+ *
+ * @return void
+ */
+	function testScaffoldChangingViewProperty() {
+		$this->Controller->action = 'edit';
+		$this->Controller->theme = 'test_theme';
+		$this->Controller->view = 'Theme';
+		$this->Controller->constructClasses();
+		$Scaffold = new TestScaffoldMock($this->Controller, array());
+
+		$this->assertEqual($this->Controller->view, 'Scaffold');
 	}
 
 /**

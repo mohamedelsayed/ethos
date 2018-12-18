@@ -8,12 +8,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake
@@ -35,7 +35,7 @@ App::import('Controller', 'Controller', false);
  * @package       cake
  * @subpackage    cake.cake
  */
-class Dispatcher extends Object {
+class Dispatcher extends CakeObject {
 
 /**
  * Base URL
@@ -82,7 +82,7 @@ class Dispatcher extends Object {
 	}
 
 /**
- * Dispatches and invokes given URL, handing over control to the involved controllers, and then renders the 
+ * Dispatches and invokes given URL, handing over control to the involved controllers, and then renders the
  * results (if autoRender is set).
  *
  * If no controller of given name can be found, invoke() shows error messages in
@@ -111,7 +111,7 @@ class Dispatcher extends Object {
 		$this->here = $this->base . '/' . $url;
 
 		if ($this->asset($url) || $this->cached($url)) {
-			$this->_stop();
+			return;
 		}
 		$controller =& $this->__getController();
 
@@ -162,7 +162,7 @@ class Dispatcher extends Object {
 		} else {
 			$controller->data = null;
 		}
-		if (array_key_exists('return', $this->params) && $this->params['return'] == 1) {
+		if (isset($this->params['return']) && $this->params['return'] == 1) {
 			$controller->autoRender = false;
 		}
 		if (!empty($this->params['bare'])) {
@@ -227,8 +227,11 @@ class Dispatcher extends Object {
  */
 	function __extractParams($url, $additionalParams = array()) {
 		$defaults = array('pass' => array(), 'named' => array(), 'form' => array());
-		$this->params = array_merge($defaults, $url, $additionalParams);
-		return Router::url($url);
+		$params = array_merge($defaults, $url, $additionalParams);
+		$this->params = $params;
+
+		$params += array('base' => false, 'url' => array());
+		return ltrim(Router::reverse($params), '/');
 	}
 
 /**
@@ -261,9 +264,9 @@ class Dispatcher extends Object {
 		$namedExpressions = Router::getNamedExpressions();
 		extract($namedExpressions);
 		include CONFIGS . 'routes.php';
-		$params = array_merge(Router::parse($fromUrl), $params);
+		$params = array_merge(array('controller' => '', 'action' => ''), Router::parse($fromUrl), $params);
 
-		if (strlen($params['action']) === 0) {
+		if (empty($params['action'])) {
 			$params['action'] = 'index';
 		}
 		if (isset($params['form']['data'])) {
@@ -354,13 +357,16 @@ class Dispatcher extends Object {
 		if ($base === DS || $base === '.') {
 			$base = '';
 		}
-		$this->webroot = $base .'/';
+		$this->webroot = $base . '/';
 
-		if (!empty($base)) {
-			if (strpos($this->webroot, $dir) === false) {
+		$docRoot = realpath(env('DOCUMENT_ROOT'));
+		$docRootContainsWebroot = strpos($docRoot, $dir . '/' . $webroot);
+
+		if (!empty($base) || !$docRootContainsWebroot) {
+			if (strpos($this->webroot, '/' . $dir . '/') === false) {
 				$this->webroot .= $dir . '/' ;
 			}
-			if (strpos($this->webroot, $webroot) === false) {
+			if (strpos($this->webroot, '/' . $webroot . '/') === false) {
 				$this->webroot .= $webroot . '/';
 			}
 		}
@@ -382,7 +388,7 @@ class Dispatcher extends Object {
 		}
 		$ctrlClass .= 'Controller';
 		if (class_exists($ctrlClass)) {
-			$controller =& new $ctrlClass();
+			$controller = new $ctrlClass();
 		}
 		return $controller;
 	}
@@ -480,8 +486,8 @@ class Dispatcher extends Object {
 			if ($tmpUri === '/' || $tmpUri == $baseDir || $tmpUri == $base) {
 				$url = $_GET['url'] = '/';
 			} else {
-				if ($base && strpos($uri, $base) !== false) {
-					$elements = explode($base, $uri);
+				if ($base && strpos($uri, $base) === 0) {
+					$elements = explode($base, $uri, 2);
 				} elseif (preg_match('/^[\/\?\/|\/\?|\?\/]/', $uri)) {
 					$elements = array(1 => preg_replace('/^[\/\?\/|\/\?|\?\/]/', '', $uri));
 				} else {
@@ -533,7 +539,7 @@ class Dispatcher extends Object {
 					App::import('View', 'View', false);
 				}
 				$controller = null;
-				$view =& new View($controller);
+				$view = new View($controller);
 				$return = $view->renderCache($filename, getMicrotime());
 				if (!$return) {
 					ClassRegistry::removeObject('view');
@@ -557,7 +563,7 @@ class Dispatcher extends Object {
 		}
 		$filters = Configure::read('Asset.filter');
 		$isCss = (
-			strpos($url, 'ccss/') === 0 || 
+			strpos($url, 'ccss/') === 0 ||
 			preg_match('#^(theme/([^/]+)/ccss/)|(([^/]+)(?<!css)/ccss)/#i', $url)
 		);
 		$isJs = (
@@ -576,27 +582,23 @@ class Dispatcher extends Object {
 			$this->_stop();
 		}
 		$controller = null;
-		$ext = array_pop(explode('.', $url));
+		$urlParts = explode('.', $url);
+		$ext = array_pop($urlParts);
 		$parts = explode('/', $url);
 		$assetFile = null;
 
 		if ($parts[0] === 'theme') {
 			$themeName = $parts[1];
 			unset($parts[0], $parts[1]);
-			$fileFragment = implode('/', $parts);
-
-			$viewPaths = App::path('views');
-			foreach ($viewPaths as $viewPath) {
-				$path = $viewPath . 'themed' . DS . $themeName . DS . 'webroot' . DS;
-				if (file_exists($path . $fileFragment)) {
-					$assetFile = $path . $fileFragment;
-					break;
-				}
+			$fileFragment = implode(DS, $parts);
+			$path = App::themePath($themeName) . 'webroot' . DS;
+			if (file_exists($path . $fileFragment)) {
+				$assetFile = $path . $fileFragment;
 			}
 		} else {
 			$plugin = $parts[0];
 			unset($parts[0]);
-			$fileFragment = implode('/', $parts);
+			$fileFragment = implode(DS, $parts);
 			$pluginWebroot = App::pluginPath($plugin) . 'webroot' . DS;
 			if (file_exists($pluginWebroot . $fileFragment)) {
 				$assetFile = $pluginWebroot . $fileFragment;
@@ -620,12 +622,13 @@ class Dispatcher extends Object {
  */
 	function _deliverAsset($assetFile, $ext) {
 		$ob = @ini_get("zlib.output_compression") !== '1' && extension_loaded("zlib") && (strpos(env('HTTP_ACCEPT_ENCODING'), 'gzip') !== false);
-		if ($ob && Configure::read('Asset.compress')) {
+		$compressionEnabled = $ob && Configure::read('Asset.compress');
+		if ($compressionEnabled) {
 			ob_start();
 			ob_start('ob_gzhandler');
 		}
 
-		App::import('View', 'Media', false);
+		App::import('View', 'Media');
 		$controller = null;
 		$Media = new MediaView($controller);
 		if (isset($Media->mimeType[$ext])) {
@@ -647,10 +650,13 @@ class Dispatcher extends Object {
 		if ($ext === 'css' || $ext === 'js') {
 			include($assetFile);
 		} else {
+			if ($compressionEnabled) {
+				ob_clean();
+			}
 			readfile($assetFile);
 		}
 
-		if (Configure::read('Asset.compress')) {
+		if ($compressionEnabled) {
 			ob_end_flush();
 		}
 	}

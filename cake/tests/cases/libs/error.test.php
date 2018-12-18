@@ -4,14 +4,14 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs
  * @since         CakePHP(tm) v 1.2.0.5432
@@ -30,7 +30,7 @@ if (!defined('CAKEPHP_UNIT_TEST_EXECUTION')) {
  * @package       cake
  * @subpackage    cake.tests.cases.libs
  */
-class BlueberryComponent extends Object {
+class BlueberryComponent extends CakeObject {
 
 /**
  * testName property
@@ -279,19 +279,19 @@ class ErrorHandlerTest extends CakeTestCase {
 		$back = Configure::read('debug');
 		Configure::write('debug', 2);
 		ob_start();
-		$ErrorHandler =& new MyCustomErrorHandler('missingWidgetThing', array('message' => 'doh!'));
+		$ErrorHandler = new MyCustomErrorHandler('missingWidgetThing', array('message' => 'doh!'));
 		$result = ob_get_clean();
 		$this->assertEqual($result, 'widget thing is missing');
 
 		Configure::write('debug', 0);
 		ob_start();
-		$ErrorHandler =& new MyCustomErrorHandler('missingWidgetThing', array('message' => 'doh!'));
+		$ErrorHandler = new MyCustomErrorHandler('missingWidgetThing', array('message' => 'doh!'));
 		$result = ob_get_clean();
 		$this->assertEqual($result, 'widget thing is missing', 'Method declared in subclass converted to error404. %s');
 
 		Configure::write('debug', 0);
 		ob_start();
-		$ErrorHandler =& new MyCustomErrorHandler('missingController', array(
+		$ErrorHandler = new MyCustomErrorHandler('missingController', array(
 			'className' => 'Missing', 'message' => 'Page not found'
 		));
 		$result = ob_get_clean();
@@ -339,7 +339,7 @@ class ErrorHandlerTest extends CakeTestCase {
 	 	$this->assertPattern("/<strong>'\/test_error'<\/strong>/", $result);
 
 		ob_start();
-		$TestErrorHandler =& new TestErrorHandler('error404', array('message' => 'Page not found'));
+		$TestErrorHandler = new TestErrorHandler('error404', array('message' => 'Page not found'));
 		ob_get_clean();
 		ob_start();
 		$TestErrorHandler->error404(array(
@@ -608,5 +608,23 @@ class ErrorHandlerTest extends CakeTestCase {
 		$this->assertPattern('/<h2>Missing Model<\/h2>/', $result);
 		$this->assertPattern('/<em>Article<\/em> could not be found./', $result);
 		$this->assertPattern('/(\/|\\\)article.php/', $result);
+	}
+
+/**
+ * testing that having a code => 500 in the cakeError call makes an 
+ * internal server error.
+ *
+ * @return void
+ */
+	function testThatCode500Works() {
+		Configure::write('debug', 0);
+		ob_start();
+		$TestErrorHandler = new TestErrorHandler('missingTable', array(
+			'className' => 'Article',
+			'table' => 'articles',
+			'code' => 500
+		));
+		$result = ob_get_clean();
+		$this->assertPattern('/<h2>An Internal Error Has Occurred<\/h2>/', $result);
 	}
 }

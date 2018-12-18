@@ -12,17 +12,17 @@ class YearGroup extends AppModel {
     var $displayField = 'title';
     //Validation rules
     var $validate = array(
-        'title' => array(
-            'notempty' => array(
-                'rule' => array('notempty'),
-                'message' => 'Title cannot be left blank',),
-        ),
-        'weight' => array(
-            'numeric' => array(
-                'rule' => array('numeric'),
-                'message' => 'Weight must be numeric.',
-            ),
-        ),
+//        'title' => array(
+//            'notempty' => array(
+//                'rule' => array('notempty'),
+//                'message' => 'Title cannot be left blank',),
+//        ),
+//        'weight' => array(
+//            'numeric' => array(
+//                'rule' => array('numeric'),
+//                'message' => 'Weight must be numeric.',
+//            ),
+//        ),
     );
     var $belongsTo = array(
 //        'Member' => array(

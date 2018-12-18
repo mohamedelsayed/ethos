@@ -73,7 +73,7 @@ echo $this->Html->css(array('backend/admissions'));
         <?php if ($request['Request']['status'] != 3) { ?>
             <li><?php echo $this->Html->link(__('Reject Application', true), array('action' => 'changeStatus', $request['Request']['id'], 3), null, sprintf(__('Are you sure you want to reject # %s?', true), $request['Request']['id'])); ?> </li>
         <?php } ?>
-        <li><?php echo $this->Html->link(__('Export Application', true), array('action' => 'export', $request['Request']['id'])); ?> </li>
+        <li><?php echo $this->Html->link(__('Export Application', true), array('action' => 'exportAction', $request['Request']['id'])); ?> </li>
         <li><?php echo $this->Html->link(__('List Applications', true), array('action' => 'index')); ?> </li>
     </ul>
 </div>

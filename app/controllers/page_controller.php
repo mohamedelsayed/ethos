@@ -351,7 +351,6 @@ class PageController extends AppController {
             $this->loadModel('Cat');
             $cat = $this->Cat->read(null, $admissionCatId);
             $to = $cat['Cat']['to_email'];
-            $from = $to;
             $this->loadModel('Setting');
             $settings = $this->Setting->read(null, 1);
             $siteTitle = $settings['Setting']['title'];
@@ -361,18 +360,18 @@ class PageController extends AppController {
             $email_tpl_path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . 'email' . DS . 'admissions' . DS;
             $tpl = file_get_contents($email_tpl_path . 'request.ctp');
             $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-            $mailSent = $this->sendMail($to, $subject, $body, $from);
+            $mailSent = $this->sendMail($to, $subject, $body);
             $tpl = file_get_contents($email_tpl_path . 'request.ctp');
             $messageIn = $this->getEmailTemplateBody('notification');
             if ($parentMail1 != '') {
                 $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName1, $application_number), $messageIn);
                 $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-                $mailSent = $this->sendMail($parentMail1, $subject, $body, $from);
+                $mailSent = $this->sendMail($parentMail1, $subject, $body);
             }
             if ($parentMail2 != '') {
                 $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName2, $application_number), $messageIn);
                 $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-                $mailSent = $this->sendMail($parentMail2, $subject, $body, $from);
+                $mailSent = $this->sendMail($parentMail2, $subject, $body);
             }
             if ($mailSent) {
                 $dataIn['status'] = 'success';
@@ -433,7 +432,12 @@ class PageController extends AppController {
                 'Request.id' => 'DESC']
                 ]
         );
-        $year_application_number = (date('y') * 100000) + 1;
+        $month = date('n');
+        $leadingYear = date('y');
+        if ($month >= 10) {
+            $leadingYear += 1;
+        }
+        $year_application_number = ($leadingYear * 100000) + 1;
         $last_application_number = 0;
         if (!empty($lastRequest) && isset($lastRequest['Request']['application_number'])) {
             $last_application_number = $lastRequest['Request']['application_number'];

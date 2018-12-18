@@ -47,7 +47,9 @@
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['academic_year_entry_input'])) {
-            echo $terms[$dataIn['academic_year_entry_input']];
+            if (isset($terms[$dataIn['academic_year_entry_input']])) {
+                echo $terms[$dataIn['academic_year_entry_input']];
+            }
         }
         ?>
         &nbsp;
@@ -58,7 +60,9 @@
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['year_group_applying_to_input'])) {
-            echo $yearGroups[$dataIn['year_group_applying_to_input']];
+            if (isset($yearGroups[$dataIn['year_group_applying_to_input']])) {
+                echo $yearGroups[$dataIn['year_group_applying_to_input']];
+            }
         }
         ?>
         &nbsp;
@@ -69,7 +73,9 @@
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['current_year_group_input'])) {
-            echo $yearGroups[$dataIn['current_year_group_input']];
+            if (isset($yearGroups[$dataIn['current_year_group_input']])) {
+                echo $yearGroups[$dataIn['current_year_group_input']];
+            }
         }
         ?>
         &nbsp;

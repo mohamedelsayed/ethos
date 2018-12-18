@@ -3,10 +3,10 @@
     <fieldset>
         <legend><?php __('Add EmailTemplate'); ?></legend>
         <?php
-        echo $this->Form->input('title', array("label" => $titleLabel));
-        echo $this->Form->input('EmailTemplate.body', array('class' => 'ckeditor'));
+        echo $this->Form->input('title', array("label" => $titleLabel, 'required' => 'required'));
+        echo $this->Form->input('EmailTemplate.body', array('class' => 'ckeditor', 'required' => 'required'));
 //        echo $this->Form->input('body');
-        echo $this->Form->input('identifier');
+        echo $this->Form->input('identifier', ['required' => 'required']);
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Submit', true)); ?>

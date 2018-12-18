@@ -5,7 +5,7 @@
         <div id="form">
             <?php
             echo $this->Form->input('id');
-            echo $this->Form->input('title', array("label" => $titleLabel, 'class' => 'ckeditor'));
+            echo $this->Form->input('Album.title', array("label" => $titleLabel, 'class' => 'ckeditor', 'required' => 'required'));
             echo $this->Form->input('meta_keywords');
             echo $this->Form->input('meta_description');
             echo $this->Form->input('approved')
@@ -27,7 +27,8 @@
                 <div class="tabdiv" id="tab2" style="display: block;">
                     <?php include_once 'upload_images.php'; ?>
                     <?php //echo $this->Form->input('Gal.0.caption', array('value'=>'')); ?>
-                    <?php //echo $this->Form->input('Gal', array('type'=>'file', 'multiple' => 'multiple'));
+                    <?php
+                    //echo $this->Form->input('Gal', array('type'=>'file', 'multiple' => 'multiple'));
                     /* echo '<h3>'.__('Related Images', true).'</h3>';
                       echo $this->element('backend/images_gallery_view', array('gallery' => $this->data['Gal']));
                       ?>
@@ -83,4 +84,4 @@
         <li><?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('Album.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('Album.id'))); ?></li>
         <li><?php echo $this->Html->link(__('List Albums', true), array('action' => 'index')); ?></li>
     </ul>
-</div> 
+</div>

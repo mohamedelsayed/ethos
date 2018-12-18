@@ -5,12 +5,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -105,7 +105,7 @@ class DboOracleTest extends CakeTestCase {
  */
 	function testName() {
 		$Db = $this->db;
-		#$Db =& new DboOracle($config = null, $autoConnect = false);
+		#$Db = new DboOracle($config = null, $autoConnect = false);
 
 		$r = $Db->name($Db->name($Db->name('foo.last_update_date')));
 		$e = 'foo.last_update_date';

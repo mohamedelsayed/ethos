@@ -5,12 +5,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP :  Rapid Development Framework (http://cakephp.org)
- * Copyright 2006-2010, Cake Software Foundation, Inc.
+ * Copyright 2005-2012, Cake Software Foundation, Inc.
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2006-2010, Cake Software Foundation, Inc.
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc.
  * @link          http://cakephp.org CakePHP Project
  * @package       cake
  * @subpackage    cake.tests.cases.console.libs.tasks
@@ -58,8 +58,8 @@ class ApiShellTest extends CakeTestCase {
  * @access public
  */
 	function startTest() {
-		$this->Dispatcher =& new ApiShellMockShellDispatcher();
-		$this->Shell =& new MockApiShell($this->Dispatcher);
+		$this->Dispatcher = new ApiShellMockShellDispatcher();
+		$this->Shell = new MockApiShell($this->Dispatcher);
 		$this->Shell->Dispatch =& $this->Dispatcher;
 	}
 

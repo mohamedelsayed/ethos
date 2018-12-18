@@ -87,7 +87,16 @@ jQuery(function () {
     });
     jQuery(document).on("change", "#parental_marital_status", function () {
         var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#" + id_val, '#parental_marital_status_details', 'divorced');
+        var divorced_value = 'divorced';
+        show_textbox_if_value_selected("#" + id_val, '#parental_marital_status_details', divorced_value);
+        var val = jQuery("#" + id_val).val();
+        var item = jQuery('#father_national_id');
+        if (val.toLowerCase() == divorced_value) {
+            item.removeClass(required_input_class);
+            item.removeClass(required_class);
+        } else {
+            item.addClass(required_input_class);
+        }
     });
     jQuery("#mesagepopboxadmissiondisclaimerpopoup").on("click", ".closealert", function () {
         close_admission_disclaimer_popup();
@@ -171,10 +180,12 @@ function validate_required_input(obj) {
         }
     }
     if (input_type == 'tel') {
+        error = 0;
         if (!isNumeric(val)) {
             error = 1;
-        } else {
-            error = 0;
+        }
+        if (jQuery.trim(val).length < 11) {
+            error = 1;
         }
     }
     if (input_type == 'checkbox') {
@@ -325,7 +336,6 @@ function show_textbox_if_value_selected(selector1, selector2, value) {
     }
 }
 function open_admission_disclaimer_popup() {
-    console.log('aaa');
     jQuery("#mesagepopboxadmissiondisclaimerpopoup").show();
 }
 function close_admission_disclaimer_popup() {

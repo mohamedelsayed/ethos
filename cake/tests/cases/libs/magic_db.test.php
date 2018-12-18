@@ -5,12 +5,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
@@ -40,7 +40,7 @@ class MagicDbTest extends UnitTestCase {
  * @access public
  */
 	function setUp() {
-		$this->Db =& new MagicDb();
+		$this->Db = new MagicDb();
 	}
 /**
  * MagicDb::analyze should properly detect the file type and output additional info as requested.
@@ -158,7 +158,7 @@ class MagicDbTest extends UnitTestCase {
  * @package       cake
  * @subpackage    cake.tests.cases.libs
  */
-class MagicDbTestData extends Object {
+class MagicDbTestData extends CakeObject {
 /**
  * Base64 encoded data
  *

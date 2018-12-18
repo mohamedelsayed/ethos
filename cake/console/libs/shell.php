@@ -5,12 +5,12 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.console.libs
@@ -24,7 +24,7 @@
  * @package       cake
  * @subpackage    cake.cake.console.libs
  */
-class Shell extends Object {
+class Shell extends CakeObject {
 
 /**
  * An instance of the ShellDispatcher object that loaded this script
@@ -181,7 +181,7 @@ class Shell extends Object {
 	}
 
 /**
- * Starts up the the Shell
+ * Starts up the Shell
  * allows for checking and configuring prior to command or main execution
  * can be overriden in subclasses
  *
@@ -215,7 +215,7 @@ class Shell extends Object {
  */
 	function _loadDbConfig() {
 		if (config('database') && class_exists('DATABASE_CONFIG')) {
-			$this->DbConfig =& new DATABASE_CONFIG();
+			$this->DbConfig = new DATABASE_CONFIG();
 			return true;
 		}
 		$this->err('Database config could not be loaded.');
@@ -238,7 +238,7 @@ class Shell extends Object {
 		}
 
 		if ($this->uses === true && App::import('Model', 'AppModel')) {
-			$this->AppModel =& new AppModel(false, false, false);
+			$this->AppModel = new AppModel(false, false, false);
 			return true;
 		}
 
@@ -307,7 +307,7 @@ class Shell extends Object {
 			} else {
 				$this->taskNames[] = $taskName;
 				if (!PHP5) {
-					$this->{$taskName} =& new $taskClass($this->Dispatch);
+					$this->{$taskName} = new $taskClass($this->Dispatch);
 				} else {
 					$this->{$taskName} = new $taskClass($this->Dispatch);
 				}
@@ -347,13 +347,11 @@ class Shell extends Object {
 			}
 		}
 		if (is_array($options)) {
-			while ($in == '' || ($in && (!in_array(strtolower($in), $options) && !in_array(strtoupper($in), $options)) && !in_array($in, $options))) {
+			while ($in === '' || ($in !== '' && (!in_array(strtolower($in), $options) && !in_array(strtoupper($in), $options)) && !in_array($in, $options))) {
 				$in = $this->Dispatch->getInput($prompt, $options, $default);
 			}
 		}
-		if ($in) {
-			return $in;
-		}
+		return $in;
 	}
 
 /**

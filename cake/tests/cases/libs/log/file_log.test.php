@@ -4,15 +4,15 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs.log
  * @since         CakePHP(tm) v 1.3
@@ -36,7 +36,7 @@ class FileLogTest extends CakeTestCase {
  */
 	function testLogFileWriting() {
 		@unlink(LOGS . 'error.log');
-		$log =& new FileLog();
+		$log = new FileLog();
 		$log->write('warning', 'Test warning');
 		$this->assertTrue(file_exists(LOGS . 'error.log'));
 
@@ -70,7 +70,7 @@ class FileLogTest extends CakeTestCase {
 		$path = TMP . 'tests' . DS;
 		@unlink($path . 'error.log');
 
-		$log =& new FileLog(compact('path'));
+		$log = new FileLog(compact('path'));
 		$log->write('warning', 'Test warning');
 		$this->assertTrue(file_exists($path . 'error.log'));
 		unlink($path . 'error.log');

@@ -4,13 +4,13 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/1.3/en/The-Manual/Common-Tasks-With-CakePHP/Testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.tests.libs.reporter
@@ -34,9 +34,9 @@ class CakeHtmlReporter extends CakeBaseReporter {
  * @param string $params 
  * @return void
  */
-	function CakeHtmlReporter($charset = 'utf-8', $params = array()) {
+	function __construct($charset = 'utf-8', $params = array()) {
 		$params = array_map(array($this, '_htmlEntities'), $params);
-		$this->CakeBaseReporter($charset, $params);
+		CakeBaseReporter::__construct($charset, $params);
 	}
 /**
  * Paints the top of the web page setting the
@@ -74,7 +74,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
 	function paintTestMenu() {
 		$groups = $this->baseUrl() . '?show=groups';
 		$cases = $this->baseUrl() . '?show=cases';
-		$plugins = App::objects('plugin');
+		$plugins = App::objects('plugin', null, false);
 		sort($plugins);
 		include CAKE_TESTS_LIB . 'templates' . DS . 'menu.php';
 	}

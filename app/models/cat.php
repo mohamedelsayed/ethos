@@ -6,28 +6,28 @@
  * @link http://www.mohamedelsayed.net
  * @copyright Copyright (c) 2015 Programming by "mohamedelsayed.net"
  */
-
 class Cat extends AppModel {
 
     var $name = 'Cat';
     var $displayField = 'title';
     var $validate = array(
-        'title' => array(
-            'notempty' => array(
-                'rule' => array('notempty'),
-                'message' => 'Title cannot be left blank',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
-            ),
-        ),
-        'weight' => array(
-            'numeric' => array(
-                'rule' => array('numeric'),
-                'message' => 'Weight must be numeric.',
-            ),
-        ), /* ,
+//        'title' => array(
+//            'notempty' => array(
+//                'rule' => array('notempty'),
+//                'message' => 'Title cannot be left blank',
+//            //'allowEmpty' => false,
+//            //'required' => false,
+//            //'last' => false, // Stop validation after this rule
+//            //'on' => 'create', // Limit validation to 'create' or 'update' operations
+//            ),
+//        ),
+//        'weight' => array(
+//            'numeric' => array(
+//                'rule' => array('numeric'),
+//                'message' => 'Weight must be numeric.',
+//            ),
+//        ),
+            /* ,
               'artist_id' => array(
               'numeric' => array(
               'rule' => array('numeric'),

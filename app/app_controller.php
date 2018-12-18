@@ -434,20 +434,20 @@ class AppController extends Controller {
         return $baseUrl;
     }
 
-    public function sendMail($to, $subject, $body, $from = '') {
-        $this->loadModel('Setting');
-        $settings = $this->Setting->read(null, 1);
+    public function sendMail($to, $subject, $body) {
+//        $this->loadModel('Setting');
+//        $settings = $this->Setting->read(null, 1);
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
         $mail->CharSet = "UTF-8";
-        //$mail->SMTPSecure = 'tls';
+        $mail->SMTPSecure = 'tls';
         $mail->Host = getenv('MAIL_HOST');
         $mail->Port = getenv('MAIL_PORT');
         $mail->Username = getenv('MAIL_USERNAME');
         $mail->Password = getenv('MAIL_PASSWORD');
-        $mail->From = $from;
-        $mail->FromName = $settings['Setting']['title'];
+        $mail->From = getenv('MAIL_USERNAME');
+        $mail->FromName = 'Ethos Online Admissions';
         $mail->addAddress($to);
         $mail->isHTML(true);
         $mail->Subject = $subject;
