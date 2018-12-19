@@ -1,38 +1,42 @@
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo $titleLabel; ?></div>
+    <div class="leftDiv "><?php echo $titleLabel; ?>:</div>
     <div class="rightDiv ">
         <?php echo $request['Request']['title']; ?>
         &nbsp;
     </div>
 </div>
-<?php if (isset($dataIn['filesData']['child_photo']) && $dataIn['filesData']['child_photo'] != '') { ?>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('Child’s Photo'); ?></div>
-        <div class="rightDiv ">
-            <?php
-            $img_url = $base_url . '/' . $dataIn['filesData']['child_photo'];
-            ?>
-            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-            <img src="<?php echo $img_url; ?>"/>
-            &nbsp;
+<?php if (isset($base_url)) { ?>
+    <?php if (isset($dataIn['filesData']['child_photo']) && $dataIn['filesData']['child_photo'] != '') { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Child’s Photo'); ?>:</div>
+            <div class="rightDiv ">
+                <?php
+                $img_url = $base_url . '/' . $dataIn['filesData']['child_photo'];
+                ?>
+                <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                <img src="<?php echo $img_url; ?>"/>
+                &nbsp;
+            </div>
         </div>
-    </div>
+    <?php } ?>
 <?php } ?>
-<?php if (isset($dataIn['filesData']['child_birth_certificate']) && $dataIn['filesData']['child_birth_certificate'] != '') { ?>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('Child’s birth certificate (electronic)'); ?></div>
-        <div class="rightDiv ">
-            <?php
-            $img_url = $base_url . '/' . $dataIn['filesData']['child_birth_certificate'];
-            ?>
-            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-            <img src="<?php echo $img_url; ?>"/>
-            &nbsp;
+<?php if (isset($base_url)) { ?>
+    <?php if (isset($dataIn['filesData']['child_birth_certificate']) && $dataIn['filesData']['child_birth_certificate'] != '') { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Child’s birth certificate (electronic)'); ?>:</div>
+            <div class="rightDiv ">
+                <?php
+                $img_url = $base_url . '/' . $dataIn['filesData']['child_birth_certificate'];
+                ?>
+                <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                <img src="<?php echo $img_url; ?>"/>
+                &nbsp;
+            </div>
         </div>
-    </div>
+    <?php } ?>
 <?php } ?>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Date of Birth'); ?></div>
+    <div class="leftDiv "><?php echo __('Date of Birth'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['birth_date'])) {
@@ -43,7 +47,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Academic Year Entry'); ?></div>
+    <div class="leftDiv "><?php echo __('Academic Year Entry'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['academic_year_entry_input'])) {
@@ -56,7 +60,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Year Group Applying to'); ?></div>
+    <div class="leftDiv "><?php echo __('Year Group Applying to'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['year_group_applying_to_input'])) {
@@ -69,7 +73,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Current Year Group / Grade'); ?></div>
+    <div class="leftDiv "><?php echo __('Current Year Group / Grade'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['current_year_group_input'])) {
@@ -82,7 +86,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Gender'); ?></div>
+    <div class="leftDiv "><?php echo __('Gender'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['gender_input'])) {
@@ -93,7 +97,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Nationality'); ?></div>
+    <div class="leftDiv "><?php echo __('Nationality'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['nationality'])) {
@@ -104,7 +108,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Religion'); ?></div>
+    <div class="leftDiv "><?php echo __('Religion'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['religion'])) {
@@ -115,7 +119,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Language Spoken At Home'); ?></div>
+    <div class="leftDiv "><?php echo __('Language Spoken At Home'); ?>:</div>
     <div class="rightDiv">
         <?php
         if (isset($dataIn['language'])) {
@@ -126,7 +130,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Will the pupil require bus transportation?'); ?></div>
+    <div class="leftDiv "><?php echo __('Will the pupil require bus transportation?'); ?>:</div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['require_bus'])) {

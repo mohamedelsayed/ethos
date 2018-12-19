@@ -36,7 +36,7 @@ echo $this->Html->css(array('backend/admissions'));
     </div>
     <div id="tapss">
         <ul class="tabs">
-            <li data-tab='tab2' class="current"><a><?php __('Pupil Information') ?></a></li>
+            <li data-tab='tab2' class="current"><a><?php __('Pupil’s Information') ?></a></li>
             <li data-tab='tab1'><a><?php __('Previous School(s) / Nursery') ?></a></li>
             <li data-tab='tab3'><a><?php __('Parents Information') ?></a></li>
             <li data-tab='tab4'><a><?php __('Emergency Information') ?></a></li>
@@ -73,7 +73,8 @@ echo $this->Html->css(array('backend/admissions'));
         <?php if ($request['Request']['status'] != 3) { ?>
             <li><?php echo $this->Html->link(__('Reject Application', true), array('action' => 'changeStatus', $request['Request']['id'], 3), null, sprintf(__('Are you sure you want to reject # %s?', true), $request['Request']['id'])); ?> </li>
         <?php } ?>
-        <li><?php echo $this->Html->link(__('Export Application', true), array('action' => 'exportAction', $request['Request']['id'])); ?> </li>
+        <li><?php echo $this->Html->link(__('Export Application To Excel', true), array('action' => 'exportAction', $request['Request']['id'])); ?> </li>
+        <li><?php echo $this->Html->link(__('Export Application To PDF', true), array('action' => 'getPdf', $request['Request']['id']), ['target' => '_blank']); ?> </li>
         <li><?php echo $this->Html->link(__('List Applications', true), array('action' => 'index')); ?> </li>
     </ul>
 </div>

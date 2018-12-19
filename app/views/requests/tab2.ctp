@@ -45,16 +45,18 @@ if ($counter > 0) {
         </div>
     </div>
 <?php } ?>
-<?php if (isset($dataIn['filesData']['previous_school_report']) && $dataIn['filesData']['previous_school_report'] != '') { ?>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('Previous school report'); ?></div>
-        <div class="rightDiv ">
-            <?php $img_url = $base_url . '/' . $dataIn['filesData']['previous_school_report']; ?>
-            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-            <img src="<?php echo $img_url; ?>"/>
-            &nbsp;
+<?php if (isset($base_url)) { ?>
+    <?php if (isset($dataIn['filesData']['previous_school_report']) && $dataIn['filesData']['previous_school_report'] != '') { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Previous school report'); ?></div>
+            <div class="rightDiv ">
+                <?php $img_url = $base_url . '/' . $dataIn['filesData']['previous_school_report']; ?>
+                <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                <img src="<?php echo $img_url; ?>"/>
+                &nbsp;
+            </div>
         </div>
-    </div>
+    <?php } ?>
 <?php } ?>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
     <div class="leftDiv "><?php echo __('Has the pupil ever skipped a year?'); ?></div>

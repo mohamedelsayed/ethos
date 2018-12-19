@@ -1,5 +1,5 @@
 <div class="tab tabIn0">
-    <div class="pupil_details-title head_div orange_head"><?php echo __('1. Pupil Information') ?></div>
+    <div class="pupil_details-title head_div orange_head"><?php echo __('1. Pupil’s Information') ?></div>
     <div class="input_new">
         <label for="child_name"><?php echo __('Child’s Name'); ?>:</label>
         <span>

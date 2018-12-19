@@ -380,4 +380,49 @@ class RequestsController extends AuthController {
         }
     }
 
+    public function getPdf($id = null) {
+        if (!$id) {
+            $this->Session->setFlash(__('Invalid application.', true));
+            $this->redirect(array('action' => 'index'));
+        }
+        $request = $this->Request->read(null, $id);
+        if (!empty($request)) {
+            $application_number = $request['Request']['application_number'];
+            $dompdf = new Dompdf\Dompdf();
+            $this->loadModel('Term');
+            $terms = $this->Term->find('list');
+            $this->loadModel('YearGroup');
+            $yearGroups = $this->YearGroup->find('list');
+            $html = '';
+            $style = new \Dompdf\Css\Stylesheet($dompdf);
+            $base_url = $this->getBaseUrl();
+            $style->load_css_file($base_url . '/css/backend/admissions_pdf.css');
+            $dompdf->setCss($style);
+            $dompdf->set_base_path(ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'img' . DS . 'backend' . DS);
+            $html .= '<img width="200" src="admissionLogo.jpg" />';
+            $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
+            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= '<h3 class="section_title">2. Previous School(s) / Nursery</h3>';
+            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab2.ctp';
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= '<h3 class="section_title">3. Parents Information</h3>';
+            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab3.ctp';
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= '<h3 class="section_title">4. Emergency Information</h3>';
+            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab4.ctp';
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= '<h3 class="section_title">5. Developmental History</h3>';
+            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab5.ctp';
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+            $dompdf->stream($application_number . '.pdf', ['compress' => 0, 'Attachment' => 0]);
+        } else {
+            $this->Session->setFlash(__('Invalid application.', true));
+            $this->redirect(array('action' => 'index'));
+        }
+    }
+
 }

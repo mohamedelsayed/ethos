@@ -472,4 +472,17 @@ class AppController extends Controller {
         return $body;
     }
 
+    function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups) {
+        $data = $request['Request']['data'];
+        $request['Request']['data'] = unserialize($data);
+        $dataIn = $request['Request']['data'];
+        $i = 0;
+        $class = ' altrow ';
+        ob_start();
+        include($path);
+        $var = ob_get_contents();
+        ob_end_clean();
+        return $var;
+    }
+
 }

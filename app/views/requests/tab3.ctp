@@ -166,27 +166,31 @@
         </table>
     </div>
 </div>
-<?php if (isset($dataIn['filesData']['father_national_id']) && $dataIn['filesData']['father_national_id'] != '') { ?>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('Father National ID/ Passport'); ?></div>
-        <div class="rightDiv ">
-            <?php $img_url = $base_url . '/' . $dataIn['filesData']['father_national_id']; ?>
-            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-            <img src="<?php echo $img_url; ?>"/>
-            &nbsp;
+<?php if (isset($base_url)) { ?>
+    <?php if (isset($dataIn['filesData']['father_national_id']) && $dataIn['filesData']['father_national_id'] != '') { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Father National ID/ Passport'); ?></div>
+            <div class="rightDiv ">
+                <?php $img_url = $base_url . '/' . $dataIn['filesData']['father_national_id']; ?>
+                <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                <img src="<?php echo $img_url; ?>"/>
+                &nbsp;
+            </div>
         </div>
-    </div>
+    <?php } ?>
 <?php } ?>
-<?php if (isset($dataIn['filesData']['mother_national_id']) && $dataIn['filesData']['mother_national_id'] != '') { ?>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('Mother National ID/ Passport'); ?></div>
-        <div class="rightDiv ">
-            <?php $img_url = $base_url . '/' . $dataIn['filesData']['mother_national_id']; ?>
-            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-            <img src="<?php echo $img_url; ?>"/>
-            &nbsp;
+<?php if (isset($base_url)) { ?>
+    <?php if (isset($dataIn['filesData']['mother_national_id']) && $dataIn['filesData']['mother_national_id'] != '') { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Mother National ID/ Passport'); ?></div>
+            <div class="rightDiv ">
+                <?php $img_url = $base_url . '/' . $dataIn['filesData']['mother_national_id']; ?>
+                <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                <img src="<?php echo $img_url; ?>"/>
+                &nbsp;
+            </div>
         </div>
-    </div>
+    <?php } ?>
 <?php } ?>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
     <div class="leftDiv "><?php echo __('Parental Marital Status'); ?></div>
