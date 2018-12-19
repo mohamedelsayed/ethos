@@ -198,7 +198,7 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function exportAction($id = null) {
+    public function exportApplicationToExcel($id = null) {
         $ids = [];
         if ($id) {
             $ids = [$id];
@@ -380,7 +380,7 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function getPdf($id = null) {
+    public function exportApplicationToPDF($id = null) {
         if (!$id) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
