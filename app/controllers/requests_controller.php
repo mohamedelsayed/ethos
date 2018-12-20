@@ -388,18 +388,37 @@ class RequestsController extends AuthController {
         $request = $this->Request->read(null, $id);
         if (!empty($request)) {
             $application_number = $request['Request']['application_number'];
-            $dompdf = new Dompdf\Dompdf();
             $this->loadModel('Term');
             $terms = $this->Term->find('list');
             $this->loadModel('YearGroup');
             $yearGroups = $this->YearGroup->find('list');
-            $html = '';
-            $style = new \Dompdf\Css\Stylesheet($dompdf);
             $base_url = $this->getBaseUrl();
+            $html = '';
+            $options = new \Dompdf\Options();
+            $options->setIsRemoteEnabled(true);
+            $options->setTempDir(ROOT . DS . 'app' . DS . 'tmp');
+            $options->set('debugKeepTemp', TRUE);
+            $options->setIsHtml5ParserEnabled(true);
+            $dompdf = new Dompdf\Dompdf();
+            $dompdf->setOptions($options);
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => FALSE,
+                    'verify_peer_name' => FALSE,
+                    'allow_self_signed' => TRUE
+                ]
+            ]);
+            $dompdf->setHttpContext($context);
+            $style = new \Dompdf\Css\Stylesheet($dompdf);
             $style->load_css_file($base_url . '/css/backend/admissions_pdf.css');
             $dompdf->setCss($style);
-            $dompdf->set_base_path(ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'img' . DS . 'backend' . DS);
-            $html .= '<img width="200" src="admissionLogo.jpg" />';
+            $html .= '<html>
+                    <head>
+                        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                    </head>
+                <body>';
+            $imgpath = $base_url . '/app/webroot/img/backend/';
+            $html .= '<img width="200" src="' . $imgpath . 'admissionLogo.jpg">';
             $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
@@ -415,6 +434,8 @@ class RequestsController extends AuthController {
             $html .= '<h3 class="section_title">5. Developmental History</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab5.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= '</body>'
+                    . '</html>';
             $dompdf->loadHtml($html);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
