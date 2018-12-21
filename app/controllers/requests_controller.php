@@ -396,7 +396,7 @@ class RequestsController extends AuthController {
             $html = '';
             $options = new \Dompdf\Options();
             $options->setIsRemoteEnabled(true);
-            $options->setTempDir(ROOT . DS . 'app' . DS . 'tmp');
+            $options->setTempDir(ROOT . DS . 'app' . DS . 'tmp' . DS . 'pdf');
             $options->set('debugKeepTemp', TRUE);
             $options->setIsHtml5ParserEnabled(true);
             $dompdf = new Dompdf\Dompdf();
