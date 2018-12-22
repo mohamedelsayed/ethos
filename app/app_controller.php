@@ -4,7 +4,7 @@
  * @author Author "Mohamed Elsayed"
  * @author Author Email "me@mohamedelsayed.net"
  * @link http://www.mohamedelsayed.net
- * @copyright Copyright (c) 2015 Programming by "mohamedelsayed.net"
+ * @copyright Copyright (c) 2018 Programming by "mohamedelsayed.net"
  */
 class AppController extends Controller {
 
@@ -472,7 +472,7 @@ class AppController extends Controller {
         return $body;
     }
 
-    function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups) {
+    public function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups) {
         $data = $request['Request']['data'];
         $request['Request']['data'] = unserialize($data);
         $dataIn = $request['Request']['data'];
@@ -483,6 +483,33 @@ class AppController extends Controller {
         $var = ob_get_contents();
         ob_end_clean();
         return $var;
+    }
+
+    public function getOrientation() {
+        $this->loadModel('Orientation');
+        $today = date("Y-m-d");
+        $orientation = $this->Orientation->find('first', [
+            'conditions' => [
+                'Orientation.approved' => 1,
+                'Orientation.start_date <=' => $today,
+                'Orientation.end_date >=' => $today,
+            ]]
+        );
+        if (isset($orientation['Orientation'])) {
+            return $orientation['Orientation'];
+        } else {
+            return [];
+        }
+    }
+
+    public function check_if_startdate_lessthan_endate($startdate, $endate) {
+        $startdateIn = $startdate['year'] . '-' . $startdate['month'] . '-' . $startdate['day'];
+        $endateIn = $endate['year'] . '-' . $endate['month'] . '-' . $endate['day'];
+        if (strtotime($endateIn) >= strtotime($startdateIn)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

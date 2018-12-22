@@ -62,6 +62,7 @@
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/year_groups'; ?>"><?php echo __('Year Groups'); ?></a></li>
                     </ul>
                 </li>
+                <li class="heading"><a href="<?php echo $this->Session->read('Setting.url') . '/orientations/edit/1'; ?>"><?php echo __('Orientation'); ?></a></li>
             </ul>
         </div>
     <?php } ?>
