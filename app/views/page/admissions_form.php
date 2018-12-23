@@ -1,22 +1,7 @@
-<div id="mesagepopboxadmissiondisclaimerpopoup" class="mesage-pop" >
-    <div id="mesagecontent">
-        <h4>
-            <span id="disclaimer_popup_title">Disclaimer</span>
-            <div id="closedisclaimerypopoup" class="closealert">X</div>
-        </h4>
-        <div class="disclaimerpopoupbody" id="disclaimerpopoupbody">
-            Please make sure you have the soft copies of the following documents before you attempt to complete the online application form:
-            <ul>
-                <li style="display: list-item;">Child’s recent photo (passport size)</li>
-                <li style="display: list-item;">Child’s birth certificate (electronic)</li>
-                <li style="display: list-item;">Parents IDs</li>
-                <li style="display: list-item;">Most recent school report</li>
-                Kindly note that only completed and qualified application forms will be considered.
-        </div>
-    </div>
-    <div class="mesage-pop-bg"></div>
-</div>
 <?php
+if (isset($disclaimer)) {
+    echo $this->element('front' . DS . 'disclaimer', array('disclaimer' => $disclaimer));
+}
 $tabsCount = 5;
 echo $this->Html->css(array('front/jquery-ui', 'front/admissions'));
 echo $this->Javascript->link(array('front/jquery-ui'));
@@ -76,4 +61,3 @@ echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab5', [
 <?php
 echo $this->Form->end();
 echo $this->Javascript->link(array('front/admissions'));
-?>

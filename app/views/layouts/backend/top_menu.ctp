@@ -57,6 +57,7 @@
                 <li class="heading"><a><?php echo __('Admission System'); ?></a>
                     <ul>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/requests'; ?>"><?php echo __('Applications'); ?></a></li>
+                        <li class="heading"><a href="<?php echo $this->Session->read('Setting.url') . '/disclaimers/edit/1'; ?>"><?php echo __('Disclaimer'); ?></a></li>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/email_templates'; ?>"><?php echo __('Email Templates'); ?></a></li>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/terms'; ?>"><?php echo __('Terms'); ?></a></li>
                         <li class=""><a href="<?php echo $this->Session->read('Setting.url') . '/year_groups'; ?>"><?php echo __('Year Groups'); ?></a></li>

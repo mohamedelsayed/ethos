@@ -127,6 +127,17 @@ class PageController extends AppController {
                         )
                 );
                 $this->set('yearGroups', $yearGroups);
+                $this->loadModel('Disclaimer');
+                $disclaimer = $this->Disclaimer->find('first', [
+                    'conditions' => [
+                        'Disclaimer.id' => 1,
+                    ]]
+                );
+                $disclaimerIn = [];
+                if (isset($disclaimer['Disclaimer'])) {
+                    $disclaimerIn = $disclaimer['Disclaimer'];
+                }
+                $this->set('disclaimer', $disclaimerIn);
             }
         }
         $this->set('title_for_layout', strip_tags($title));

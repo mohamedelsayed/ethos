@@ -17,13 +17,14 @@ class OrientationsController extends AuthController {
 //    var $components = array('Upload');
 
     function index() {
-        $this->Orientation->recursive = 0;
-        if (isset($this->data['Orientation']['title'])) {
-            $this->paginate = array(
-                'conditions' => array('Orientation.title LIKE' => "%" . $this->data['Orientation']['title'] . "%"),
-            );
-        }
-        $this->set('orientations', $this->paginate());
+//        $this->Orientation->recursive = 0;
+//        if (isset($this->data['Orientation']['title'])) {
+//            $this->paginate = array(
+//                'conditions' => array('Orientation.title LIKE' => "%" . $this->data['Orientation']['title'] . "%"),
+//            );
+//        }
+//        $this->set('orientations', $this->paginate());
+        $this->redirect(array('action' => 'edit', 1));
     }
 
 //    function view($id = null) {
