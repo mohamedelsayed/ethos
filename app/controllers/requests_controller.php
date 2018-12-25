@@ -221,6 +221,7 @@ class RequestsController extends AuthController {
             $this->loadModel('YearGroup');
             $yearGroups = $this->YearGroup->find('list');
             $data[] = [
+                'Application Number',
                 'Application Date',
                 "Pupil's Name",
                 'Date of Birth',
@@ -254,6 +255,7 @@ class RequestsController extends AuthController {
                     $current_year_group_input = $yearGroups[$dataIn['current_year_group_input']];
                 }
                 $data[] = [
+                    $request['Request']['application_number'],
                     date('d-m-Y', strtotime($request['Request']['created'])),
                     $request['Request']['title'],
                     $dataIn['birth_date'],
