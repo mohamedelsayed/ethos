@@ -347,55 +347,75 @@ class PageController extends AppController {
             if (isset($data['parent_informations24'])) {
                 $parentMail2 = $data['parent_informations24'];
             }
-            $parentName2 = '';
+            if (isset($data['birth_date']))
+                $parentName2 = '';
             if (isset($data['parent_informations2'])) {
                 $parentName2 = $data['parent_informations2'];
             }
-            $this->data['Request']['data'] = serialize($data);
-            $application_number = $this->generateApplicationNumber();
-            $this->data['Request']['application_number'] = $application_number;
-            $this->Request->create();
-            $saved = false;
-            if ($this->Request->save($this->data)) {
-                $saved = true;
+            $required_inputs_array = ['birth_date', 'academic_year_entry_input',
+                'year_group_applying_to_input', 'gender_input', 'nationality',
+                'religion', 'language', 'require_bus', 'parental_marital_status'
+            ];
+            for ($i = 1; $i <= 24; $i++) {
+                $required_inputs_array[] = 'parent_informations' . $i;
             }
-            $this->loadModel('Cat');
-            $cat = $this->Cat->read(null, $admissionCatId);
-            $to = $cat['Cat']['to_email'];
-            $this->loadModel('Setting');
-            $settings = $this->Setting->read(null, 1);
-            $siteTitle = $settings['Setting']['title'];
-            $subject = $cat['Cat']['title'] . ' "' . $siteTitle . '"';
-            $messageIn = $this->getEmailTemplateBody('notification_admin');
-            $message = str_replace(array('{{name}}', '{{application_number}}'), array('Admin', $application_number), $messageIn);
-            $email_tpl_path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . 'email' . DS . 'admissions' . DS;
-            $tpl = file_get_contents($email_tpl_path . 'request.ctp');
-            $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-            $mailSent = $this->sendMail($to, $subject, $body);
-            $tpl = file_get_contents($email_tpl_path . 'request.ctp');
-            $messageIn = $this->getEmailTemplateBody('notification');
-            if ($parentMail1 != '') {
-                $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName1, $application_number), $messageIn);
+            for ($i = 1; $i <= 6; $i++) {
+                $required_inputs_array[] = 'emergency' . $i;
+            }
+            for ($i = 0; $i <= 4; $i++) {
+                $required_inputs_array[] = 'developmental_history' . $i;
+            }
+            $is_valid = $this->validate_required_data($data, $required_inputs_array);
+            if (!$is_valid) {
+                $dataIn['status'] = 'fail';
+                $dataIn['msg'] = __('Please fill required inputs.', true);
+            } else {
+                $this->data['Request']['data'] = serialize($data);
+                $application_number = $this->generateApplicationNumber();
+                $this->data['Request']['application_number'] = $application_number;
+                $this->Request->create();
+                $saved = false;
+                if ($this->Request->save($this->data)) {
+                    $saved = true;
+                }
+                $this->loadModel('Cat');
+                $cat = $this->Cat->read(null, $admissionCatId);
+                $to = $cat['Cat']['to_email'];
+                $this->loadModel('Setting');
+                $settings = $this->Setting->read(null, 1);
+                $siteTitle = $settings['Setting']['title'];
+                $subject = $cat['Cat']['title'] . ' "' . $siteTitle . '"';
+                $messageIn = $this->getEmailTemplateBody('notification_admin');
+                $message = str_replace(array('{{name}}', '{{application_number}}'), array('Admin', $application_number), $messageIn);
+                $email_tpl_path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . 'email' . DS . 'admissions' . DS;
+                $tpl = file_get_contents($email_tpl_path . 'request.ctp');
                 $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-                $mailSent = $this->sendMail($parentMail1, $subject, $body);
+                $mailSent = $this->sendMail($to, $subject, $body);
+                $tpl = file_get_contents($email_tpl_path . 'request.ctp');
+                $messageIn = $this->getEmailTemplateBody('notification');
+                if ($parentMail1 != '') {
+                    $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName1, $application_number), $messageIn);
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
+                    $mailSent = $this->sendMail($parentMail1, $subject, $body);
+                }
+                if ($parentMail2 != '') {
+                    $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName2, $application_number), $messageIn);
+                    $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
+                    $mailSent = $this->sendMail($parentMail2, $subject, $body);
+                }
+                if ($mailSent) {
+                    $dataIn['status'] = 'success';
+                    $dataIn['msg'] = __('Thank you for your message. We will get back to you the soonest, your application number is: ' . $application_number . '', true);
+                }
             }
-            if ($parentMail2 != '') {
-                $message = str_replace(array('{{name}}', '{{application_number}}'), array($parentName2, $application_number), $messageIn);
-                $body = str_replace(array('{{mailsubject}}', '{{message}}'), array('', $message), $tpl);
-                $mailSent = $this->sendMail($parentMail2, $subject, $body);
-            }
-            if ($mailSent) {
-                $dataIn['status'] = 'success';
-                $dataIn['msg'] = __('Thank you for your message. We will get back to you the soonest, your application number is: ' . $application_number . '', true);
-            }
-            if ($type == 'notajax') {
-                $this->redirect($this->getBaseUrl() . '/');
-            } elseif ($type == 'ajax') {
-                $this->autoRender = false;
-                header('Content-Type: application/json');
-                echo json_encode($dataIn);
-                exit;
-            }
+        }
+        if ($type == 'notajax') {
+            $this->redirect($this->getBaseUrl() . '/');
+        } elseif ($type == 'ajax') {
+            $this->autoRender = false;
+            header('Content-Type: application/json');
+            echo json_encode($dataIn);
+            exit;
         }
     }
 
@@ -458,6 +478,20 @@ class PageController extends AppController {
             $application_number = $last_application_number + 1;
         }
         return $application_number;
+    }
+
+    public function validate_required_data($data, $required_inputs_array) {
+        foreach ($required_inputs_array as $key => $value) {
+            if (isset($data[$value])) {
+                $item = trim($data[$value]);
+                if ($item == '' || is_null($item)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
