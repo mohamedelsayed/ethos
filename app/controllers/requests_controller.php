@@ -247,12 +247,18 @@ class RequestsController extends AuthController {
                 "Marital Status",
                 "Emergancy Contact 1",
                 "Emergancy Contact 2",
+                "Online Applications Status",
             ];
             foreach ($requests as $key => $request) {
                 $dataIn = unserialize($request['Request']['data']);
                 $current_year_group_input = '';
                 if (isset($yearGroups[$dataIn['current_year_group_input']])) {
                     $current_year_group_input = $yearGroups[$dataIn['current_year_group_input']];
+                }
+                if (isset($this->statusOptions[$request['Request']['status']])) {
+                    $statusIn = $this->statusOptions[$request['Request']['status']];
+                } else {
+                    $statusIn = '---';
                 }
                 $data[] = [
                     $request['Request']['application_number'],
@@ -281,8 +287,11 @@ class RequestsController extends AuthController {
                     $dataIn['parental_marital_status'],
                     $dataIn['emergency5'],
                     $dataIn['emergency6'],
+                    $statusIn,
                 ];
             }
+//            pr($data);
+//            exit;
             $this->exportArrayToExcel($data);
         } else {
             $this->Session->setFlash(__('Invalid applications to export.', true));
@@ -294,11 +303,15 @@ class RequestsController extends AuthController {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Applications');
-        $letters = 'abcdefghijklmnopqrstuvwxyz';
+        $letters = 'abcdefghijklmnopqrstuvwxyzaaabacadae';
         $i = 1;
         foreach ($data as $key => $data_in) {
             foreach ($data_in as $key_in => $value_in) {
-                $sheet->setCellValue(strtoupper(substr($letters, $key_in, 1)) . $i, $value_in);
+                $step = 1;
+                if ($key_in > 25) {
+                    $step = 2;
+                }
+                $sheet->setCellValue(strtoupper(substr($letters, $key_in, $step)) . $i, $value_in);
             }
             $i++;
         }
@@ -307,7 +320,11 @@ class RequestsController extends AuthController {
             $i = 1;
             foreach ($data2 as $key => $data_in) {
                 foreach ($data_in as $key_in => $value_in) {
-                    $sheet->setCellValue(strtoupper(substr($letters, $key_in, 1)) . $i, $value_in);
+                    $step = 1;
+                    if ($key_in > 25) {
+                        $step = 2;
+                    }
+                    $sheet->setCellValue(strtoupper(substr($letters, $key_in, $step)) . $i, $value_in);
                 }
                 $i++;
             }
