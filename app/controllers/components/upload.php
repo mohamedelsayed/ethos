@@ -101,7 +101,7 @@ class UploadComponent extends AppController {
             $this->getOut();
         }
         //Get file extension
-        $ext_arr = split("\.", basename($dataArr['name']));
+        $ext_arr = explode(".", basename($dataArr['name']));
         $ext = strtolower($ext_arr[count($ext_arr) - 1]); //Get the last extension
         $file_name_without_ext = str_replace('.' . $ext, "", $dataArr['name']);
         //Not really uniqe - but for all practical reasons, it is
@@ -113,9 +113,9 @@ class UploadComponent extends AppController {
         $this->fileName = str_replace($special, '_', $this->fileName);
         $all_types = explode(",", strtolower($this->fileTypes));
         if ($this->fileTypes) {
-            if (in_array($ext, $all_types))
-                ;
-            else {
+            if (in_array($ext, $all_types)) {
+
+            } else {
                 $this->error = "'" . $dataArr['name'] . "' is not a valid file."; //Show error if any.
                 $this->getOut();
             }
@@ -174,7 +174,7 @@ class UploadComponent extends AppController {
             }
         }
         //Get file extension
-        $ext_arr = split("\.", basename($dataArr['name']));
+        $ext_arr = explode(".", basename($dataArr['name']));
         $ext = strtolower($ext_arr[count($ext_arr) - 1]); //Get the last extension
         $file_name_without_ext = str_replace('.' . $ext, "", $dataArr['name']);
         //Not really uniqe - but for all practical reasons, it is
@@ -186,9 +186,9 @@ class UploadComponent extends AppController {
         $this->fileName = str_replace($special, '_', $this->fileName);
         $all_types = explode(",", strtolower($this->imageTypes));
         if ($this->imageTypes) {
-            if (in_array($ext, $all_types))
-                ;
-            else {
+            if (in_array($ext, $all_types)) {
+
+            } else {
                 $this->error = "'" . $dataArr['name'] . "' is not a valid file."; //Show error if any.
                 $this->getOut();
             }
@@ -259,8 +259,7 @@ class UploadComponent extends AppController {
                 $factor = min($width / $width_old, $height / $height_old);
             $final_width = round($width_old * $factor);
             $final_height = round($height_old * $factor);
-        }
-        else {
+        } else {
             $final_width = ( $width <= 0 ) ? $width_old : $width;
             $final_height = ( $height <= 0 ) ? $height_old : $height;
         }
