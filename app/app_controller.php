@@ -287,7 +287,7 @@ class AppController extends Controller {
                 if (!$this->Session->check('Setting'))
                     $this->setSettings();
                 return true;
-            }else {
+            } else {
                 $this->Session->destroy();
                 return false;
             }
@@ -330,7 +330,7 @@ class AppController extends Controller {
     function string_format_view($str = '', $type = '', $val = 0) {
         if ($type == 'wordsCut') {
             $str_without_tags = strip_tags($str);
-            $strArr = split(" ", $str_without_tags);
+            $strArr = explode(" ", $str_without_tags);
             if (count($strArr) > $val) {
                 $data = '';
                 for ($index = 0; $index < $val; $index++) {
