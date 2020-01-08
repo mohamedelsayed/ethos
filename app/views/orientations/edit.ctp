@@ -8,7 +8,9 @@
         echo $this->Form->input('Orientation.body', array('class' => 'ckeditor'));
         echo $this->Form->input('start_date', ['required' => 'required']);
         echo $this->Form->input('end_date', ['required' => 'required']);
-        echo $this->Form->input('url', ['required' => 'required']);
+        echo $this->Form->input('url'
+                //,['required' => 'required']
+        );
         echo $this->Form->input('approved');
         ?>
     </fieldset>
