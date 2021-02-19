@@ -323,6 +323,7 @@ class AppController extends Controller {
     }
 
     function remove_unneeded_tags_from_string($string = '') {
+        return $string;
         $new_string = trim(trim($string, '<p>'), '</p>');
         return $new_string;
     }
