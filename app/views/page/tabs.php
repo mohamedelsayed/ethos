@@ -1,4 +1,4 @@
-<?php if(isset($cats)){?>
+<?php /*if(isset($cats)){?>
     <?php if(!empty($cats)){?>
         <div class="student_life_tabs">
             <ul class="tabs3">
@@ -27,7 +27,7 @@
             </ul>
         </div>
     <?php }?>
-<?php }?>
+<?php } */?>
 <style type="text/css">
 .student_life_tabs{
     float: left;

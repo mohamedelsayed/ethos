@@ -29,7 +29,7 @@
               </div>
               </div> */ ?>
             <div class="menu_grop">
-                <div class="footer_menu">
+                <?php /*<div class="footer_menu">
                     <a href="<?php echo $base_url; ?>"><?php echo $setting['home_string']; ?></a>
                     <?php
                     if (!empty($header_cats)) {
@@ -50,7 +50,7 @@
                             </a>
                         <?php } ?>
                     <?php } ?>
-                </div>
+                </div>*/?>
             </div>
             <div class="adders_face_s">
                 <a target="_blank" href="<?php echo $setting['facbook_link']; ?>">

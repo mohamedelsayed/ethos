@@ -17,7 +17,7 @@
                     <img class="Twitter" src="<?php echo $base_url.'/img/front/';?>in.png" />
                 </a>
             </div>
-            <div class="input">
+            <?php /*<div class="input">
                 <?php $keyword = '';
                 if(isset($_GET['k'])){
                     $keyword = $_GET['k'];
@@ -28,7 +28,7 @@
                     </a>
                     <input id="headersearchformk" class="input_s" type="text" name="k" value="<?php echo $keyword;?>" >
                 </form>
-            </div>
+            </div>*/?>
         </div>
         <div class="menu_big">
             <div class="logo">
@@ -37,7 +37,7 @@
                 </a>
             </div>
             <div class="menu_">
-                <ul id="jMenu" class="menu">
+            <?php /*  <ul id="jMenu" class="menu">
                     <li>
                         <a href="<?php echo $base_url;?>" class="fNiv" id="home" ><?php echo $setting['home_string'];?></a>
                     </li>
@@ -57,15 +57,8 @@
                         <a href="<?php echo $url;?>" class="fNiv" id="<?php echo strtolower(str_replace(' ', '', $header_cat['Cat']['title']));?>"  <?php echo $additional_code;?>>
                                     <?php echo $header_cat['Cat']['title'];?>
                         </a>
-                                <?php /*if(!empty($header_cat['Node'])){?>
-                                    <ul>
-                                        <?php foreach ($header_cat['Node'] as $key => $header_cat_node) {?>
-                                            <li class="submenu">
-                                                <a style="width: 200px;" href="<?php echo $base_url.'/page/show/'.$header_cat['Cat']['id'].'?nodeid='.$header_cat_node['id'];?>"><?php echo $header_cat_node['title'];?></a>
-                                            </li>
-                                        <?php }?>
-                                    </ul>
-                                <?php }else*/if(!empty($header_cat['ChildCat'])){?>
+                                <?php 
+                                if(!empty($header_cat['ChildCat'])){?>
                         <ul style="width: auto;overflow: hidden;">
                                         <?php foreach ($header_cat['ChildCat'] as $key => $header_cat_child) {
                                             $in_url = $base_url.'/page/show/'.$header_cat['Cat']['id'].'/'.$header_cat_child['id'];
@@ -88,7 +81,7 @@
                     </li>
                         <?php }?>
                     <?php }?>
-                </ul>
+                </ul>*/?>
             </div>
         </div>
     </div>

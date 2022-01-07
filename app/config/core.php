@@ -35,7 +35,7 @@ ini_set('memory_limit', '1024M'); // or you could use 1G
  */
 $http_host = $_SERVER['HTTP_HOST'];
 if (strpos($http_host, 'localhost') !== FALSE) {
-	Configure::write('debug', 2);	
+	Configure::write('debug', 0);	
 }else{
 	Configure::write('debug', 0);	
 }

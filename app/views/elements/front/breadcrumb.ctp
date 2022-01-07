@@ -1,4 +1,4 @@
-<?php if(!empty($tree)){?>
+<?php /*if(!empty($tree)){?>
     <ul class="tabs2">
         <?php $show_home = 1;
         if(isset($hide_home)){
@@ -35,4 +35,4 @@
 			<?php }?>
 		<?php }?>
     </ul>
-<?php }?>
+<?php } */?>

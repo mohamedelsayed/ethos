@@ -2,7 +2,8 @@
 
 Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 //Static Pages Routing
-Router::connect('/', array('controller' => 'home', 'action' => 'index'));
+// Router::connect('/', array('controller' => 'home', 'action' => 'index'));
+Router::connect('/', array('controller' => 'page', 'action' => 'show', 2, 23));
 Router::connect('/maintenance', array('controller' => 'home', 'action' => 'maintenancemode'));
 Router::connect('/search', array('controller' => 'page', 'action' => 'search'));
 //Router::connect('/', array('controller' => 'admin', 'action' => 'index'));
