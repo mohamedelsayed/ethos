@@ -497,7 +497,6 @@ public function getAdmissionsCss(){
     }
     .oneLine{
         clear: both;
-        /*float: left;*/
         width: 99%;
         margin: 1px;
         padding: 4px;
