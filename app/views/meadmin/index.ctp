@@ -32,7 +32,7 @@
                 </tr>
             </table>
 		</td>    
-		<td align="center" width="20%">
+        <?php /*<td align="center" width="20%">
             <table style="border: 2px solid #F3F3F3;" height="80" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td height="80" align="center">
@@ -47,7 +47,7 @@
                     </td>
                 </tr>
             </table>
-        </td> 
+        </td> */?>
         <?php /*<td align="center"  width="20%">
             <table style="border: 2px solid #F3F3F3;"  height="80" border="0" cellpadding="0" cellspacing="0">
                 <tr>
