@@ -481,8 +481,11 @@ class AppController extends Controller
         $from = getenv('MAIL_USERNAME');
         $fromName = 'Ethos Online Admissions';
         if ($mailHost == 'localhost') {
-            $headers = "From:" . $from;
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From:" . $from;
             mail($to, $subject, $body, $headers);
+            $mailSent = 1;
         } else {
             $mail = new \PHPMailer\PHPMailer\PHPMailer();
             $mail->IsSMTP();
