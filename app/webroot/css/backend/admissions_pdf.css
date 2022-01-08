@@ -1,4 +1,4 @@
-.altrow {
+/* .altrow {
     background: #f4f4f4;
 }
 .leftDiv{
@@ -19,7 +19,6 @@
 }
 .oneLine{
     clear: both;
-    /*float: left;*/
     width: 99%;
     margin: 1px;
     padding: 4px;
@@ -55,7 +54,6 @@ table{
     width: 100%;
 }
 table tr:first-child td{
-    /*background-color: #0d9f49;*/
     border-bottom: 5px solid #ffffff;
     border-right: 5px solid #ffffff;
     color: #ffffff;
@@ -76,9 +74,8 @@ table tr td {
     padding: 5px 0;
     text-align: center;
     text-decoration: none;
-    /*background-color: #ffffff;*/
 }
 .section_title{
     text-align: center;
     clear: both;
-}
+} */
