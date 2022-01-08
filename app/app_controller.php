@@ -6,7 +6,8 @@
  * @link http://www.mohamedelsayed.net
  * @copyright Copyright (c) 2018 Programming by "mohamedelsayed.net"
  */
-class AppController extends Controller {
+class AppController extends Controller
+{
 
     public $helpers = array('Html', 'Form', 'Javascript', 'Ajax', 'Session', 'Lang', 'Resize');
     public $components = array('Session', 'Cookie', 'Email', 'Upload');
@@ -18,7 +19,8 @@ class AppController extends Controller {
     //Define facebook AppId & AppSecret
     //const AppId = '548083845231266';
     //const AppSecret = 'fb8c98a3a6f182a9c8dfe030f3ad7acb';
-    function beforeFilter() {
+    function beforeFilter()
+    {
         $http_host = $_SERVER['HTTP_HOST'];
         if (strpos($http_host, 'localhost') === FALSE && strpos($http_host, 'mohamedelsayed.net') === FALSE) {
             if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off") {
@@ -50,7 +52,8 @@ class AppController extends Controller {
         //$this->setParentCat();
     }
 
-    function beforeRender() {
+    function beforeRender()
+    {
         if ($this->name == 'CakeError') {
             $page_not_found_text = 'Page Not Found';
             $this->set('title_for_layout', $page_not_found_text);
@@ -75,51 +78,59 @@ class AppController extends Controller {
         $this->set('google_api_key', $this->google_api_key);
     }
 
-    function afterFilter() {
+    function afterFilter()
+    {
         //$this->Session->write('dontPopup', true);
     }
 
-    function setSettings() {
+    function setSettings()
+    {
         $this->loadModel('Setting');
         $setting = $this->Setting->read(null, 1);
         $this->Session->write($setting);
     }
 
-    function getPagingLimit() {
+    function getPagingLimit()
+    {
         $this->loadModel('Setting');
         $settings = $this->Setting->read(null, 1);
         return $settings['Setting']['paging_limit'];
     }
 
-    function getCommentPagingLimit() {
+    function getCommentPagingLimit()
+    {
         $this->loadModel('Setting');
         $settings = $this->Setting->read(null, 1);
         return $settings['Setting']['comment_paging_limit'];
     }
 
-    protected function setCookie() {
+    protected function setCookie()
+    {
         //Set Cookie
         $this->Cookie->name = 'ethos';
         $this->Cookie->key = '#MaT7sssssccesaAmOOR*';
         $this->Cookie->time = 3600; // or '1 hour'
     }
 
-    protected function setHeaderQuotes() {
+    protected function setHeaderQuotes()
+    {
         $this->loadModel('Content');
         $contact_us = $this->Content->read(null, 1);
         $this->set('header_contact_us_title', $contact_us['Content']['title']);
         $this->loadModel('Quote');
         $quote = $this->Quote->find(
-                'first', array(
-            'conditions' => array('Quote.approved' => 1),
-            'order' => 'RAND()',
-                )
+            'first',
+            array(
+                'conditions' => array('Quote.approved' => 1),
+                'order' => 'RAND()',
+            )
         );
         $this->set('quote', $quote);
     }
 
     // clean Title
-    function cleanTitle($title = null) {
+    function cleanTitle($title = null)
+    {
         if (!$title)
             return '';
         return Inflector::slug(strtolower($title), '-');
@@ -134,7 +145,8 @@ class AppController extends Controller {
      * so if you send all mails one time it will not work
      * so I make it send limit mails (by set it from Settings) at one time & call it by Cron jobs every hour
      */
-    function send_newsletter($key = null) {
+    function send_newsletter($key = null)
+    {
         if ($key == 'hr3w2a4t1515s23w6pae') {
             $this->autoRender = false;
             $this->loadModel('Setting');
@@ -163,21 +175,23 @@ class AppController extends Controller {
             if (!empty($newsletter_sending)) {
                 if ($newsletter_sending['Newsletter']['user_id'] != 0) {
                     $subscribers = $this->Subscriber->find(
-                            'all', array(
-                        'fields' => array('Subscriber.id', 'Subscriber.email'),
-                        'conditions' => array('Subscriber.user_id' => $newsletter_sending['Newsletter']['user_id'], 'Subscriber.sent' => 0),
-                        'order' => array('Subscriber.id' => 'DESC'),
-                        'limit' => $limit
-                            )
+                        'all',
+                        array(
+                            'fields' => array('Subscriber.id', 'Subscriber.email'),
+                            'conditions' => array('Subscriber.user_id' => $newsletter_sending['Newsletter']['user_id'], 'Subscriber.sent' => 0),
+                            'order' => array('Subscriber.id' => 'DESC'),
+                            'limit' => $limit
+                        )
                     );
                 } else {
                     $subscribers = $this->Subscriber->find(
-                            'all', array(
-                        'fields' => array('Subscriber.id', 'Subscriber.email'),
-                        'conditions' => array('Subscriber.sent' => 0),
-                        'order' => array('Subscriber.id' => 'DESC'),
-                        'limit' => $limit
-                            )
+                        'all',
+                        array(
+                            'fields' => array('Subscriber.id', 'Subscriber.email'),
+                            'conditions' => array('Subscriber.sent' => 0),
+                            'order' => array('Subscriber.id' => 'DESC'),
+                            'limit' => $limit
+                        )
                     );
                 }
                 if (empty($subscribers)) {
@@ -213,15 +227,17 @@ class AppController extends Controller {
     }
 
     // get All Articles Tags
-    function setAllArticlesTags() {
+    function setAllArticlesTags()
+    {
         $all_tags = array();
         $this->loadModel('Article');
         $articles = $this->Article->find(
-                'all', array(
-            'fields' => array('Article.id', 'Article.tags'),
-            'conditions' => array('Article.approved' => 1),
-            'order' => array('Article.date' => 'DESC', 'Article.id' => 'DESC')
-                )
+            'all',
+            array(
+                'fields' => array('Article.id', 'Article.tags'),
+                'conditions' => array('Article.approved' => 1),
+                'order' => array('Article.date' => 'DESC', 'Article.id' => 'DESC')
+            )
         );
         foreach ($articles as $key => $article) {
             $tags = explode(",", $article['Article']['tags']);
@@ -238,33 +254,38 @@ class AppController extends Controller {
     }
 
     // get Recent Articles
-    function setRecentArticles() {
+    function setRecentArticles()
+    {
         $this->loadModel('Article');
         $articles = $this->Article->find(
-                'all', array(
-            //'fields'     => array('Article.id', 'Article.tags'),
-            'conditions' => array('Article.approved' => 1),
-            'order' => array('Article.date' => 'DESC', 'Article.id' => 'DESC'),
-            'limit' => 3
-                )
+            'all',
+            array(
+                //'fields'     => array('Article.id', 'Article.tags'),
+                'conditions' => array('Article.approved' => 1),
+                'order' => array('Article.date' => 'DESC', 'Article.id' => 'DESC'),
+                'limit' => 3
+            )
         );
         $this->set('recent_articles', $articles);
     }
 
-    function setParentCat() {
+    function setParentCat()
+    {
         $this->loadModel('Cat');
         $cats = $this->Cat->find(
-                'all', array(
-            //'fields'     => array('Article.id', 'Article.tags'),
-            'conditions' => array('Cat.approved' => 1, 'Cat.parent_id' => null),
-            'order' => array('Cat.weight' => 'ASC', 'Cat.id' => 'DESC'),
-            'limit' => 10
-                )
+            'all',
+            array(
+                //'fields'     => array('Article.id', 'Article.tags'),
+                'conditions' => array('Cat.approved' => 1, 'Cat.parent_id' => null),
+                'order' => array('Cat.weight' => 'ASC', 'Cat.id' => 'DESC'),
+                'limit' => 10
+            )
         );
         $this->set('header_cats', $cats);
     }
 
-    function checkMaintenanceMode() {
+    function checkMaintenanceMode()
+    {
         $front_controllers_list = array('Home', 'Page', 'Article', 'Faq', 'Texts');
         if (!$this->isAuthentic()) {
             if (in_array($this->name, $front_controllers_list)) {
@@ -279,7 +300,8 @@ class AppController extends Controller {
     }
 
     //Check Authentication.
-    protected function isAuthentic() {
+    protected function isAuthentic()
+    {
         if ($this->Session->check('userInfo')) {
             //check if data in session (userInfo) existing in database.
             if ($this->inDataBase()) {
@@ -296,39 +318,47 @@ class AppController extends Controller {
     }
 
     //Check that session user in database.
-    protected function inDataBase() {
+    protected function inDataBase()
+    {
         $this->loadModel('User');
         $this->User->recursive = -1;
         return $this->User->find('count', array('conditions' =>
-                    array('username' => $this->Session->read('userInfo.User.username'),
-                        'password' => $this->Session->read('userInfo.User.password'))));
+        array(
+            'username' => $this->Session->read('userInfo.User.username'),
+            'password' => $this->Session->read('userInfo.User.password')
+        )));
     }
 
-    function getGalleryPagingLimit() {
+    function getGalleryPagingLimit()
+    {
         $this->loadModel('Setting');
         $settings = $this->Setting->read(null, 1);
         return $settings['Setting']['gallary_paging_limit'];
     }
 
-    function getCareersPagingLimit() {
+    function getCareersPagingLimit()
+    {
         $this->loadModel('Setting');
         $settings = $this->Setting->read(null, 1);
         return $settings['Setting']['carrers_paging_limit'];
     }
 
-    function getDevelopmentsPagingLimit() {
+    function getDevelopmentsPagingLimit()
+    {
         $this->loadModel('Setting');
         $settings = $this->Setting->read(null, 1);
         return $settings['Setting']['carrers_developments_paging_limit'];
     }
 
-    function remove_unneeded_tags_from_string($string = '') {
+    function remove_unneeded_tags_from_string($string = '')
+    {
         return $string;
         $new_string = trim(trim($string, '<p>'), '</p>');
         return $new_string;
     }
 
-    function string_format_view($str = '', $type = '', $val = 0) {
+    function string_format_view($str = '', $type = '', $val = 0)
+    {
         if ($type == 'wordsCut') {
             $str_without_tags = strip_tags($str);
             $strArr = explode(" ", $str_without_tags);
@@ -347,7 +377,8 @@ class AppController extends Controller {
         }
     }
 
-    function get_realated_event_agenda($id = 0, $title = '') {
+    function get_realated_event_agenda($id = 0, $title = '')
+    {
         $agenda_final = '';
         $this->loadModel('Event');
         $title = trim($title);
@@ -355,7 +386,8 @@ class AppController extends Controller {
             $events = $this->Event->find('all', array(
                 'conditions' => array(
                     'Event.title LIKE' => "%" . $title . "%",
-                    'Event.id <>' => $id),
+                    'Event.id <>' => $id
+                ),
                 'order' => array('Event.from_date' => 'DESC', 'Event.id' => 'DESC'),
             ));
             if (!empty($events)) {
@@ -371,13 +403,15 @@ class AppController extends Controller {
         return $agenda_final;
     }
 
-    function linkify_mail($str = '') {
+    function linkify_mail($str = '')
+    {
         $pattern = '/([a-z0-9][-a-z0-9._]*[a-z0-9]*\@[a-z0-9][-a-z0-9_]+[a-z0-9]*\.[a-z0-9][-a-z0-9_-][a-z0-9]+)/i';
         $str = preg_replace($pattern, '<a href="mailto:\\1">\\1</a>', $str);
         return $str;
     }
 
-    function draw_image_box($id = 0, $path = '', $cover = 0, $caption = '') {
+    function draw_image_box($id = 0, $path = '', $cover = 0, $caption = '')
+    {
         $tpl = '<div class="image_wrap" data-img-id="{{img_id}}">
             <div class="img_item">
             <img src="' . $this->Session->read('Setting.url') . '/{{img_path}}" style="max-width: 250px; max-height: 250px;">
@@ -409,7 +443,8 @@ class AppController extends Controller {
         return $html;
     }
 
-    function generateRandomString($length = 10) {
+    function generateRandomString($length = 10)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
@@ -418,7 +453,8 @@ class AppController extends Controller {
         return $randomString;
     }
 
-    public function mainSmartResizeImage($image = '') {
+    public function mainSmartResizeImage($image = '')
+    {
         $imagePath = $this->Upload->imageUploadDir . $image;
         $maxImageWidth = 960;
         list($width, $height, $type, $attr) = getimagesize($imagePath);
@@ -427,20 +463,25 @@ class AppController extends Controller {
         }
     }
 
-    public function getBaseUrl() {
-//        $this->loadModel('Setting');
-//        $settings = $this->Setting->read(null, 1);
-//        $baseUrl = $settings['Setting']['url'];
+    public function getBaseUrl()
+    {
+        //        $this->loadModel('Setting');
+        //        $settings = $this->Setting->read(null, 1);
+        //        $baseUrl = $settings['Setting']['url'];
         $baseUrl = $this->Session->read('Setting.url');
         return $baseUrl;
     }
 
-    public function sendMail($to, $subject, $body) {
-//        $this->loadModel('Setting');
-//        $settings = $this->Setting->read(null, 1);
+    public function sendMail($to, $subject, $body)
+    {
+        //        $this->loadModel('Setting');
+        //        $settings = $this->Setting->read(null, 1);
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
+        if (getenv('MAIL_USERNAME') == '') {
+            $mail->SMTPAuth = false;
+        }
         $mail->CharSet = "UTF-8";
         $mail->SMTPSecure = 'ssl';
         $mail->Host = getenv('MAIL_HOST');
@@ -462,10 +503,14 @@ class AppController extends Controller {
         return $mailSent;
     }
 
-    public function getEmailTemplateBody($identifier = '') {
+    public function getEmailTemplateBody($identifier = '')
+    {
         $this->loadModel('EmailTemplate');
-        $emailTemplate = $this->EmailTemplate->find('first', array(
-            'conditions' => array('EmailTemplate.identifier' => $identifier))
+        $emailTemplate = $this->EmailTemplate->find(
+            'first',
+            array(
+                'conditions' => array('EmailTemplate.identifier' => $identifier)
+            )
         );
         $body = '';
         if (isset($emailTemplate['EmailTemplate']['body'])) {
@@ -474,7 +519,8 @@ class AppController extends Controller {
         return $body;
     }
 
-    public function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups) {
+    public function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups)
+    {
         $data = $request['Request']['data'];
         $request['Request']['data'] = unserialize($data);
         $dataIn = $request['Request']['data'];
@@ -487,15 +533,19 @@ class AppController extends Controller {
         return $var;
     }
 
-    public function getOrientation() {
+    public function getOrientation()
+    {
         $this->loadModel('Orientation');
         $today = date("Y-m-d");
-        $orientation = $this->Orientation->find('first', [
-            'conditions' => [
-                'Orientation.approved' => 1,
-                'Orientation.start_date <=' => $today,
-                'Orientation.end_date >=' => $today,
-            ]]
+        $orientation = $this->Orientation->find(
+            'first',
+            [
+                'conditions' => [
+                    'Orientation.approved' => 1,
+                    'Orientation.start_date <=' => $today,
+                    'Orientation.end_date >=' => $today,
+                ]
+            ]
         );
         if (isset($orientation['Orientation'])) {
             return $orientation['Orientation'];
@@ -504,7 +554,8 @@ class AppController extends Controller {
         }
     }
 
-    public function check_if_startdate_lessthan_endate($startdate, $endate) {
+    public function check_if_startdate_lessthan_endate($startdate, $endate)
+    {
         $startdateIn = $startdate['year'] . '-' . $startdate['month'] . '-' . $startdate['day'];
         $endateIn = $endate['year'] . '-' . $endate['month'] . '-' . $endate['day'];
         if (strtotime($endateIn) >= strtotime($startdateIn)) {
@@ -513,5 +564,4 @@ class AppController extends Controller {
             return false;
         }
     }
-
 }
