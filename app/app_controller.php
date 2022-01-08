@@ -443,6 +443,7 @@ class AppController extends Controller {
         $mail->SMTPAuth = true;
         $mail->CharSet = "UTF-8";
         $mail->SMTPSecure = 'tls';
+        echo getenv('MAIL_HOST').' '.getenv('MAIL_PORT').' '.getenv('MAIL_USERNAME').' '.getenv('MAIL_PASSWORD');
         $mail->Host = getenv('MAIL_HOST');
         $mail->Port = getenv('MAIL_PORT');
         $mail->Username = getenv('MAIL_USERNAME');
