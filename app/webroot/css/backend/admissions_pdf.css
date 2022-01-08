@@ -19,6 +19,7 @@
 }
 .oneLine{
     clear: both;
+    /*float: left;*/
     width: 99%;
     margin: 1px;
     padding: 4px;
@@ -48,13 +49,17 @@ table, td {
 }
 table{
     border-collapse: collapse;
-    border-spacing: 0;    width: 100%;
-
+    border-spacing: 0;
+}
+table{
+    width: 100%;
 }
 table tr:first-child td{
+    /*background-color: #0d9f49;*/
     border-bottom: 5px solid #ffffff;
     border-right: 5px solid #ffffff;
     color: #ffffff;
+    font-family: OpenSans-Regular;
     padding: 1% 0;
     text-decoration: none;
 }
@@ -68,10 +73,12 @@ table tr td {
     border-bottom: 5px solid #ffffff;
     border-right: 5px solid #ffffff;
     color: #414141;
+    font-family: OpenSans-Regular;
     font-size: 17px;
     padding: 5px 0;
     text-align: center;
     text-decoration: none;
+    /*background-color: #ffffff;*/
 }
 .section_title{
     text-align: center;

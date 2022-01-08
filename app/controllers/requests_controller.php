@@ -406,7 +406,7 @@ class RequestsController extends AuthController {
         }
         $request = $this->Request->read(null, $id);
         if (!empty($request)) {
-            // date_default_timezone_set('Africa/Cairo');
+            date_default_timezone_set('Africa/Cairo');
             $application_number = $request['Request']['application_number'];
             $this->loadModel('Term');
             $terms = $this->Term->find('list');
@@ -429,22 +429,13 @@ class RequestsController extends AuthController {
                 ]
             ]);
             $dompdf->setHttpContext($context);
-            // $style = new \Dompdf\Css\Stylesheet($dompdf);
-            $cssFile = $base_url . '/css/backend/admissions_pdf.css';
-            $cssFile = ROOT . DS . APP_DIR . DS.'webroot' . DS.'css'. DS.'backend'. DS.'admissions_pdf.css';
-            // echo $cssFile;
-            // exit;
-            // $cssContent='.altrow {
-            //     background: #f4f4f4;
-            // }';
-            $cssContent = file_get_contents($cssFile);
-            // $style->load_css_file($cssFile);
-            // $dompdf->setCss($style);
+            $style = new \Dompdf\Css\Stylesheet($dompdf);
+            $style->load_css_file($base_url . '/css/backend/admissions_pdf.css');
+            $dompdf->setCss($style);
             $html .= '<html>
                     <head>
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-                    </head><style>'.$cssContent.'
-                  </style>
+                    </head>
                 <body>';
             $data = $request['Request']['data'];
             $dataIn = unserialize($data);
