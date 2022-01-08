@@ -442,8 +442,7 @@ class AppController extends Controller {
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
         $mail->CharSet = "UTF-8";
-        $mail->SMTPSecure = 'tls';
-        echo getenv('MAIL_HOST').' '.getenv('MAIL_PORT').' '.getenv('MAIL_USERNAME').' '.getenv('MAIL_PASSWORD');
+        $mail->SMTPSecure = 'ssl';
         $mail->Host = getenv('MAIL_HOST');
         $mail->Port = getenv('MAIL_PORT');
         $mail->Username = getenv('MAIL_USERNAME');
@@ -455,9 +454,8 @@ class AppController extends Controller {
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AltBody = strip_tags($body);
-        $mail->SMTPDebug  = 2; 
+        // $mail->SMTPDebug  = 2; 
         $mailSent = 0;
-        pr($mail->send());
         if ($mail->send()) {
             $mailSent = 1;
         }
