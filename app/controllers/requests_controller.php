@@ -463,7 +463,7 @@ class RequestsController extends AuthController {
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
             ob_end_clean();
-            $dompdf->stream($application_number . '.pdf', ['compress' => 0, 'Attachment' => 0]);
+            $dompdf->stream($application_number . '.pdf', [ 'Attachment' => false]);
         } else {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
