@@ -442,7 +442,7 @@ class AppController extends Controller {
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
         $mail->CharSet = "UTF-8";
-        $mail->SMTPSecure = 'tls';
+        // $mail->SMTPSecure = 'tls';
         $mail->Host = getenv('MAIL_HOST');
         $mail->Port = getenv('MAIL_PORT');
         $mail->Username = getenv('MAIL_USERNAME');
