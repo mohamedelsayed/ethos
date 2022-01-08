@@ -432,8 +432,8 @@ class RequestsController extends AuthController {
             // $style = new \Dompdf\Css\Stylesheet($dompdf);
             $cssFile = $base_url . '/css/backend/admissions_pdf.css';
             $cssFile = ROOT . DS . APP_DIR . DS.'webroot' . DS.'css'. DS.'backend'. DS.'admissions_pdf.css';
-            // echo $cssFile;
-            // exit;
+            echo $cssFile;
+            exit;
             $cssContent='.altrow {
                 background: #f4f4f4;
             }';
