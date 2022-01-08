@@ -430,7 +430,7 @@ class RequestsController extends AuthController {
             ]);
             $dompdf->setHttpContext($context);
             $style = new \Dompdf\Css\Stylesheet($dompdf);
-            $style->load_css_file($base_url . '/css/backend/admissions_pdf.css');
+            // $style->load_css_file($base_url . '/css/backend/admissions_pdf.css');
             $dompdf->setCss($style);
             $html .= '<html>
                     <head>
