@@ -59,7 +59,6 @@ table tr:first-child td{
     border-bottom: 5px solid #ffffff;
     border-right: 5px solid #ffffff;
     color: #ffffff;
-    /* font-family: OpenSans-Regular; */
     padding: 1% 0;
     text-decoration: none;
 }
@@ -73,7 +72,6 @@ table tr td {
     border-bottom: 5px solid #ffffff;
     border-right: 5px solid #ffffff;
     color: #414141;
-    /* font-family: OpenSans-Regular; */
     font-size: 17px;
     padding: 5px 0;
     text-align: center;
