@@ -527,8 +527,6 @@ public function getAdmissionsCss(){
     table{
         border-collapse: collapse;
         border-spacing: 0;
-    }
-    table{
         width: 100%;
     }
     table tr:first-child td{
