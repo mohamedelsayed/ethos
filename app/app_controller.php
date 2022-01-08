@@ -476,29 +476,34 @@ class AppController extends Controller
     {
         //        $this->loadModel('Setting');
         //        $settings = $this->Setting->read(null, 1);
-        $mail = new \PHPMailer\PHPMailer\PHPMailer();
-        $mail->IsSMTP();
-        $mail->SMTPAuth = true;
-        if (getenv('MAIL_USERNAME') == '') {
-            $mail->SMTPAuth = false;
-        }
-        $mail->CharSet = "UTF-8";
-        $mail->SMTPSecure = 'ssl';
-        $mail->Host = getenv('MAIL_HOST');
-        $mail->Port = getenv('MAIL_PORT');
-        $mail->Username = getenv('MAIL_USERNAME');
-        $mail->Password = getenv('MAIL_PASSWORD');
-        $mail->From = getenv('MAIL_USERNAME');
-        $mail->FromName = 'Ethos Online Admissions';
-        $mail->addAddress($to);
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body = $body;
-        $mail->AltBody = strip_tags($body);
-        // $mail->SMTPDebug  = 2; 
+        $mailHost = getenv('MAIL_HOST');
         $mailSent = 0;
-        if ($mail->send()) {
-            $mailSent = 1;
+        $from = getenv('MAIL_USERNAME');
+        $fromName = 'Ethos Online Admissions';
+        if ($mailHost == 'localhost') {
+            $headers = "From:" . $from;
+            mail($to, $subject, $body, $headers);
+        } else {
+            $mail = new \PHPMailer\PHPMailer\PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPAuth = true;
+            $mail->CharSet = "UTF-8";
+            $mail->SMTPSecure = 'tls';
+            $mail->Host = $mailHost;
+            $mail->Port = getenv('MAIL_PORT');
+            $mail->Username = getenv('MAIL_USERNAME');
+            $mail->Password = getenv('MAIL_PASSWORD');
+            $mail->From = $from;
+            $mail->FromName = $fromName;
+            $mail->addAddress($to);
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+            $mail->AltBody = strip_tags($body);
+            // $mail->SMTPDebug  = 2; 
+            if ($mail->send()) {
+                $mailSent = 1;
+            }
         }
         return $mailSent;
     }
