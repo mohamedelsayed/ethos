@@ -406,6 +406,7 @@ class RequestsController extends AuthController {
         }
         $request = $this->Request->read(null, $id);
         if (!empty($request)) {
+            date_default_timezone_set('Africa/Cairo');
             $application_number = $request['Request']['application_number'];
             $this->loadModel('Term');
             $terms = $this->Term->find('list');
