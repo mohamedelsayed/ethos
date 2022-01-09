@@ -468,7 +468,7 @@ class PageController extends AppController {
         if ($month >= 10) {
             $leadingYear += 1;
         }
-        $year_application_number = ($leadingYear * 100000) + 1;
+        $year_application_number = ($leadingYear * 100000) + 110;
         $last_application_number = 0;
         if (!empty($lastRequest) && isset($lastRequest['Request']['application_number'])) {
             $last_application_number = $lastRequest['Request']['application_number'];
