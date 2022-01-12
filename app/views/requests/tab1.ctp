@@ -220,3 +220,24 @@
         </div>
     </div>
 <?php } ?>
+<div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+    <div class="leftDiv "><?php echo __('How did you hear about us?'); ?></div>
+    <div class="rightDiv ">
+        <?php
+        $how_did_you_hear_about_us = $GLOBALS['how_did_you_hear_about_us'];
+        if (isset($dataIn['how_did_you_hear_about_us'])) {
+            echo $how_did_you_hear_about_us[$dataIn['how_did_you_hear_about_us']];
+        }
+        ?>
+        &nbsp;
+    </div>
+</div>
+<?php if (isset($dataIn['how_did_you_hear_about_us_other']) && $dataIn['how_did_you_hear_about_us_other'] != '') { ?>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv "><?php echo __('If other, please specify'); ?></div>
+        <div class="rightDiv ">
+            <?php echo $dataIn['how_did_you_hear_about_us_other']; ?>
+            &nbsp;
+        </div>
+    </div>
+<?php } ?>

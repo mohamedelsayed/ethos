@@ -73,6 +73,10 @@ jQuery(function () {
         var id_val = jQuery(this).attr('id');
         show_textbox_if_value_selected("#" + id_val, '#are_you_applying_for_any_siblings_details', 'yes');
     });
+    jQuery(document).on("change", "#how_did_you_hear_about_us", function () {
+        var id_val = jQuery(this).attr('id');
+        show_textbox_if_value_selected("#" + id_val, '#how_did_you_hear_about_us_other', 'other');
+    });
     jQuery(document).on("change", "#has_the_pupil_ever_skipped_year", function () {
         var id_val = jQuery(this).attr('id');
         show_textbox_if_value_selected("#" + id_val, '#has_the_pupil_ever_skipped_year_details', 'yes');

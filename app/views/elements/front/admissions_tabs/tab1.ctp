@@ -55,7 +55,7 @@
                     <?php
                     foreach ($yearGroups as $key => $yearGroup) {
                         if ($yearGroup['YearGroup']['applying_to'] == 1) {
-                            ?>
+                    ?>
                             <option value="<?php echo $yearGroup['YearGroup']['id']; ?>"><?php echo $yearGroup['YearGroup']['title']; ?></option>
                         <?php } ?>
                     <?php } ?>
@@ -72,7 +72,7 @@
                     <?php
                     foreach ($yearGroups as $key => $yearGroup) {
                         if ($yearGroup['YearGroup']['current'] == 1) {
-                            ?>
+                    ?>
                             <option value="<?php echo $yearGroup['YearGroup']['id']; ?>"><?php echo $yearGroup['YearGroup']['title']; ?></option>
                         <?php } ?>
                     <?php } ?>
@@ -149,7 +149,7 @@
                         if (strtolower($yes_no_option) == 'no') {
                             $item_selected = " " . $selected . " ";
                         }
-                        ?>
+                    ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
                     <?php } ?>
                     <option value="applying_this_year"><?php echo __('Applying this Year'); ?></option>;
@@ -174,7 +174,7 @@
                         if (strtolower($yes_no_option) == 'no') {
                             $item_selected = " " . $selected . " ";
                         }
-                        ?>
+                    ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
                     <?php } ?>
                     <option value="applying_this_year"><?php echo __('Applying this Year'); ?></option>;
@@ -199,7 +199,7 @@
                         if (strtolower($yes_no_option) == 'no') {
                             $item_selected = " " . $selected . " ";
                         }
-                        ?>
+                    ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
                     <?php } ?>
                 </select>
@@ -210,6 +210,31 @@
         <label for="are_you_applying_for_any_siblings_details"><?php echo __('If yes, please give details'); ?>:</label>
         <span>
             <input placeholder="<?php echo __(''); ?>..." id="are_you_applying_for_any_siblings_details" class="input3new admissions_input take_placeholder " type="text" name="are_you_applying_for_any_siblings_details" />
+        </span>
+    </div>
+    <div class="input_new">
+        <label for="how_did_you_hear_about_us"><?php echo __('How did you hear about us?'); ?></label>
+        <span>
+            <div class="calendar_select">
+                <select class="select form-control form-select required_input" id="how_did_you_hear_about_us" name="how_did_you_hear_about_us">
+                    <?php
+                    $how_did_you_hear_about_us = $GLOBALS['how_did_you_hear_about_us'];
+                    foreach ($how_did_you_hear_about_us as $key => $item) {
+                        $item_selected = '';
+                        // if (strtolower($item) == 'no') {
+                        //     $item_selected = " " . $selected . " ";
+                        // }
+                    ?>
+                        <option <?php echo $item_selected; ?> value="<?php echo $key; ?>"><?php echo $item; ?></option>;
+                    <?php } ?>
+                </select>
+            </div>
+        </span>
+    </div>
+    <div class="input_new hiddendiv">
+        <label for="how_did_you_hear_about_us_other"><?php echo __('If other, please specify'); ?>:</label>
+        <span>
+            <input placeholder="<?php echo __(''); ?>..." id="how_did_you_hear_about_us_other" class="input3new admissions_input take_placeholder " type="text" name="how_did_you_hear_about_us_other" />
         </span>
     </div>
 </div>
