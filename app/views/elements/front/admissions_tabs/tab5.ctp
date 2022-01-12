@@ -67,6 +67,6 @@
     </div>
     <div class="agree_out">
         <input id="i_agree" type="checkbox" name="i_agree" class="i_agree required_input" />
-        <label class="i_agree_label" for="i_agree"><?php echo ('I confirm that the information provided is correct to the best of my knowledge. Failure to disclose relevant information my affect my child’s application.'); ?></label>
+        <label class="i_agree_label" for="i_agree"><?php echo ('I confirm that the information provided is correct to the best of my knowledge. Failure to disclose relevant information may affect my child’s application.'); ?></label>
     </div>
 </div>

@@ -8,6 +8,13 @@
     </div>
     <div class="input_description"><?php echo __('(PLEASE GIVE THE EXACT SPELLING AS IT APPEARS ON THE BIRTH CERTIFICATE OR PASSPORT)'); ?></div>
     <div class="input_new">
+        <label for="child_name"><?php echo __('Child’s ID number'); ?>:</label>
+        <span>
+            <input placeholder="<?php echo __(''); ?>..." id="child_id_number" class="input3new admissions_input take_placeholder required_input " type="number" name="child_id_number" />
+        </span>
+    </div>
+    <div class="input_description"><?php echo __(strtoupper('(Written in the birth certificate)')); ?></div>
+    <div class="input_new">
         <label for="child_photo"><?php echo __('Child’s Photo') ?>:</label>
         <span>
             <input id="child_photo" class="input3new admissions_input required_input" type="file" name="child_photo" accept="<?php echo $image_extensions; ?>" />
@@ -145,12 +152,13 @@
                         ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
                     <?php } ?>
+                    <option value="applying_this_year"><?php echo __('Applying this Year'); ?></option>;
                 </select>
             </div>
         </span>
     </div>
     <div class="input_new hiddendiv">
-        <label for="have_any_sibling_at_EIS_pupil"><?php echo __('If yes, name of pupil/s'); ?>:</label>
+        <label for="have_any_sibling_at_EIS_pupil"><?php echo __('If yes please write his/her name and year group'); ?>:</label>
         <span>
             <input placeholder="<?php echo __(''); ?>..." id="have_any_sibling_at_EIS_pupil" class="input3new admissions_input take_placeholder " type="text" name="have_any_sibling_at_EIS_pupil" />
         </span>
@@ -169,12 +177,13 @@
                         ?>
                         <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
                     <?php } ?>
+                    <option value="applying_this_year"><?php echo __('Applying this Year'); ?></option>;
                 </select>
             </div>
         </span>
     </div>
     <div class="input_new hiddendiv">
-        <label for="have_any_sibling_at_rukan_pupil"><?php echo __('If yes, name of pupil/s'); ?>:</label>
+        <label for="have_any_sibling_at_rukan_pupil"><?php echo __('If yes please write his/her name and year group'); ?>:</label>
         <span>
             <input placeholder="<?php echo __(''); ?>..." id="have_any_sibling_at_rukan_pupil" class="input3new admissions_input take_placeholder " type="text" name="have_any_sibling_at_rukan_pupil" />
         </span>

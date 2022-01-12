@@ -347,8 +347,7 @@ class PageController extends AppController {
             if (isset($data['parent_informations24'])) {
                 $parentMail2 = $data['parent_informations24'];
             }
-            if (isset($data['birth_date']))
-                $parentName2 = '';
+            $parentName2 = '';
             if (isset($data['parent_informations2'])) {
                 $parentName2 = $data['parent_informations2'];
             }

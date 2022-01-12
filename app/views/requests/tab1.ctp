@@ -5,6 +5,15 @@
         &nbsp;
     </div>
 </div>
+<div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+    <div class="leftDiv "><?php echo __('Child’s ID number'); ?>:</div>
+    <div class="rightDiv ">
+        <?php if (isset($dataIn['child_id_number'])) {
+            echo $dataIn['child_id_number'];
+        } ?>
+        &nbsp;
+    </div>
+</div>
 <?php if (isset($base_url)) { ?>
     <?php if (isset($dataIn['filesData']['child_photo']) && $dataIn['filesData']['child_photo'] != '') { ?>
         <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
@@ -14,7 +23,7 @@
                 $img_url = $base_url . '/' . $dataIn['filesData']['child_photo'];
                 ?>
                 <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-                <img src="<?php echo $img_url; ?>"/>
+                <img src="<?php echo $img_url; ?>" />
                 &nbsp;
             </div>
         </div>
@@ -29,7 +38,7 @@
                 $img_url = $base_url . '/' . $dataIn['filesData']['child_birth_certificate'];
                 ?>
                 <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
-                <img src="<?php echo $img_url; ?>"/>
+                <img src="<?php echo $img_url; ?>" />
                 &nbsp;
             </div>
         </div>
@@ -156,7 +165,7 @@
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['have_any_sibling_at_EIS'])) {
-            echo $dataIn['have_any_sibling_at_EIS'];
+            echo $haveAnySibling[$dataIn['have_any_sibling_at_EIS']];
         }
         ?>
         &nbsp;
@@ -164,7 +173,7 @@
 </div>
 <?php if (isset($dataIn['have_any_sibling_at_EIS_pupil']) && $dataIn['have_any_sibling_at_EIS_pupil'] != '') { ?>
     <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('If yes, name of pupil/s'); ?></div>
+        <div class="leftDiv "><?php echo __('If yes please write his/her name and year group'); ?></div>
         <div class="rightDiv ">
             <?php echo $dataIn['have_any_sibling_at_EIS_pupil']; ?>
             &nbsp;
@@ -176,7 +185,7 @@
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['have_any_sibling_at_rukan'])) {
-            echo $dataIn['have_any_sibling_at_rukan'];
+            echo $haveAnySibling[$dataIn['have_any_sibling_at_rukan']];
         }
         ?>
         &nbsp;
@@ -184,7 +193,7 @@
 </div>
 <?php if (isset($dataIn['have_any_sibling_at_rukan_pupil']) && $dataIn['have_any_sibling_at_rukan_pupil'] != '') { ?>
     <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('If yes, name of pupil/s'); ?></div>
+        <div class="leftDiv "><?php echo __('If yes please write his/her name and year group'); ?></div>
         <div class="rightDiv ">
             <?php echo $dataIn['have_any_sibling_at_rukan_pupil']; ?>
             &nbsp;

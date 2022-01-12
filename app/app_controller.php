@@ -528,7 +528,7 @@ class AppController extends Controller
         return $body;
     }
 
-    public function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups)
+    public function render_php_file_for_pdf($path, $request, $titleLabel, $terms, $yearGroups, $haveAnySibling=null)
     {
         $data = $request['Request']['data'];
         $request['Request']['data'] = unserialize($data);

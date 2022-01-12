@@ -8,7 +8,8 @@
  */
 require_once '../auth_controller.php';
 
-class RequestsController extends AuthController {
+class RequestsController extends AuthController
+{
 
     var $name = 'Requests';
     var $uses = array('Request');
@@ -19,9 +20,15 @@ class RequestsController extends AuthController {
         2 => 'Resubmitted',
         3 => 'Rejected'
     ];
+    var $haveAnySibling = [
+        'Yes' => 'Yes',
+        'No' => 'No',
+        'applying_this_year' => 'Applying this Year',
+    ];
     var $limit = 20;
 
-    function index() {
+    function index()
+    {
         $limit = $this->limit;
         if ($this->Session->read('Request.limit') && is_numeric($this->Session->read('Request.limit'))) {
             if ($this->Session->read('Request.limit') > 0) {
@@ -50,7 +57,8 @@ class RequestsController extends AuthController {
         $this->set('limit', $limit);
     }
 
-    function view($id = null) {
+    function view($id = null)
+    {
         if (!$id) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
@@ -58,10 +66,11 @@ class RequestsController extends AuthController {
         $request = $this->Request->read(null, $id);
         $data = $request['Request']['data'];
         $request['Request']['data'] = unserialize($data);
-//        pr($request);
+        //        pr($request);
         $this->set('request', $request);
         $this->set('titleLabel', $this->titleLabel);
         $this->set('statusOptions', $this->statusOptions);
+        $this->set('haveAnySibling', $this->haveAnySibling);
         $this->loadModel('Term');
         $terms = $this->Term->find('list');
         $this->set(compact('terms'));
@@ -70,7 +79,8 @@ class RequestsController extends AuthController {
         $this->set(compact('yearGroups'));
     }
 
-    function delete($id = null) {
+    function delete($id = null)
+    {
         if (!$id) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
@@ -83,7 +93,8 @@ class RequestsController extends AuthController {
         $this->redirect(array('action' => 'index'));
     }
 
-    function changeStatus($id = null, $status = 0) {
+    function changeStatus($id = null, $status = 0)
+    {
         if (!$id && empty($this->data)) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
@@ -134,7 +145,7 @@ class RequestsController extends AuthController {
             $admissionCatId = 23;
             $this->loadModel('Cat');
             $cat = $this->Cat->read(null, $admissionCatId);
-//            $from = $cat['Cat']['to_email'];
+            //            $from = $cat['Cat']['to_email'];
             $this->loadModel('Setting');
             $settings = $this->Setting->read(null, 1);
             $siteTitle = $settings['Setting']['title'];
@@ -171,8 +182,11 @@ class RequestsController extends AuthController {
                     $this->Session->setFlash(__('Application has been resubmitted.', true));
                 }
                 if ($parentMail1 != '' && isset($messageIn) && $messageIn != '') {
-                    $message = str_replace(array('{{name}}', '{{application_number}}', '{{checklist}}')
-                            , array($parentName1, $application_number, $checklist), $messageIn);
+                    $message = str_replace(
+                        array('{{name}}', '{{application_number}}', '{{checklist}}'),
+                        array($parentName1, $application_number, $checklist),
+                        $messageIn
+                    );
                     if ($additional_information != '') {
                         $message .= '<br/>' . $additional_information;
                     }
@@ -180,8 +194,11 @@ class RequestsController extends AuthController {
                     $mailSent = $this->sendMail($parentMail1, $subject, $body);
                 }
                 if ($parentMail2 != '' && isset($messageIn) && $messageIn != '') {
-                    $message = str_replace(array('{{name}}', '{{application_number}}', '{{checklist}}')
-                            , array($parentName2, $application_number, $checklist), $messageIn);
+                    $message = str_replace(
+                        array('{{name}}', '{{application_number}}', '{{checklist}}'),
+                        array($parentName2, $application_number, $checklist),
+                        $messageIn
+                    );
                     if ($additional_information != '') {
                         $message .= '<br/>' . $additional_information;
                     }
@@ -198,7 +215,8 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function exportApplicationToExcel($id = null) {
+    public function exportApplicationToExcel($id = null)
+    {
         $ids = [];
         if ($id) {
             $ids = [$id];
@@ -210,9 +228,12 @@ class RequestsController extends AuthController {
         }
         $requests = [];
         if (!empty($ids)) {
-            $requests = $this->Request->find('all', array(
-                'conditions' => array('Request.id' => $ids),
-                'order' => array('Request.id' => 'DESC'),)
+            $requests = $this->Request->find(
+                'all',
+                array(
+                    'conditions' => array('Request.id' => $ids),
+                    'order' => array('Request.id' => 'DESC'),
+                )
             );
         }
         if (!empty($requests)) {
@@ -224,6 +245,7 @@ class RequestsController extends AuthController {
                 'Application Number',
                 'Application Date',
                 "Pupil's Name",
+                "Pupil's ID number",
                 'Date of Birth',
                 'Academic Year Entry',
                 'Year Group Applying to',
@@ -264,6 +286,7 @@ class RequestsController extends AuthController {
                     $request['Request']['application_number'],
                     date('d-m-Y', strtotime($request['Request']['created'])),
                     $request['Request']['title'],
+                    $dataIn['child_id_number'],
                     $dataIn['birth_date'],
                     $terms[$dataIn['academic_year_entry_input']],
                     $yearGroups[$dataIn['year_group_applying_to_input']],
@@ -272,8 +295,8 @@ class RequestsController extends AuthController {
                     $dataIn['nationality'],
                     $dataIn['religion'],
                     $dataIn['require_bus'],
-                    $dataIn['have_any_sibling_at_EIS'],
-                    $dataIn['have_any_sibling_at_rukan'],
+                    $this->haveAnySibling[$dataIn['have_any_sibling_at_EIS']],
+                    $this->haveAnySibling[$dataIn['have_any_sibling_at_rukan']],
                     $dataIn['are_you_applying_for_any_siblings'],
                     $dataIn['previous_schools_nursery_1_1'],
                     $dataIn['parent_informations2'],
@@ -290,8 +313,8 @@ class RequestsController extends AuthController {
                     $statusIn,
                 ];
             }
-//            pr($data);
-//            exit;
+            //            pr($data);
+            //            exit;
             $this->exportArrayToExcel($data);
         } else {
             $this->Session->setFlash(__('Invalid applications to export.', true));
@@ -299,7 +322,8 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function exportArrayToExcel(array $data, $data2 = []) {
+    public function exportArrayToExcel(array $data, $data2 = [])
+    {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Applications');
@@ -368,7 +392,8 @@ class RequestsController extends AuthController {
         }
     }
 
-    function changeLimit() {
+    function changeLimit()
+    {
         $limit = 0;
         if (isset($_POST['limit']) && is_numeric($_POST['limit'])) {
             if ($_POST['limit'] > 0) {
@@ -385,7 +410,8 @@ class RequestsController extends AuthController {
         $this->redirect(array('action' => 'index'));
     }
 
-    public function resubmit($id = null) {
+    public function resubmit($id = null)
+    {
         if (!$id && empty($this->data)) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
@@ -399,7 +425,9 @@ class RequestsController extends AuthController {
         }
     }
 
-    public function exportApplicationToPDF($id = null) {
+    public function exportApplicationToPDF($id = null)
+    {
+        $haveAnySibling= $this->haveAnySibling;
         if (!$id) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
@@ -431,15 +459,15 @@ class RequestsController extends AuthController {
             $dompdf->setHttpContext($context);
             // $style = new \Dompdf\Css\Stylesheet($dompdf);
             // $cssFile = $base_url . '/css/backend/admissions_pdf.css';
-            $cssFile = ROOT . DS . APP_DIR . DS.'webroot' . DS.'css'. DS.'backend'. DS.'admissions_pdf.css';
-//   $cssContent = file_get_contents($cssFile);
- $cssContent = $this->getAdmissionsCss();
+            $cssFile = ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'css' . DS . 'backend' . DS . 'admissions_pdf.css';
+            //   $cssContent = file_get_contents($cssFile);
+            $cssContent = $this->getAdmissionsCss();
             // $style->load_css_file($cssFile);
             // $dompdf->setCss($style);
             $html .= '<html>
                     <head>
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-                    </head><style>'.$cssContent.'
+                    </head><style>' . $cssContent . '
                     </style>
                 <body>';
             $data = $request['Request']['data'];
@@ -450,7 +478,7 @@ class RequestsController extends AuthController {
             $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg">';
             $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
-            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
             $html .= '<h3 class="section_title">2. Previous School(s) / Nursery</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab2.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
@@ -464,19 +492,20 @@ class RequestsController extends AuthController {
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab5.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '</body>'
-                    . '</html>';
+                . '</html>';
             $dompdf->loadHtml($html);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
             ob_end_clean();
-            $dompdf->stream($application_number . '.pdf', [ 'Attachment' => false]);
+            $dompdf->stream($application_number . '.pdf', ['Attachment' => false]);
         } else {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
         }
     }
-public function getAdmissionsCss(){
-    $cssContent = '.altrow {
+    public function getAdmissionsCss()
+    {
+        $cssContent = '.altrow {
         background: #f4f4f4;
     }
     .leftDiv{
@@ -555,6 +584,6 @@ public function getAdmissionsCss(){
         text-align: center;
         clear: both;
     }';
-    return $cssContent;
-}
+        return $cssContent;
+    }
 }
