@@ -10,3 +10,4 @@ app/tmp/cache/persistent/*
 app/tmp/tmpcv/*
 app/tmp/admissions/*
 app/tmp/*
+app/webroot/files/admissions/*
