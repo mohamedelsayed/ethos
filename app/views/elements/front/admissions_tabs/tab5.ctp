@@ -74,7 +74,7 @@
     <div class="input_new">
         <label for="medical_history"><?php echo __('Medical History') ?>:</label>
         <span>
-            <input id="medical_history" class="input3new admissions_input required_input" type="file" name="medical_history" accept="<?php echo $files_extensions; ?>" />
+        <input type="text" class="input3new admissions_input required_input" id="medical_history" name="medical_history" />
         </span>
     </div>
     <div class="agree_out">
