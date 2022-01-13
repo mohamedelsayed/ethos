@@ -381,12 +381,12 @@ function set_required_for_recent_report_if_needed() {
     let dh3 = $('input[type=radio][name=developmental_history3]:checked').val();
     let dh4 = $('input[type=radio][name=developmental_history4]:checked').val();
     let dh5 = $('input[name=developmental_history5]').val();
-    console.log(dh0);
-    console.log(dh1);
-    console.log(dh2);
-    console.log(dh3);
-    console.log(dh4);
-    console.log(dh5);
+    // console.log(dh0);
+    // console.log(dh1);
+    // console.log(dh2);
+    // console.log(dh3);
+    // console.log(dh4);
+    // console.log(dh5);
     item=$('#recent_report');
     if (dh0 == 1 || dh1 == 1 || dh2 == 1 || dh3 == 1 || dh4 == 1 || dh5 != '') {
         item.addClass(required_input_class);
