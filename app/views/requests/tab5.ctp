@@ -70,4 +70,32 @@
             </tr>
         </table>
     </div>
+    <?php if (isset($base_url)) { ?>
+        <?php if (isset($dataIn['filesData']['recent_report']) && $dataIn['filesData']['recent_report'] != '') { ?>
+            <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+                <div class="leftDiv "><?php echo __('Please upload the most recent report/assessment'); ?>:</div>
+                <div class="rightDiv ">
+                    <?php
+                    $img_url = $base_url . '/' . $dataIn['filesData']['recent_report'];
+                    ?>
+                    <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                    &nbsp;
+                </div>
+            </div>
+        <?php } ?>
+    <?php } ?>
+    <?php if (isset($base_url)) { ?>
+        <?php if (isset($dataIn['filesData']['medical_history']) && $dataIn['filesData']['medical_history'] != '') { ?>
+            <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+                <div class="leftDiv "><?php echo __('Medical History'); ?>:</div>
+                <div class="rightDiv ">
+                    <?php
+                    $img_url = $base_url . '/' . $dataIn['filesData']['medical_history'];
+                    ?>
+                    <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                    &nbsp;
+                </div>
+            </div>
+        <?php } ?>
+    <?php } ?>
 </div>

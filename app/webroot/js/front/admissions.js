@@ -12,32 +12,32 @@ jQuery(function () {
         dateFormat: 'dd-mm-yy',
         yearRange: "-100:+0",
     });
-//    jQuery("#birth_date_input").change(function () {
-//        var birth_date = jQuery(this).val();
-//        jQuery('#pupil_details5').val(birth_date);
-//    });
-//    jQuery("#pupil_details5").change(function () {
-//        var birth_date = jQuery(this).val();
-//        jQuery('#birth_date_input').val(birth_date);
-//    });
-//    jQuery("form :input.take_placeholder").each(function (index, elem) {
-//        var eId = jQuery(elem).attr("id");
-//        var label = null;
-//        if (eId && (label = jQuery(elem).parents("form").find("label[for=" + eId + "]")).length == 1) {
-//            var label_data = jQuery(label).html().replace(":", "");
-//            jQuery(elem).attr("placeholder", label_data);
-//        }
-//    });
-//    jQuery("form#admissionsform").submit(function (event) {
-//        event.preventDefault();
-//        validate_admissions_form();
-//    });
+    //    jQuery("#birth_date_input").change(function () {
+    //        var birth_date = jQuery(this).val();
+    //        jQuery('#pupil_details5').val(birth_date);
+    //    });
+    //    jQuery("#pupil_details5").change(function () {
+    //        var birth_date = jQuery(this).val();
+    //        jQuery('#birth_date_input').val(birth_date);
+    //    });
+    //    jQuery("form :input.take_placeholder").each(function (index, elem) {
+    //        var eId = jQuery(elem).attr("id");
+    //        var label = null;
+    //        if (eId && (label = jQuery(elem).parents("form").find("label[for=" + eId + "]")).length == 1) {
+    //            var label_data = jQuery(label).html().replace(":", "");
+    //            jQuery(elem).attr("placeholder", label_data);
+    //        }
+    //    });
+    //    jQuery("form#admissionsform").submit(function (event) {
+    //        event.preventDefault();
+    //        validate_admissions_form();
+    //    });
     jQuery(document).on("change paste keyup", "input." + required_input_class + ", select." + required_input_class + "", function () {
         validate_required_input(jQuery(this));
     });
-//    jQuery(':file').change(function () {
-//        validate_required_input_image(jQuery(this), this);
-//    });
+    //    jQuery(':file').change(function () {
+    //        validate_required_input_image(jQuery(this), this);
+    //    });
     jQuery(document).on("change", "#year_group_applying_to_input", function () {
         var val = jQuery(this).val();
         var item1 = jQuery("#current_year_group_input");
@@ -108,6 +108,24 @@ jQuery(function () {
     jQuery('.mesage-pop-bg').click(function () {
         close_admission_disclaimer_popup();
     });
+    jQuery(document).on("change", "input[type=radio][name=developmental_history0]", function () {
+        set_required_for_recent_report_if_needed();
+    });
+    jQuery(document).on("change", "input[type=radio][name=developmental_history1]", function () {
+        set_required_for_recent_report_if_needed();
+    });
+    jQuery(document).on("change", "input[type=radio][name=developmental_history2]", function () {
+        set_required_for_recent_report_if_needed();
+    });
+    jQuery(document).on("change", "input[type=radio][name=developmental_history3]", function () {
+        set_required_for_recent_report_if_needed();
+    });
+    jQuery(document).on("change", "input[type=radio][name=developmental_history4]", function () {
+        set_required_for_recent_report_if_needed();
+    });
+    jQuery(document).on("change", "#developmental_history5", function () {
+        set_required_for_recent_report_if_needed();
+    });
 });
 //function validate_admissions_form() {
 //    var error_flag = 0;
@@ -166,6 +184,7 @@ function send_addmission_form() {
         });
     }
 }
+
 function validate_required_input(obj) {
     var val = obj.val();
     var input_type = obj.attr('type');
@@ -210,13 +229,16 @@ function validate_required_input(obj) {
     }
     return error;
 }
+
 function isValidEmailAddress(emailAddress) {
     var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
     return pattern.test(emailAddress);
 }
+
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
 function validate_required_input_checkbox(obj) {
     var obj_in = jQuery('#' + obj);
     var obj_out = jQuery('.agree_out');
@@ -267,6 +289,7 @@ function showTab(n) {
     // ... and run a function that displays the correct step indicator:
     fixStepIndicator(n);
 }
+
 function nextPrev(n) {
     // This function will figure out which tab to display
     var x = document.getElementsByClassName("tab");
@@ -289,18 +312,19 @@ function nextPrev(n) {
         showTab(currentTab);
     }
 }
+
 function validateForm() {
     // This function deals with validation of the form fields
     var x, y, i, valid = true;
     x = document.getElementsByClassName("tab");
-//    y = x[currentTab].getElementsByTagName("input");
+    //    y = x[currentTab].getElementsByTagName("input");
     y = x[currentTab].getElementsByClassName(required_input_class);
     // A loop that checks every input field in the current tab:
     i = 0;
     var obj;
     var error = 0;
     var focused = 0;
-//    console.log(".tabIn"+currentTab+" ."+required_input_class);
+    //    console.log(".tabIn"+currentTab+" ."+required_input_class);
     jQuery(".tabIn" + currentTab + " ." + required_input_class).each(function (index) {
         obj = jQuery(this);
         error = validate_required_input(obj);
@@ -318,6 +342,7 @@ function validateForm() {
     }
     return valid; // return the valid status
 }
+
 function fixStepIndicator(n) {
     // This function removes the "active" class of all steps...
     var i, x = document.getElementsByClassName("step");
@@ -327,6 +352,7 @@ function fixStepIndicator(n) {
     //... and adds the "active" class to the current step:
     x[n].className += " active";
 }
+
 function show_textbox_if_value_selected(selector1, selector2, value) {
     var val = jQuery(selector1).val();
     var item = jQuery(selector2);
@@ -339,9 +365,33 @@ function show_textbox_if_value_selected(selector1, selector2, value) {
         item.closest('.input_new').addClass(hiddendiv_class);
     }
 }
+
 function open_admission_disclaimer_popup() {
     jQuery("#mesagepopboxadmissiondisclaimerpopoup").show();
 }
+
 function close_admission_disclaimer_popup() {
     jQuery("#mesagepopboxadmissiondisclaimerpopoup").hide();
+}
+
+function set_required_for_recent_report_if_needed() {
+    let dh0 = $('input[type=radio][name=developmental_history0]:checked').val();
+    let dh1 = $('input[type=radio][name=developmental_history1]:checked').val();
+    let dh2 = $('input[type=radio][name=developmental_history2]:checked').val();
+    let dh3 = $('input[type=radio][name=developmental_history3]:checked').val();
+    let dh4 = $('input[type=radio][name=developmental_history4]:checked').val();
+    let dh5 = $('input[name=developmental_history5]').val();
+    console.log(dh0);
+    console.log(dh1);
+    console.log(dh2);
+    console.log(dh3);
+    console.log(dh4);
+    console.log(dh5);
+    item=$('#recent_report');
+    if (dh0 == 1 || dh1 == 1 || dh2 == 1 || dh3 == 1 || dh4 == 1 || dh5 != '') {
+        item.addClass(required_input_class);
+    } else {
+        item.removeClass(required_input_class);
+        item.removeClass(required_class);
+    }
 }

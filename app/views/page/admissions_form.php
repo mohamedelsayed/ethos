@@ -7,6 +7,7 @@ echo $this->Html->css(array('front/jquery-ui', 'front/admissions'));
 echo $this->Javascript->link(array('front/jquery-ui'));
 $yes_no_options = array('Yes', 'No');
 $image_extensions = '.jpeg,.png,.gif,.jpg';
+$files_extensions = $image_extensions.',.pdf,.doc,.docx';
 $selected = ' selected="selected" ';
 $checked = ' checked="checked" ';
 $gender_options = array('Male', 'Female');
@@ -39,6 +40,7 @@ echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab4', [
 echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab5', [
     'yes_no_options' => $yes_no_options,
     'image_extensions' => $image_extensions,
+    'files_extensions' => $files_extensions,
     'selected' => $selected,
     'checked' => $checked,
 ]);
