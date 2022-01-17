@@ -5,5 +5,6 @@
     'referral' => 'I’m a referral',
     'child_in_ethos' => 'I already have a child in Ethos',
     'staff_member' => 'I’m a staff member',
+    'from_rukan' => 'From Rukan',
     'other' => 'Other',
 ];
