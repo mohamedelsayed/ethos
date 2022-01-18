@@ -242,8 +242,10 @@ class RequestsController extends AuthController
             $this->loadModel('YearGroup');
             $yearGroups = $this->YearGroup->find('list');
             $data[] = [
+                //application info
                 'Application Number',
                 'Application Date',
+                //tab1
                 "Pupil's Name",
                 "Pupil's ID number",
                 'Date of Birth',
@@ -253,22 +255,74 @@ class RequestsController extends AuthController
                 'Gender',
                 'Nationality',
                 'Religion',
+                'Language Spoken At Home',
                 'Bus',
+                'Will the pupil be exempted from the Egyptian Ministry exams',
                 'Siblings at EIS',
+                'If yes please write his/her name and year group',
                 'Siblings at Rukan',
+                'If yes please write his/her name and year group',
                 'Sibling applying at EIS',
+                'If yes, please give details',
+                'How did you hear about us',
+                'If other, please specify',
+                //tab2
                 'Previous School',
-                "Mother's Name",
-                "Mother's Mobile",
-                "Mother's Email",
-                "Mother's Qualifications",
+                'Years Attended',
+                'Year Group/ Form / Grade',
+                'Curriculum Followed (British, IB, American, National)',
+                'Has the pupil ever skipped a year',
+                'If yes, which year group, Please give details',
+                'Has the pupil ever been asked to repeat a year',
+                'If yes, which year group, Please give details',
+                'Has the pupil ever applied to Ethos International School',
+                'If yes, which year group, Please give details:	',
+                //tab3
+                //Father
                 "Father's Name",
-                "Father's Mobile",
-                "Father's Email",
+                "Father's Occupation",
+                "Father's Employer",
                 "Father's Qualifications",
+                "Father's University",
+                "Father's School",
+                "Father's Nationality",
+                "Father's ID/ Passport Number",
+                "Father's Date of Birth",
+                "Father's Address",
+                "Father's Mobile Number",
+                "Father's Email",
+                //Mother
+                "Mother's Name",
+                "Mother's Occupation",
+                "Mother's Employer",
+                "Mother's Qualifications",
+                "Mother's University",
+                "Mother's School",
+                "Mother's Nationality",
+                "Mother's ID/ Passport Number",
+                "Mother's Date of Birth",
+                "Mother's Address",
+                "Mother's Mobile Number",
+                "Mother's Email",               
+                //Marital
                 "Marital Status",
-                "Emergancy Contact 1",
-                "Emergancy Contact 2",
+                "If divorced, custody with",
+                //tab4
+                "Emergancy Name 1",
+                "Emergancy Relationship to Pupil 1",
+                "Emergancy Mobile Number 1",
+                "Emergancy Name 2",
+                "Emergancy Relationship to Pupil 2",
+                "Emergancy Mobile Number 2",
+                //tab5
+                'Attention Deficit Disorder / Hyperactive',
+                'Speech & Language Disorder	',
+                'Developmental Delay',
+                'Behavioural Issues',
+                'Has your child been diagnosed/ assessed for any learning disabilities / challenges',
+                'Other/s (please specify)',
+                'Medical History',
+                //application status
                 "Online Applications Status",
             ];
             foreach ($requests as $key => $request) {
@@ -282,9 +336,12 @@ class RequestsController extends AuthController
                 } else {
                     $statusIn = '---';
                 }
+                $how_did_you_hear_about_us = $GLOBALS['how_did_you_hear_about_us'];
                 $data[] = [
+                    //application info
                     $request['Request']['application_number'],
                     date('d-m-Y', strtotime($request['Request']['created'])),
+                    //tab1
                     $request['Request']['title'],
                     $dataIn['child_id_number'],
                     $dataIn['birth_date'],
@@ -294,22 +351,74 @@ class RequestsController extends AuthController
                     $dataIn['gender_input'],
                     $dataIn['nationality'],
                     $dataIn['religion'],
+                    $dataIn['language'],
                     $dataIn['require_bus'],
+                    $dataIn['egyptian_ministry_exams'],
                     $this->haveAnySibling[$dataIn['have_any_sibling_at_EIS']],
+                    $dataIn['have_any_sibling_at_EIS_pupil'],
                     $this->haveAnySibling[$dataIn['have_any_sibling_at_rukan']],
+                    $dataIn['have_any_sibling_at_rukan_pupil'],
                     $dataIn['are_you_applying_for_any_siblings'],
+                    $dataIn['are_you_applying_for_any_siblings_details'],
+                    $how_did_you_hear_about_us[$dataIn['how_did_you_hear_about_us']],
+                    $dataIn['how_did_you_hear_about_us_other'],
+                    //tab2
                     $dataIn['previous_schools_nursery_1_1'],
-                    $dataIn['parent_informations2'],
-                    $dataIn['parent_informations22'],
-                    $dataIn['parent_informations24'],
-                    $dataIn['parent_informations8'],
+                    $dataIn['previous_schools_nursery_1_2'],
+                    $dataIn['previous_schools_nursery_1_3'],
+                    $dataIn['previous_schools_nursery_1_4'],
+                    $dataIn['has_the_pupil_ever_skipped_year'],
+                    $dataIn['has_the_pupil_ever_skipped_year_details'],
+                    $dataIn['has_the_pupil_ever_been_asked_to_repeat_year'],
+                    $dataIn['has_the_pupil_ever_been_asked_to_repeat_year_details'],
+                    $dataIn['has_the_pupil_ever_applied_to_EIS'],
+                    $dataIn['has_the_pupil_ever_applied_to_EIS_details'],
+                    //tab3
+                    //Father
                     $dataIn['parent_informations1'],
+                    $dataIn['parent_informations3'],
+                    $dataIn['parent_informations5'],
+                    $dataIn['parent_informations7'],
+                    $dataIn['parent_informations9'],
+                    $dataIn['parent_informations11'],
+                    $dataIn['parent_informations13'],
+                    $dataIn['parent_informations15'],
+                    $dataIn['parent_informations17'],
+                    $dataIn['parent_informations19'],
                     $dataIn['parent_informations21'],
                     $dataIn['parent_informations23'],
-                    $dataIn['parent_informations7'],
+                    //Mother
+                    $dataIn['parent_informations2'],
+                    $dataIn['parent_informations4'],
+                    $dataIn['parent_informations6'],
+                    $dataIn['parent_informations8'],
+                    $dataIn['parent_informations10'],
+                    $dataIn['parent_informations12'],
+                    $dataIn['parent_informations14'],
+                    $dataIn['parent_informations16'],
+                    $dataIn['parent_informations18'],
+                    $dataIn['parent_informations20'],
+                    $dataIn['parent_informations22'],
+                    $dataIn['parent_informations24'],
+                    //Marital
                     $dataIn['parental_marital_status'],
+                    $dataIn['parental_marital_status_details'],
+                    //tab4
+                    $dataIn['emergency1'],
+                    $dataIn['emergency3'],
                     $dataIn['emergency5'],
+                    $dataIn['emergency2'],
+                    $dataIn['emergency4'],
                     $dataIn['emergency6'],
+                    //tab5
+                    $dataIn['developmental_history0']?"Yes":"No",
+                    $dataIn['developmental_history1']?"Yes":"No",
+                    $dataIn['developmental_history2']?"Yes":"No",
+                    $dataIn['developmental_history3']?"Yes":"No",
+                    $dataIn['developmental_history4']?"Yes":"No",
+                    $dataIn['developmental_history5'],
+                    $dataIn['medical_history'],
+                    //application status
                     $statusIn,
                 ];
             }
@@ -322,38 +431,44 @@ class RequestsController extends AuthController
         }
     }
 
-    public function exportArrayToExcel(array $data, $data2 = [])
+    public function exportArrayToExcel(array $data = [])
     {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Applications');
-        $letters = 'abcdefghijklmnopqrstuvwxyzaaabacadae';
-        $i = 1;
-        foreach ($data as $key => $data_in) {
-            foreach ($data_in as $key_in => $value_in) {
-                $step = 1;
-                if ($key_in > 25) {
-                    $step = 2;
-                }
-                $sheet->setCellValue(strtoupper(substr($letters, $key_in, $step)) . $i, $value_in);
-            }
-            $i++;
-        }
-        if (!empty($data2)) {
-            $sheet = $spreadsheet->createSheet(1);
-            $i = 1;
-            foreach ($data2 as $key => $data_in) {
-                foreach ($data_in as $key_in => $value_in) {
-                    $step = 1;
-                    if ($key_in > 25) {
-                        $step = 2;
-                    }
-                    $sheet->setCellValue(strtoupper(substr($letters, $key_in, $step)) . $i, $value_in);
-                }
-                $i++;
-            }
-            $sheet->setTitle('Applications');
-        }
+        $sheet->fromArray(
+            $data,  // The data to set
+            NULL,        // Array values with this value will not be set
+            'A1'         // Top left coordinate of the worksheet range where
+            //    we want to set these values (default is A1)
+        );
+        // $letters = 'abcdefghijklmnopqrstuvwxyzaaabacadae';
+        // $i = 1;
+        // foreach ($data as $key => $data_in) {
+        //     foreach ($data_in as $key_in => $value_in) {
+        //         $step = 1;
+        //         if ($key_in > 25) {
+        //             $step = 2;
+        //         }
+        //         $sheet->setCellValue(strtoupper(substr($letters, $key_in, $step)) . $i, $value_in);
+        //     }
+        //     $i++;
+        // }
+        // if (!empty($data2)) {
+        //     $sheet = $spreadsheet->createSheet(1);
+        //     $i = 1;
+        //     foreach ($data2 as $key => $data_in) {
+        //         foreach ($data_in as $key_in => $value_in) {
+        //             $step = 1;
+        //             if ($key_in > 25) {
+        //                 $step = 2;
+        //             }
+        //             $sheet->setCellValue(strtoupper(substr($letters, $key_in, $step)) . $i, $value_in);
+        //         }
+        //         $i++;
+        //     }
+        //     $sheet->setTitle('Applications');
+        // }
         $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->setIncludeCharts(true);
         $exported_file_name_user = 'applications.xlsx';
@@ -427,7 +542,7 @@ class RequestsController extends AuthController
 
     public function exportApplicationToPDF($id = null)
     {
-        $haveAnySibling= $this->haveAnySibling;
+        $haveAnySibling = $this->haveAnySibling;
         if (!$id) {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
