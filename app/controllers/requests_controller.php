@@ -589,8 +589,8 @@ class RequestsController extends AuthController
             $dataIn = unserialize($data);
             $imgpath = $base_url . '/app/webroot/img/backend/';
             $userImage = $base_url . '/' . $dataIn['filesData']['child_photo'];
-            // $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
-            // $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
+            $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
+            $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
             $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
