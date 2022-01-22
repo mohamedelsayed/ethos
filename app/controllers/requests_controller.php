@@ -573,17 +573,17 @@ class RequestsController extends AuthController
                 ]
             ]);
             $dompdf->setHttpContext($context);
-            // $style = new \Dompdf\Css\Stylesheet($dompdf);
-            // $cssFile = $base_url . '/css/backend/admissions_pdf.css';
-            $cssFile = ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'css' . DS . 'backend' . DS . 'admissions_pdf.css';
+            $style = new \Dompdf\Css\Stylesheet($dompdf);
+            $cssFile = $base_url . '/css/backend/admissions_pdf.css';
+            // $cssFile = ROOT . DS . APP_DIR . DS . 'webroot' . DS . 'css' . DS . 'backend' . DS . 'admissions_pdf.css';
             //   $cssContent = file_get_contents($cssFile);
-            $cssContent = $this->getAdmissionsCss();
-            // $style->load_css_file($cssFile);
-            // $dompdf->setCss($style);
+            // $cssContent = $this->getAdmissionsCss();
+            $style->load_css_file($cssFile);
+            $dompdf->setCss($style);
             $html .= '<html>
                     <head>
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-                    </head><style>' . $cssContent 
+                    </head>'//.'<style>' . $cssContent 
                     .'</style>
                 <body>';
             $data = $request['Request']['data'];
@@ -609,14 +609,14 @@ class RequestsController extends AuthController
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '</body>'
                 . '</html>';
-            if ($isHtml) {
-                $this->autoRender = false;
-                header('Content-Type: application/json');
-                header("HTTP/1.1 " . "200" . " " . 'OK');
-                $dataout['html']=$html;
-                echo json_encode($dataout);
-                exit;
-            }
+            // if ($isHtml) {
+            //     $this->autoRender = false;
+            //     header('Content-Type: application/json');
+            //     header("HTTP/1.1 " . "200" . " " . 'OK');
+            //     $dataout['html']=$html;
+            //     echo json_encode($dataout);
+            //     exit;
+            // }
             $dompdf->loadHtml($html);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
