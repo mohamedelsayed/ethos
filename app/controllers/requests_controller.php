@@ -559,7 +559,8 @@ class RequestsController extends AuthController
             $html = '';
             $options = new \Dompdf\Options();
             $options->setIsRemoteEnabled(true);
-            $options->setTempDir(ROOT . DS . 'app' . DS . 'tmp' . DS . 'pdf');
+            $tmpDir= ROOT . DS . 'app' . DS . 'tmp' . DS . 'pdf';
+            $options->setTempDir($tmpDir);
             $options->set('debugKeepTemp', TRUE);
             $options->setIsHtml5ParserEnabled(true);
             $dompdf = new Dompdf\Dompdf();
@@ -582,40 +583,38 @@ class RequestsController extends AuthController
             $html .= '<html>
                     <head>
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-                    </head><style>' //. $cssContent 
+                    </head><style>' . $cssContent 
                     .'</style>
                 <body>';
             $data = $request['Request']['data'];
             $dataIn = unserialize($data);
             $imgpath = $base_url . '/app/webroot/img/backend/';
             $userImage = $base_url . '/' . $dataIn['filesData']['child_photo'];
-            // $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
-            // $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
+            $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
+            $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
             $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
-            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
             $html .= '<h3 class="section_title">2. Previous School(s) / Nursery</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab2.ctp';
-            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">3. Parents Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab3.ctp';
-            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">4. Emergency Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab4.ctp';
-            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">5. Developmental History</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab5.ctp';
-            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '</body>'
                 . '</html>';
             if ($isHtml) {
                 $this->autoRender = false;
                 header('Content-Type: application/json');
                 header("HTTP/1.1 " . "200" . " " . 'OK');
-        
                 $dataout['html']=$html;
                 echo json_encode($dataout);
-                // echo $html;
                 exit;
             }
             $dompdf->loadHtml($html);
@@ -623,6 +622,7 @@ class RequestsController extends AuthController
             $dompdf->render();
             ob_end_clean();
             $dompdf->stream($application_number . '.pdf', ['Attachment' => false]);
+            exit;
         } else {
             $this->Session->setFlash(__('Invalid application.', true));
             $this->redirect(array('action' => 'index'));
