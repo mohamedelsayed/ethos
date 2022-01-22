@@ -582,8 +582,8 @@ class RequestsController extends AuthController
             $html .= '<html>
                     <head>
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-                    </head><style>' . $cssContent . '
-                    </style>
+                    </head><style>' //. $cssContent 
+                    .'</style>
                 <body>';
             $data = $request['Request']['data'];
             $dataIn = unserialize($data);
