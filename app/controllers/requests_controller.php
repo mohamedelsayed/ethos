@@ -596,13 +596,13 @@ class RequestsController extends AuthController
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
             $html .= '<h3 class="section_title">2. Previous School(s) / Nursery</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab2.ctp';
-            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">3. Parents Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab3.ctp';
-            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">4. Emergency Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab4.ctp';
-            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">5. Developmental History</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab5.ctp';
             // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
