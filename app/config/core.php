@@ -36,9 +36,9 @@ require_once 'constants.php';
  */
 $http_host = $_SERVER['HTTP_HOST'];
 if (strpos($http_host, 'localhost') !== FALSE) {
-	Configure::write('debug', 0);	
+	Configure::write('debug', 2);	
 }else{
-	Configure::write('debug', 0);	
+	Configure::write('debug', 2);	
 }
 /**
  * CakePHP Log Level:
