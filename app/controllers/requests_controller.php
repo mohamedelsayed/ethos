@@ -303,7 +303,7 @@ class RequestsController extends AuthController
                 "Mother's Date of Birth",
                 "Mother's Address",
                 "Mother's Mobile Number",
-                "Mother's Email",               
+                "Mother's Email",
                 //Marital
                 "Marital Status",
                 "If divorced, custody with",
@@ -411,11 +411,11 @@ class RequestsController extends AuthController
                     $dataIn['emergency4'],
                     $dataIn['emergency6'],
                     //tab5
-                    $dataIn['developmental_history0']?"Yes":"No",
-                    $dataIn['developmental_history1']?"Yes":"No",
-                    $dataIn['developmental_history2']?"Yes":"No",
-                    $dataIn['developmental_history3']?"Yes":"No",
-                    $dataIn['developmental_history4']?"Yes":"No",
+                    $dataIn['developmental_history0'] ? "Yes" : "No",
+                    $dataIn['developmental_history1'] ? "Yes" : "No",
+                    $dataIn['developmental_history2'] ? "Yes" : "No",
+                    $dataIn['developmental_history3'] ? "Yes" : "No",
+                    $dataIn['developmental_history4'] ? "Yes" : "No",
                     $dataIn['developmental_history5'],
                     $dataIn['medical_history'],
                     //application status
@@ -540,7 +540,7 @@ class RequestsController extends AuthController
         }
     }
 
-    public function exportApplicationToPDF($id = null)
+    public function exportApplicationToPDF($id = null, $isHtml = null)
     {
         $haveAnySibling = $this->haveAnySibling;
         if (!$id) {
@@ -589,8 +589,8 @@ class RequestsController extends AuthController
             $dataIn = unserialize($data);
             $imgpath = $base_url . '/app/webroot/img/backend/';
             $userImage = $base_url . '/' . $dataIn['filesData']['child_photo'];
-            $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
-            $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
+            // $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
+            // $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
             $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
@@ -608,6 +608,16 @@ class RequestsController extends AuthController
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '</body>'
                 . '</html>';
+            if ($isHtml) {
+                $this->autoRender = false;
+                header('Content-Type: application/json');
+                header("HTTP/1.1 " . "200" . " " . 'OK');
+        
+                $dataout['html']=$html;
+                echo json_encode($dataout);
+                // echo $html;
+                exit;
+            }
             $dompdf->loadHtml($html);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
