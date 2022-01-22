@@ -84,17 +84,15 @@
             </div>
         <?php } ?>
     <?php } ?>
-    <?php if (isset($base_url)) { ?>
-        <?php if (isset($dataIn['medical_history']) && $dataIn['medical_history'] != '') { ?>
-            <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-                <div class="leftDiv "><?php echo __('Medical History'); ?>:</div>
-                <div class="rightDiv ">
-                    <?php
-                   echo $dataIn['medical_history']; 
-                    ?>
-                    &nbsp;
-                </div>
+    <?php if (isset($dataIn['medical_history']) && $dataIn['medical_history'] != '') { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Medical History'); ?>:</div>
+            <div class="rightDiv ">
+                <?php
+                echo $dataIn['medical_history'];
+                ?>
+                &nbsp;
             </div>
-        <?php } ?>
+        </div>
     <?php } ?>
 </div>
