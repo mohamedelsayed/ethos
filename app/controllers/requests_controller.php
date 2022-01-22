@@ -605,7 +605,7 @@ class RequestsController extends AuthController
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">5. Developmental History</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab5.ctp';
-            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
+            // $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '</body>'
                 . '</html>';
             if ($isHtml) {
