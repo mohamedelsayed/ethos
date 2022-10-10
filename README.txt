@@ -5,3 +5,4 @@
  * @link https://www.ethosedu.com
  * @copyright Copyright (c) 2014 Programming by "mohamedelsayed.net"
  */
+it needs PHP Version 7.3
