@@ -6,6 +6,6 @@
     'child_in_ethos' => 'I already have a child in Ethos',
     'staff_member' => 'I’m a staff member',
     'from_rukan' => 'From Rukan',
-    'rukanian' => 'I am a Rukanian',
+    'rukanian' => 'I’m a Rukanian',
     'other' => 'Other',
 ];
