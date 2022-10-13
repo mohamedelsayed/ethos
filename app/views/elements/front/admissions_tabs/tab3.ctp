@@ -25,6 +25,11 @@
                 <td><input class="parent_informations input_in_table required_input" id="parent_informations6" type="text" name="parent_informations6" value="" placeholder="..."></td>
             </tr>
             <tr>
+                <td class="td_left is_head"><?php echo __('Work Address');?></td>
+                <td><input class="parent_informations input_in_table required_input" id="parent_informations25" type="text" name="parent_informations25" value="" placeholder="..."></td>
+                <td><input class="parent_informations input_in_table required_input" id="parent_informations26" type="text" name="parent_informations26" value="" placeholder="..."></td>
+            </tr>
+            <tr>
                 <td class="td_left is_head"><?php echo __('Qualifications');?></td>
                 <td><input class="parent_informations input_in_table required_input" id="parent_informations7" type="text" name="parent_informations7" value="" placeholder="..."></td>
                 <td><input class="parent_informations input_in_table required_input" id="parent_informations8" type="text" name="parent_informations8" value="" placeholder="..."></td>

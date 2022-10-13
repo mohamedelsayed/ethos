@@ -46,6 +46,19 @@
                 </td>
             </tr>
             <tr>
+                <td class="td_left is_head"><?php echo __('Work Address'); ?></td>
+                <td>
+                    <?php if (isset($dataIn['parent_informations25'])) { ?>
+                        <?php echo $dataIn['parent_informations25']; ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (isset($dataIn['parent_informations26'])) { ?>
+                        <?php echo $dataIn['parent_informations26']; ?>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
                 <td class="td_left is_head"><?php echo __('Qualifications'); ?></td>
                 <td>
                     <?php if (isset($dataIn['parent_informations7'])) { ?>
