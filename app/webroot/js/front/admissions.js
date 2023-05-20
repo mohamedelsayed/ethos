@@ -177,6 +177,11 @@ function send_addmission_form() {
                     currentTab = 0;
                     jQuery('.tabIn4').hide();
                     showTab(currentTab);
+
+					setTimeout(function(){
+                        window.location.href = 'https://www.ethosedu.com';
+                     }, 5000);
+					 
                 } else {
                     jQuery('#admissions_result').html(result.msg).show().removeClass('admissions_result_success').addClass('admissions_result_fail');
                 }
