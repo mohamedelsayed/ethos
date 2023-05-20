@@ -48,8 +48,8 @@ class PageController extends AppController {
         }
         //$this->set('parent_cat' , $parent_cat);
         $parent_title = $title = $parent_cat['Cat']['title'];
-        $meta_keywords = $parent_cat['Cat']['meta_keywords'];
-        $meta_description = $parent_cat['Cat']['meta_description'];
+        // $meta_keywords = $parent_cat['Cat']['meta_keywords'];
+        // $meta_description = $parent_cat['Cat']['meta_description'];
         if (isset($parent_cat['Cat']['image'])) {
             if (trim($parent_cat['Cat']['image']) != '') {
                 $this->mainSmartResizeImage($parent_cat['Cat']['image']);
@@ -65,8 +65,8 @@ class PageController extends AppController {
             );
             //$this->set('child_cat' , $child_cat);
             $title = $child_cat['Cat']['title'];
-            $meta_keywords = $child_cat['Cat']['meta_keywords'];
-            $meta_description = $child_cat['Cat']['meta_description'];
+            // $meta_keywords = $child_cat['Cat']['meta_keywords'];
+            // $meta_description = $child_cat['Cat']['meta_description'];
             if (isset($child_cat['Cat']['image'])) {
                 if (trim($child_cat['Cat']['image']) != '') {
                     $this->mainSmartResizeImage($child_cat['Cat']['image']);
@@ -141,12 +141,12 @@ class PageController extends AppController {
             }
         }
         $this->set('title_for_layout', strip_tags($title));
-        $this->set(
-                array(
-                    'metaKeywords' => $meta_keywords,
-                    'metaDescription' => $meta_description,
-                )
-        );
+        // $this->set(
+        //         array(
+        //             'metaKeywords' => $meta_keywords,
+        //             'metaDescription' => $meta_description,
+        //         )
+        // );
         $this->set('selected', strtolower(str_replace(' ', '', $parent_title)));
         if (isset($parent_cat) && !empty($parent_cat)) {
             $url = '';
