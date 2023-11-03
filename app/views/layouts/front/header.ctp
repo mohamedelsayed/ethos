@@ -1,22 +1,24 @@
 <header>
-    <div class="top_header_logo"></div>
+    <!-- <div class="top_header_logo"></div> -->
     <div class="main-header">
         <div class="men_etop">
+            <div class="paddingAll">
             <?php /*<div class="men_a">
                 <a class="menu_smill" href="#">EN /</a>
                 <a class="menu_smill" href="#"> عربي</a>
             </div>*/?>
-            <div class="men_face">
+            <div class="topSocialMedia">
                 <a target="_blank" href="<?php echo $setting['facbook_link'];?>">
-                    <img class="Twitter" src="<?php echo $base_url.'/img/front/';?>face.png" />
+                    <img src="<?php echo $base_url.'/img/front/';?>face.png" />
                 </a>
                 <a target="_blank" href="<?php echo $setting['twitter_link'];?>">
-                    <img class="Twitter" src="<?php echo $base_url.'/img/front/';?>Twitter.png" />
+                    <img src="<?php echo $base_url.'/img/front/';?>Twitter.png" />
                 </a>
                 <a target="_blank" href="<?php echo $setting['linkedin_link'];?>">
-                    <img class="Twitter" src="<?php echo $base_url.'/img/front/';?>in.png" />
+                    <img src="<?php echo $base_url.'/img/front/';?>in.png" />
                 </a>
             </div>
+         </div>
             <?php /*<div class="input">
                 <?php $keyword = '';
                 if(isset($_GET['k'])){
@@ -30,7 +32,7 @@
                 </form>
             </div>*/?>
         </div>
-        <div class="menu_big">
+        <div class="menu_big paddingAll">
             <div class="logo">
                 <a href="<?php echo $base_url;?>">
                     <img src="<?php echo $base_url.'/img/front/logo.png';?>" />

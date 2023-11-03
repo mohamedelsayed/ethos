@@ -1,5 +1,5 @@
 <div class="bottom_grop">
-	<div class="top_grop">
+	<div class="top_grop containerFooter">
         <?php echo $this->Javascript->link('front/ajax/newsletter'); ?>
 		<script type="text/javascript">
 		    $(document).ready(function(){

@@ -888,6 +888,7 @@ table.home td{
 body{
     margin: 0px;
     padding: 0px;
+    box-sizing: border-box;
 }
 
 #container{
@@ -907,7 +908,6 @@ body{
 .bg_web{
     background-image: url(../../img/backend/CMS-layout_r2_c1.jpg);
     float: left;
-    width: 980px;
     padding-right: 10px;
     padding-left: 10px;
     padding-bottom: 45px;
@@ -923,7 +923,6 @@ body{
 
 .content_left{
     float: left;
-    width: 980px;
     margin-top: 0px;
 }
 

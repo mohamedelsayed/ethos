@@ -160,8 +160,10 @@ function sendFormsendmail(siteUrl){
 }       
 form{
     color: #000000;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: normal;
+    display: flex;
+    flex-direction: column;
 }
 #fileinput{
     width: 89%;    

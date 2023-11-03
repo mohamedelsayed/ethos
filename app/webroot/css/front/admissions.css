@@ -1,27 +1,28 @@
 .admissions_input{
-    width: 98%;
-    float: none;
-    border-radius: 0px;
-    padding: 2px 1%;
-    font-size: 18px;
-
+    width: 100%;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 8px 12px;
+    height: 40px;
+    border: 1px solid #abadb3;
 }
 .input_new{
-    display:table;
-    margin-top: 10px;
-    width: 100%;
+    display: flex;
+    margin-top: 16px;
+    flex-direction: column;
+}
+.tab > .input_new:first-child{
+    margin-top: 0;
 }
 label {
-    display:table-cell;
     text-align: left;
-    margin-right:15px;
-    width: 1px;
-    white-space: nowrap;
-    font-size: 18px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #333;
 }
 .input_new span {
-    display: table-cell;
-    padding: 0 0 0 5px
+    /* display: table-cell; */
+    /* padding: 0 0 0 5px */
 }
 .head_div{
     width: 100%;
@@ -128,16 +129,23 @@ table{
     background-color: #FFFFFF;
     margin-bottom: 20px;
     float: right;
+    position: relative;
+    transition: all .35s;
+    overflow: hidden;
+    background: transparent;
 }
 .btn_form_admissions:hover{
-    background-color: #0d9f49;
-    color: #FFFFFF;
+    /* background-color: #0d9f49;
+    color: #FFFFFF; */
 }
 .calendar_select{
     margin-right: 0px;
 }
 .calendar_select select{
-    border-radius: 0px;
+    color: #333;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 0 12px;
 }
 .calendar_select::before{
     border-radius: 0px;
@@ -149,6 +157,7 @@ select.select_in_table{
 }
 .admissions table tr td{
     font-size: 16px !important;
+    font-weight: bold;
 }
 option{
     background-color: transparent;
@@ -194,19 +203,34 @@ input[type=radio].required, input[type=checkbox].required{
     display: list-item;
 }
 .orange_head{
-    background-color: #f5851f;
+    border: 0;
+    border-bottom: 2px solid #f5851f !important;
+    color: #f5851f;
+    font-size: 24px;
+    justify-content: center;
+    display: flex;
+    padding: 16px 6px;
+    margin-bottom: 16px;
+    font-weight: bold;
+    margin: 8px 0 35px;
+    /* background-color: #f5851f;
     color: #FFFFFF;
     border: 0px;
     font-size: 24px;
     padding: 7px 0px;
+    font-weight: bold; */
 }
 .input_description{
-    float: left;
-    width: 100%;
     font-size: 12px;
     margin-top: 3px;
     margin-bottom: 3px;
-    text-align: center;
+    color: #151515;
+    text-align: left;
+    text-transform: lowercase;
+}
+.tabIn3 .input_description{
+    font-size: 14px;
+    margin-bottom: 8px;
 }
 .hiddendiv{
     display: none !important;
@@ -236,8 +260,9 @@ input[type=radio].required, input[type=checkbox].required{
     outline: 1px solid red;
 }*/
 .agree_out{
-    float: left;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 16px 0 0;
 }
 /* Hide all steps by default: */
 .tab {
@@ -245,31 +270,44 @@ input[type=radio].required, input[type=checkbox].required{
 }
 /* Make circles that indicate the steps of the form: */
 .step {
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbbbbb;
-    border: none;
+    height: 32px;
+    width: 32px;
+    margin-right: 8px;
+    border: 2px solid #f5851f;
     border-radius: 50%;
-    display: inline-block;
     opacity: 0.5;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
 }
 /* Mark the active step: */
 .step.active {
     opacity: 1;
+    background-color: #f5851f;
+    color: #fff;
 }
 /* Mark the steps that are finished and valid: */
 .step.finish {
-    background-color: #4CAF50;
+    background-color: #f5851f;
+    color: #fff;
 }
 .i_agree{
-    float: left;
-    margin-top: 7px;
+    vertical-align: text-bottom;
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 .i_agree_label{
-    display: inline-block;
-    width: 95%;
-    white-space: initial;
+    cursor: pointer;
+    margin: 0;
+}
+.td_center input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
 }
 .admissions_result_success{
     color: #0d9f49 !important;;
@@ -277,3 +315,113 @@ input[type=radio].required, input[type=checkbox].required{
 .admissions_result_fail{
     color: #ff0000 !important;;
 }
+/* ===================== FILE INPUT ===================== */
+.file-area {
+  width: 100%;
+  position: relative;
+
+  input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .file-dummy {
+    width: 100%;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    text-align: center;
+    transition: background 0.3s ease-in-out;
+
+    .success {
+      display: none;
+    }
+  }
+
+  &:hover .file-dummy {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  input[type="file"]:focus + .file-dummy {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+
+  input[type="file"]:valid + .file-dummy {
+    border-color: rgba(0, 255, 0, 0.4);
+    background-color: rgba(0, 255, 0, 0.3);
+
+    .success {
+      display: inline-block;
+    }
+    .default {
+      display: none;
+    }
+  }
+}
+
+.file-upload-wrapper {
+    position: relative;
+    width: 100%;
+    height: 40px;
+  }
+  .file-upload-wrapper:after {
+    content: attr(data-text);
+    font-size: 14px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 95%;
+    pointer-events: none;
+    z-index: 20;
+    height: 37px;
+    line-height: 37px;
+    padding-left: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px 10px 10px 4px;
+    color: #151515;
+    font-weight: 300;
+  }
+  .file-upload-wrapper:before {
+    content: "Upload";
+    position: absolute;
+    top: 0;
+    right: 0px;
+    display: inline-block;
+    height: 38px;
+    background: #067b36;
+    color: #fff;
+    z-index: 25;
+    font-size: 14px;
+    line-height: 38px;
+    padding: 0 15px;
+    text-transform: capitalize;
+    border-radius: 0 4px 4px 0;
+  }
+  .file-upload-wrapper:hover:before {
+    background: #3d8c63;
+  }
+  .file-upload-wrapper input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    height: 38px;
+    margin: 0;
+    padding: 0;
+    display: block;
+    cursor: pointer;
+    width: 100%;
+  }
+  

@@ -282,9 +282,9 @@ function showTab(n) {
     x[n].style.display = "block";
     // ... and fix the Previous/Next buttons:
     if (n == 0) {
-        document.getElementById("prevBtn").style.display = "none";
+        document.getElementById("prevBtn").style.opacity = 0;
     } else {
-        document.getElementById("prevBtn").style.display = "inline";
+        document.getElementById("prevBtn").style.opacity = 1;
     }
     if (n == (x.length - 1)) {
         document.getElementById("nextBtn").innerHTML = "Send";
@@ -295,8 +295,15 @@ function showTab(n) {
     fixStepIndicator(n);
 }
 
+$('input[type="file"]').on('change', function () {
+    if($(this).val()){
+        $(this).parent(".file-upload-wrapper").removeClass('invalid');
+    }
+    $(this).parent(".file-upload-wrapper").attr("data-text",$(this).val().replace(/.*(\/|\\)/, '') );
+});
 function nextPrev(n) {
     // This function will figure out which tab to display
+
     var x = document.getElementsByClassName("tab");
     // Exit the function if any field in the current tab is invalid:
     if (n == 1 && !validateForm()) {

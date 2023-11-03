@@ -12,7 +12,7 @@ $selected = ' selected="selected" ';
 $checked = ' checked="checked" ';
 $gender_options = array('Male', 'Female');
 $parental_marital_status_options = array('Married', 'Divorced', 'Separated', 'Widowed');
-echo $this->Form->create('admissions', array('type' => 'file', 'id' => 'admissionsform', 'class' => 'admissions', 'url' => $base_url . '/page/admissionsform/notajax'));
+echo $this->Form->create('admissions', array('type' => 'file', 'id' => 'admissionsform', 'class' => 'admissions paddingAll', 'url' => $base_url . '/page/admissionsform/notajax'));
 echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab1', [
     'terms' => $terms,
     'yearGroups' => $yearGroups,
@@ -45,21 +45,21 @@ echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab5', [
     'checked' => $checked,
 ]);
 ?>
-<div style="width:100%;float:left;">
-    <div style="text-align:center;margin-top:20px;">
+<div class="containerSteps">
+    <button class='btn_form_admissions' type="button" id="prevBtn" onclick="nextPrev(-1)"><?php echo __('Previous'); ?></button>
+    <ul>
         <?php for ($i = 1; $i <= 5; $i++) { ?>
-            <span class="step"></span>
+            <span class="step"><?php echo $i ?></span>
         <?php } ?>
-    </div>
+    </ul>
+    <button class='btn_form_admissions' type="button" id="nextBtn" onclick="nextPrev(1)"><?php echo __('Next'); ?></button>
 </div>
 <div class="ajax_result_admissions">
     <div id="admissions_ajaxLoading"></div>
     <div id="admissions_result"></div>
 </div>
-<div style="width:100%;float:left;">
-    <button style="float:left;" class='btn_form_admissions' type="button" id="prevBtn" onclick="nextPrev(-1)"><?php echo __('Previous'); ?></button>
-    <button class='btn_form_admissions' type="button" id="nextBtn" onclick="nextPrev(1)"><?php echo __('Next'); ?></button>
-</div>
+<!-- <div style="width:100%;float:left;">
+</div> -->
 <?php
 echo $this->Form->end();
 echo $this->Javascript->link(array('front/admissions'));

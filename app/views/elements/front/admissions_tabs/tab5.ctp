@@ -67,15 +67,13 @@
     </div>
     <div class="input_new">
         <label for="recent_report"><?php echo __('Please upload the most recent report/assessment') ?>:</label>
-        <span>
-            <input id="recent_report" class="input3new admissions_input" type="file" name="recent_report" accept="<?php echo $files_extensions; ?>" />
-        </span>
+        <div class="file-upload-wrapper" data-text="Select your file!">
+        <input id="recent_report" class="input3new admissions_input" type="file" name="recent_report" accept="<?php echo $files_extensions; ?>" />
+    </div>
     </div>
     <div class="input_new">
         <label for="medical_history"><?php echo __('Medical History') ?>:</label>
-        <span>
         <input type="text" class="input3new admissions_input required_input" id="medical_history" name="medical_history" />
-        </span>
     </div>
     <div class="agree_out">
         <input id="i_agree" type="checkbox" name="i_agree" class="i_agree required_input" />

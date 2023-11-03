@@ -1,3 +1,6 @@
+*{
+    box-sizing: border-box;
+}
 .no_data_found, .no-data-found{
     text-align:center;
     margin:20px 0px;
@@ -9,7 +12,7 @@
 }
 #Developer{
     display:none;
-    float: left;
+
     height: 30px;
     width: 100%;
     text-align: center;
@@ -52,12 +55,12 @@ ul.tabs li{
 .jcarousel {
     position: relative;
     overflow: hidden;
-    width: 960px;
+    
 }
 .jcarousel li {
-    float: left;
+
     display: inline;
-    width: 960px;
+    
 }
 .jcarousel ul{
     width: 50000px;
@@ -75,7 +78,7 @@ a.jcarousel-next{
     z-index: 60;
     float: right;
     margin-top: 100px;
-    margin-left: 980px;
+    /* margin-left: 980px; */
     cursor: pointer;
 }
 a.jcarousel-prev{
@@ -91,12 +94,12 @@ a.jcarousel-prev{
 }
 .jcarousel-wrapper{
     /*width:100%;*/
-    float: left;
+
     position: absolute;
 }
 .home_latest_news{
     width: 100%;
-    float: left;
+
 }
 .home_latest_news, .jcarousel{
     height: 260px;
@@ -133,7 +136,7 @@ a.jcarousel-prev:hover{
     /*border: 2px solid #adadad;*/
 }
 .menu-outer{
-    float: left;
+
     width: 100%;
     margin-bottom: 30px;
 }
@@ -181,7 +184,7 @@ footer{
 }
 .adders_face_s{
     height: 28px;
-    margin-bottom: 2%;
+    margin-bottom: 24px;
 }
 .adders_face_s img{
     height: 100%;
@@ -207,7 +210,7 @@ footer{
 }
 .more_events_button_out{
     width: 100%;
-    float: left;
+
 }
 .more_events_button a{
     text-decoration: none;
@@ -257,7 +260,20 @@ html, body {
     opacity: 0.6;
 }
 #mesagecontent {
-    position:fixed;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 600px;
+    border-radius: 12px;
+    margin: auto;
+    height: fit-content;
+    z-index: 102;
+    padding: 24px 24px 28px 24px;
+    background: #fff;
+    /* position:fixed;
     width:460px;
     top:20%;
     left:50%;
@@ -270,43 +286,40 @@ html, body {
     border-radius: 3px;
     -webkit-box-shadow: #33465F 0px 0px 10px;
     -moz-box-shadow: #33465F 0px 0px 10px;
-    box-shadow: #33465F 0px 0px 10px;
+    box-shadow: #33465F 0px 0px 10px; */
 }
 .mesage-pop {
     display:none;
 }
 #mesagecontent h4 {
-    background:#d9d9d9;
-    padding:11px 10px;
-    color:#00000;
-    border-bottom:solid 1px #BDC3C7;
+    /* padding: 12px 16px; */
+    color: #333;
     text-transform:capitalize;
-    -webkit-border-radius: 3px 3px 0 0;
-    -moz-border-radius: 3px 3px 0 0;
-    border-radius: 3px 3px 0 0;
-    font-size: 17px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: bold;
     line-height: 18px;
     margin: 0;
+    display: flex;
+    justify-content: space-between
 }
 #mesagecontent > div, #mesagecontent > form {
-    margin:10px;
-    border-top: 1px solid #ecf0f1;
-    border-bottom: 1px solid #ecf0f1;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     font-size: 17px;
     font-weight: 500;
     line-height: 24px;
-    margin-bottom: 5px;
-    padding-top: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
-.closealert, .closeeventpopoup, .closevacancypopoup, .closesendmailpopoup {
+.closeeventpopoup, .closevacancypopoup, .closesendmailpopoup {
     cursor: pointer;
     position: absolute;
     right: 10px;
     top: 10px;
 }
 .inner404{
-    float: left;
+
     text-align: center;
     width: 100%;
     margin-top: 100px;
@@ -329,7 +342,7 @@ html, body {
 .bottom_till_big{
     margin-bottom: 30px;
     margin-top: 30px;
-    float: left;
+
     width: 100%;
 }
 .news_groub_img{
@@ -352,7 +365,7 @@ html, body {
     width: 100%;
     background: url("../../img/front/loading.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
     height: 30px;
-    float: left;
+
     display: none;
 }
 .news2_groub_img img{
@@ -399,7 +412,7 @@ html, body {
 }
 .slide_galary{
     width: 100%;
-    float: left;
+
     height: 781px;
     margin-bottom: 108px;
 }
@@ -412,15 +425,15 @@ td.calendar-day-head { background:#ccc;text-align:center; width:120px; padding:5
 div.day-number      {  padding:5px; color:#585858; font-weight:bold; float:left; margin:-5px -5px 0 0; width:20px; text-align:center; }
 td.calendar-day, td.calendar-day-np { width:100px; padding:5px; border-bottom:2px solid #cfcfcf; border-right:2px solid #cfcfcf; }
 .months_select{
-    float: left;
+
     width: 16%;
 }
 .years_select{
-    float: left;
+
     width: 11%;
 }
 .calendar_div{
-    float: left;
+
     width: 100%;
     margin-bottom: 23px;
 }
@@ -456,7 +469,7 @@ td.calendar-day, td.calendar-day-np { width:100px; padding:5px; border-bottom:2p
     margin-right: 23px;
 }
 .calendar_filter_div{
-    float: left;
+
     width: 100%;
     margin-top:10px;
     margin-bottom: 32px;
@@ -480,35 +493,35 @@ div.day-number{
     margin-left: 10px;
 }
 .calendar_list_categories{
-    float: left;
+
     width: 100%;
     margin-bottom: 23px;
 }
 .category_div{
-    float: left;
+
     margin-right: 32px;
 }
 .category_color_div{
     margin-right: 20px;
-    float: left;
+
     width: 14px;
     height: 14px;
     margin-top: 7px;
 }
 .category_title_div{
-    float: left;
+
     font-family: OpenSans-Light;
     font-size: 17px;
 }
 .categories_select{
-    float: left;
+
     width: 20%;
 }
 .event_calendar_div{
     cursor: pointer;
 }
 .event_calendar_wraper_div{
-    float: left;
+
     height: 75%;
     width: 100%;
     margin-top: 25%;
@@ -518,10 +531,10 @@ div.day-number{
     width: 100%;
     background: url("../../img/front/loading.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
     height: 30px;
-    float: left;
+
 }
 .eventpopouphead {
-    float: left;
+
     margin-right: 2px;
     width: 23%;
 }
@@ -536,6 +549,7 @@ td.calendar-day-head{
 }
 body{
     font-family: OpenSans-Regular;
+    box-sizing: border-box;
 }
 .eventpopoupcontent{
     font-family: OpenSans-Light;
@@ -546,7 +560,7 @@ td.calendar-day{
 }
 .page_body_div{
     width: 100%;
-    float: left;
+
     margin-bottom: 25px;
     text-align: justify;
 }
@@ -565,7 +579,7 @@ td.calendar-day{
     max-width: 100% !important;
 }
 .page_body_div table, .admissions table{
-    float: left;
+
     text-align: center;
     table-layout: fixed;
 }
@@ -586,13 +600,13 @@ td.calendar-day{
     background-color: #f2f2f2
 }
 .page_body_div table tr:first-child td, .admissions table tr:first-child td, .admissions table tr td.is_head {
-    background-color: #0d9f49;
+    background-color: #4DAF7C;
     border-bottom: 5px solid #ffffff;
     border-right: 5px solid #ffffff;
     color: #ffffff;
     font-family: OpenSans-Regular;
     font-size: 23px;
-    padding: 1% 0;
+    /* padding: 1% 0; */
     text-decoration: none;
 }
 .page_body_div table tr td:last-child, .admissions table tr td:last-child{
@@ -605,7 +619,7 @@ td.calendar-day{
 }
 div#vacancypopoupbody, .sendmailpopoupbody{
     width: 95%;
-    float: left;
+
     padding: 0px;
 }
 .newsletter_footer_div{
@@ -630,7 +644,7 @@ input:focus{
 .event_home_category{
     color: #58595b;
     font-size: 18px;
-    float: left;
+
     margin-left: 20px;
 }
 .white_green_button:hover{
@@ -674,7 +688,7 @@ ul.tabs3 li a:hover{
     bottom: 0px;
 }
 .articles-listing{
-    float: left;
+
 }
 .calendar_select select{
     -webkit-appearance: none;
@@ -683,12 +697,12 @@ ul.tabs3 li a:hover{
     text-overflow: '';
 }
 .footer_accreditation {
-    margin: auto;
-    width: 960px;
+    /* margin: auto; */
+    
 }
 .footer_accreditation img {
     height: 90px;
-    margin-top: -90px;
+    /* margin-top: -90px; */
 }
 .page_body_div ul li, .page_body_div ol li {
     display:list-item;
@@ -696,14 +710,128 @@ ul.tabs3 li a:hover{
 .page_body_div img{
     margin: 10px;
 }
+.paddingAll{
+    padding: 0 100px;
+}
+.topSocialMedia img{
+    width: 35px;
+    margin-left: 8px;
+}
+.topSocialMedia {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+}
+.gg-close {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    cursor: pointer;
+    transform: scale(var(--ggs,1));
+    width: 24px;
+    height: 24px;
+    border: 2px solid transparent;
+    border-radius: 40px
+}
+.gg-close::after,
+.gg-close::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    transform: rotate(45deg);
+    border-radius: 5px;
+    top: 8px;
+    left: 1px
+}
+.gg-close::after {
+    transform: rotate(-45deg)
+}
+.disclaimerpopoupbody span{
+    font-size: 14px !important;
+}
+.disclaimerpopoupbody ul{
+    list-style: circle;
+}
+.iconsSocialMedia {
+    display: flex;
+  }
+  .iconsSocialMedia li a {
+    list-style: none;
+    margin: 0 5px;
+    height: 38px;
+    width: 38px;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    transition: all ease 0.4s;
+  }
+  
+  .iconsSocialMedia li a:hover {
+    color: #2c698d;
+    background: #fff;
+    cursor: pointer;
+  }
+  .file-upload-wrapper:has(> .required_input.invalid) {
+    background-color: #ffdddd !important;
+  }
+  .containerSteps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 32px 0 16px;
+}
+.btn_form_admissions:before,
+.btn_form_admissions:after{
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  bottom: -100%;
+  left: 0;
+  background: #0d9f49;
+  z-index: -1;
+  transition: all .35s;
+}
+.btn_form_admissions:before{
+  opacity: .5;
+}
+.btn_form_admissions:after{
+  transition-delay: .2s;
+}
+.btn_form_admissions:hover{
+  color: #fff;
+}
+.btn_form_admissions:hover:before,
+.btn_form_admissions:hover:after{
+    bottom: 0;
+}
 @media screen and (max-width: 1030px) {
     .home_latest_news {
         position: relative;
         overflow: hidden;
     }
+    .paddingAll{
+        padding: 0 60px;
+    }
 }
 @media screen and (max-width: 960px) {
-    .container_big {
-        width: auto;
+    .paddingAll{
+        padding: 0 40px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .paddingAll{
+        padding: 0 16px;
     }
 }

@@ -1,6 +1,10 @@
 <footer class="bottom_grop">
     <div class="main-footer">
-        <div class="top_grop">
+        <div class="top_grop containerFooter paddingAll">
+            <div class="footer_accreditation">
+                <img src="<?php echo $base_url; ?>/app/webroot/img/front/BC-Adjusted.jpg" alt="British Council" title="British Council">
+            </div>
+            <div>
             <div class="adders_grop">
                 <img src="<?php echo $base_url . '/img/front/ethos_footer_logo.png'; ?>" />
             </div>
@@ -28,8 +32,8 @@
               <?php echo $this->Form->end(__('', true,array('class' => '')));?>
               </div>
               </div> */ ?>
-            <div class="menu_grop">
-                <?php /*<div class="footer_menu">
+           <?php /*<div class="menu_grop">
+                <div class="footer_menu">
                     <a href="<?php echo $base_url; ?>"><?php echo $setting['home_string']; ?></a>
                     <?php
                     if (!empty($header_cats)) {
@@ -50,9 +54,20 @@
                             </a>
                         <?php } ?>
                     <?php } ?>
-                </div>*/?>
-            </div>
-            <div class="adders_face_s">
+                </div>
+            </div>*/?>
+            <ul class="iconsSocialMedia">
+                <li><a target="_blank" href="<?php echo $setting['facbook_link']; ?>">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a></li>
+                <li><a target="_blank" href="<?php echo $setting['twitter_link']; ?>">
+                    <i class="fa-brands fa-twitter"></i>
+                </a></li>
+                <li><a target="_blank" href="<?php echo $setting['google_plus_link']; ?>">
+                    <i class="fa-brands fa-google-plus-g"></i>
+                </a></li>
+            </ul>
+            <!-- <div class="adders_face_s">
                 <a target="_blank" href="<?php echo $setting['facbook_link']; ?>">
                     <img class="facbook_link_footer" src="<?php echo $base_url . '/img/front/ethos_footer_facebook.png'; ?>" />
                 </a>
@@ -62,13 +77,13 @@
                 <a target="_blank" href="<?php echo $setting['google_plus_link']; ?>">
                     <img class="google_plus_link_footer" src="<?php echo $base_url . '/img/front/ethos_footer_google.png'; ?>" />
                 </a>
-            </div>
+            </div> -->
             <div class="left_bot"> 
                 <?php echo $setting['footer']; ?>
             </div>
+            </div>
             <div class="footer_accreditation">
-                <img style="float: left;margin-left: 100px;" src="<?php echo $base_url; ?>/app/webroot/img/front/BC-Adjusted.jpg" alt="British Council" title="British Council">
-                <img style="float: right;margin-right: 100px;" src="<?php echo $base_url; ?>/app/webroot/img/front/21751894_10155637363398426_981233372486364086_n.png" alt="Cambridge Assessment International Education" title="Cambridge Assessment International Education">
+                <img src="<?php echo $base_url; ?>/app/webroot/img/front/21751894_10155637363398426_981233372486364086_n.png" alt="Cambridge Assessment International Education" title="Cambridge Assessment International Education">
             </div>
         </div>
     </div>
