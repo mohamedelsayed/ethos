@@ -579,9 +579,14 @@ td.calendar-day{
     max-width: 100% !important;
 }
 .page_body_div table, .admissions table{
-
     text-align: center;
-    table-layout: fixed;
+    /* table-layout: fixed; */
+    overflow: auto;
+    /* display: flex; */
+    border: none;
+}
+.admissions table tbody{
+    width: 100%;
 }
 .page_body_div table tr td, .admissions table tr td {
     border-bottom: 5px solid #ffffff;
@@ -606,7 +611,7 @@ td.calendar-day{
     color: #ffffff;
     font-family: OpenSans-Regular;
     font-size: 23px;
-    /* padding: 1% 0; */
+    min-width: 180px;
     text-decoration: none;
 }
 .page_body_div table tr td:last-child, .admissions table tr td:last-child{
@@ -760,6 +765,8 @@ ul.tabs3 li a:hover{
 }
 .iconsSocialMedia {
     display: flex;
+    padding: 0;
+    justify-content: center;
   }
   .iconsSocialMedia li a {
     list-style: none;
@@ -816,6 +823,16 @@ ul.tabs3 li a:hover{
 .btn_form_admissions:hover:after{
     bottom: 0;
 }
+.additional_pupils_informations-table,
+.parent_informations-table {
+    overflow-x: auto;
+    width: 100%;
+}
+.topSocialMedia .iconsSocialMedia li a{
+    height: 30px;
+    width: 30px;
+    font-size: 14px;
+}
 @media screen and (max-width: 1030px) {
     .home_latest_news {
         position: relative;
@@ -824,14 +841,76 @@ ul.tabs3 li a:hover{
     .paddingAll{
         padding: 0 60px;
     }
+    .containerFooter{
+        max-width: 70%;
+    }
 }
 @media screen and (max-width: 960px) {
+    .containerFooter{
+        max-width: 80%;
+    }
     .paddingAll{
         padding: 0 40px;
     }
 }
 @media screen and (max-width: 768px) {
+    .containerSteps{
+        margin: 24px 0 16px;
+    }
+    .containerSteps ul{
+        padding: 0;
+    }
+   
+    .containerFooter{
+        max-width: 80%;
+    }
     .paddingAll{
         padding: 0 16px;
+    }
+}
+@media screen and (max-width: 500px) {
+    .bottom_grop .paddingAll{
+        padding: 0 8px; 
+    }
+    .orange_head{
+        margin: 0px 0 16px !important;
+        font-size: 18px !important;
+        padding: 12px 0 !important;
+    }
+    .tabIn3 .input_description{
+        font-size: 12px;
+    }
+    .btn_form_admissions{
+        width: 140px;
+        font-size: 18px;
+    }
+    .containerSteps ul{
+        margin: 6px 0 12px 0;
+    }
+    #admissions_result{
+        font-size: 14px;
+    }
+    .file-upload-wrapper:before{
+        padding: 0 18px !important;
+    }
+    .input_in_table{
+        font-size: 14px; 
+        width: 100%;
+    }
+    .admissions table tr td {
+        font-size: 14px !important;
+        font-weight: bold;
+    }
+    .containerSteps{
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 16px 0 0;
+    }
+    .btn_form_admissions[style='opacity: 0;']{
+        display: none;
+    }
+    .containerFooter{
+        justify-content: center;
+        max-width: 100%;
     }
 }

@@ -27,7 +27,7 @@
     </div>
     <div class="input_new">
         <label for="previous_school_report"><?php echo __('Previous school report') ?>:</label>
-        <div class="file-upload-wrapper" data-text="Select your file!">
+        <div class="file-upload-wrapper" data-text="No file chosen">
             <input id="previous_school_report" class="input3new admissions_input" type="file" name="previous_school_report" accept="<?php echo $image_extensions; ?>" />
         </div>
         <div class="input_description"><?php echo __('(PLEASE UPLOAD A COPY OF PUPIL’S MOST RECENT PREVIOUS SCHOOL REPORT)'); ?></div>

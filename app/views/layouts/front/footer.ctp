@@ -67,7 +67,7 @@
                     <i class="fa-brands fa-google-plus-g"></i>
                 </a></li>
             </ul>
-            <!-- <div class="adders_face_s">
+            <?php /* <div class="adders_face_s">
                 <a target="_blank" href="<?php echo $setting['facbook_link']; ?>">
                     <img class="facbook_link_footer" src="<?php echo $base_url . '/img/front/ethos_footer_facebook.png'; ?>" />
                 </a>
@@ -77,7 +77,7 @@
                 <a target="_blank" href="<?php echo $setting['google_plus_link']; ?>">
                     <img class="google_plus_link_footer" src="<?php echo $base_url . '/img/front/ethos_footer_google.png'; ?>" />
                 </a>
-            </div> -->
+            </div> */?>
             <div class="left_bot"> 
                 <?php echo $setting['footer']; ?>
             </div>

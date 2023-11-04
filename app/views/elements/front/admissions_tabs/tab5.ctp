@@ -67,7 +67,7 @@
     </div>
     <div class="input_new">
         <label for="recent_report"><?php echo __('Please upload the most recent report/assessment') ?>:</label>
-        <div class="file-upload-wrapper" data-text="Select your file!">
+        <div class="file-upload-wrapper" data-text="No file chosen">
         <input id="recent_report" class="input3new admissions_input" type="file" name="recent_report" accept="<?php echo $files_extensions; ?>" />
     </div>
     </div>

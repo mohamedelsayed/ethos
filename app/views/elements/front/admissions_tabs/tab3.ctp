@@ -79,13 +79,13 @@
     <div class="input_description"><?php echo __('(PLEASE UPLOAD A COPY OF FATHER’S & MOTHER’S NATIONAL ID/ PASSPORT FOR NON-EGYPTIANS)'); ?></div>
     <div class="input_new">
         <label for="father_national_id"><?php echo __('Father National ID/ Passport') ?>:</label>
-        <div class="file-upload-wrapper" data-text="Select your file!">
+        <div class="file-upload-wrapper" data-text="No file chosen">
             <input id="father_national_id" class="input3new admissions_input required_input" type="file" name="father_national_id" accept="<?php echo $image_extensions; ?>" />
         </div>
     </div>
     <div class="input_new">
         <label for="mother_national_id"><?php echo __('Mother National ID/ Passport') ?>:</label>
-        <div class="file-upload-wrapper" data-text="Select your file!">
+        <div class="file-upload-wrapper" data-text="No file chosen">
             <input id="mother_national_id" class="input3new admissions_input required_input" type="file" name="mother_national_id" accept="<?php echo $image_extensions; ?>" />
         </div>
     </div>

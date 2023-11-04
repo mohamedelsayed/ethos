@@ -8,6 +8,19 @@
                 <a class="menu_smill" href="#"> عربي</a>
             </div>*/?>
             <div class="topSocialMedia">
+            <ul class="iconsSocialMedia">
+                <li><a target="_blank" href="<?php echo $setting['facbook_link']; ?>">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a></li>
+                <li><a target="_blank" href="<?php echo $setting['twitter_link']; ?>">
+                    <i class="fa-brands fa-twitter"></i>
+                </a></li>
+                <li><a target="_blank" href="<?php echo $setting['linkedin_link']; ?>">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a></li>
+            </ul>
+            </div>
+            <?php /* <div class="topSocialMedia">
                 <a target="_blank" href="<?php echo $setting['facbook_link'];?>">
                     <img src="<?php echo $base_url.'/img/front/';?>face.png" />
                 </a>
@@ -17,7 +30,7 @@
                 <a target="_blank" href="<?php echo $setting['linkedin_link'];?>">
                     <img src="<?php echo $base_url.'/img/front/';?>in.png" />
                 </a>
-            </div>
+            </div> */?>
          </div>
             <?php /*<div class="input">
                 <?php $keyword = '';

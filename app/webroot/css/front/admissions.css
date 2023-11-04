@@ -2,7 +2,7 @@
     width: 100%;
     border-radius: 4px;
     font-size: 14px;
-    padding: 8px 12px;
+    padding: 8px 16px;
     height: 40px;
     border: 1px solid #abadb3;
 }
@@ -113,30 +113,21 @@ table{
 .btn_form_admissions{
     border: 1.9px solid #0d9f49;
     border-radius: 10px;
-    float: left;
-    color: #0d9f49;
     font-family: OpenSans-Regular;
     font-size: 22px;
     margin-top: 10px;
-    padding: 1.5% 1%;
     text-align: center;
     text-decoration: none;
-    width: 35%;
-    width: 219px;
+    width: 200px;
     font-weight: normal;
-    padding: 6px 0px;
+    padding: 10px 0px;
     cursor: pointer;
-    background-color: #FFFFFF;
     margin-bottom: 20px;
     float: right;
     position: relative;
     transition: all .35s;
     overflow: hidden;
     background: transparent;
-}
-.btn_form_admissions:hover{
-    /* background-color: #0d9f49;
-    color: #FFFFFF; */
 }
 .calendar_select{
     margin-right: 0px;
@@ -145,7 +136,7 @@ table{
     color: #333;
     font-size: 14px;
     border-radius: 4px;
-    padding: 0 12px;
+    padding: 0 16px;
 }
 .calendar_select::before{
     border-radius: 0px;
@@ -178,12 +169,24 @@ input[type=radio].required, input[type=checkbox].required{
     background-image: url('../../img/front/ajax-loader04.gif');
     background-repeat: no-repeat;
 }
+#admissions_result:empty{
+    height: 0px;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+}
 #admissions_result{
-    font-family:OpenSans-Regular;
-    color:#000000;
-    font-size:13px;
+    font-family: OpenSans-Regular;
+    color: #333;
+    font-size: 16px;
     font-weight: bold;
-    width: 100%
+    opacity: 1;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #ff0000;
+    padding: 12px;
+    margin-bottom: 24px;
+    transition: .5s all ease-in-out;
 }
 .ajax_result_admissions{
     margin-top: 5px;
@@ -210,15 +213,20 @@ input[type=radio].required, input[type=checkbox].required{
     justify-content: center;
     display: flex;
     padding: 16px 6px;
-    margin-bottom: 16px;
     font-weight: bold;
-    margin: 8px 0 35px;
+    margin: 8px 0 28px;
     /* background-color: #f5851f;
     color: #FFFFFF;
     border: 0px;
     font-size: 24px;
     padding: 7px 0px;
     font-weight: bold; */
+}
+.tabIn1 .orange_head,
+.tabIn3 .orange_head,
+.tabIn4 .orange_head,
+.tabIn2 .orange_head{
+    margin: 8px 0 24px;
 }
 .input_description{
     font-size: 12px;
@@ -270,8 +278,8 @@ input[type=radio].required, input[type=checkbox].required{
 }
 /* Make circles that indicate the steps of the form: */
 .step {
-    height: 32px;
-    width: 32px;
+    height: 40px;
+    width: 40px;
     margin-right: 8px;
     border: 2px solid #f5851f;
     border-radius: 50%;
@@ -279,7 +287,7 @@ input[type=radio].required, input[type=checkbox].required{
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
 }
 /* Mark the active step: */
@@ -384,14 +392,14 @@ input[type=radio].required, input[type=checkbox].required{
     z-index: 20;
     height: 37px;
     line-height: 37px;
-    padding-left: 12px;
+    padding-left: 16px;
     border: 1px solid #ccc;
     border-radius: 4px 10px 10px 4px;
     color: #151515;
     font-weight: 300;
   }
   .file-upload-wrapper:before {
-    content: "Upload";
+    content: "Choose File";
     position: absolute;
     top: 0;
     right: 0px;
@@ -402,7 +410,7 @@ input[type=radio].required, input[type=checkbox].required{
     z-index: 25;
     font-size: 14px;
     line-height: 38px;
-    padding: 0 15px;
+    padding: 0 46px;
     text-transform: capitalize;
     border-radius: 0 4px 4px 0;
   }

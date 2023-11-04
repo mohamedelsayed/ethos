@@ -12,14 +12,14 @@
     </div>
     <div class="input_new">
         <label for="child_photo"><?php echo __('Child’s Photo') ?>:</label>
-        <div class="file-upload-wrapper" data-text="Select your file!">
+        <div class="file-upload-wrapper" data-text="No file chosen">
             <input id="child_photo" class="input3new admissions_input required_input" type="file" name="child_photo" accept="<?php echo $image_extensions; ?>" />
         </div>
         <div class="input_description"><?php echo __('PASSPORT SIZE PHOTO OF PUPIL'); ?></div>
     </div>
     <div class="input_new">
         <label for="child_birth_certificate"><?php echo __('Child’s birth certificate (electronic)') ?>:</label>
-        <div class="file-upload-wrapper" data-text="Select your file!">
+        <div class="file-upload-wrapper" data-text="No file chosen">
             <input id="child_birth_certificate" class="input3new admissions_input required_input" type="file" name="child_birth_certificate" accept="<?php echo $image_extensions; ?>" />
         </div>
     </div>
