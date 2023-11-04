@@ -191,7 +191,10 @@ input[type=radio].required, input[type=checkbox].required{
 .ajax_result_admissions{
     margin-top: 5px;
     width: 100%;
-    float:left;
+    text-align: center;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
 }
 .td_left{
     text-align: left !important;
