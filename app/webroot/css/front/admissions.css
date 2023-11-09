@@ -196,7 +196,7 @@ input[type=radio].required, input[type=checkbox].required{
     display: flex;
     justify-content: center;
 }
-.td_left{
+.td_left{ 
     text-align: left !important;
     padding-left: 10px !important;
 }
