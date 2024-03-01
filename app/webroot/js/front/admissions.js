@@ -11,6 +11,15 @@ jQuery(function () {
         changeYear: true,
         dateFormat: 'dd-mm-yy',
         yearRange: "-100:+0",
+        maxDate: "0"
+    });
+    jQuery('#birth_date_input').datepicker({
+        dateFormat: 'dd-mm-yy',
+        changeMonth: true,
+        changeYear: true,
+        maxDate: "0",
+        yearRange: '2000:c',
+        minDate: new Date(1999, 10 - 1, 25),
     });
     //    jQuery("#birth_date_input").change(function () {
     //        var birth_date = jQuery(this).val();
@@ -194,8 +203,11 @@ function validate_required_input(obj) {
     var val = obj.val();
     var input_type = obj.attr('type');
     var input_id = obj.attr('id');
+    var input_maxlength = obj.attr('maxlength');
+    var input_minlength = obj.attr('minlength');
     var error = 0;
-    if (jQuery.trim(val).length !== 0) {
+    if (jQuery.trim(val).length !== 0 && !input_maxlength && !input_minlength || 
+        jQuery.trim(val).length <= input_maxlength && jQuery.trim(val).length >= input_minlength) {
         error = 0;
     } else {
         error = 1;

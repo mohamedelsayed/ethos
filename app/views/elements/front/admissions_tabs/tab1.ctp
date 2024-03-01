@@ -7,7 +7,7 @@
     </div>
     <div class="input_new">
         <label for="child_name"><?php echo __('Child’s ID number'); ?>:</label>
-            <input placeholder="<?php echo __(''); ?>..." id="child_id_number" class="input3new admissions_input take_placeholder required_input " type="number" name="child_id_number" />
+        <input minlength="8" maxlength="14" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" placeholder="<?php echo __(''); ?>..." id="child_id_number" class="input3new admissions_input take_placeholder required_input " type="number" name="child_id_number" />
         <div class="input_description"><?php echo __(strtoupper('(Written in the birth certificate)')); ?></div>
     </div>
     <div class="input_new">
@@ -25,7 +25,7 @@
     </div>
     <div class="input_new">
         <label for="birth_date_input"><?php echo __('Date of Birth') ?>:</label>
-        <input placeholder="<?php echo __(''); ?>..." id="birth_date_input" type="text" class="input3new admissions_input take_placeholder datepicker required_input" name="birth_date" readonly="readonly">
+        <input placeholder="<?php echo __(''); ?>..." id="birth_date_input" type="text" class="input3new admissions_input take_placeholder required_input" name="birth_date" readonly="readonly">
     </div>
     <div class="input_new">
         <label for="academic_year_entry_input"><?php echo __('Academic Year Entry'); ?>:</label>
