@@ -328,6 +328,7 @@ class PageController extends AppController {
             if (isset($data['_method'])) {
                 unset($data['_method']);
             }
+
             $filesData = [];
             if (!empty($files)) {
                 foreach ($files as $key => $fileIn) {
@@ -480,6 +481,23 @@ class PageController extends AppController {
     }
 
     public function validate_required_data($data, $required_inputs_array) {
+		$childIdNumber = $data['child_id_number'];
+		if (strlen($childIdNumber) < 8 || strlen($childIdNumber) > 14) {
+			return false;
+		}
+
+		$birthDate = $data['birth_date'];
+
+		$minDate = new DateTime('2000-01-01');
+		$maxDate = new DateTime();
+
+		// Parse the birth date string into a DateTime object
+		$birthDateObj = DateTime::createFromFormat('d-m-Y', $birthDate);
+
+		if (!$birthDateObj || $birthDateObj < $minDate || $birthDateObj > $maxDate) {
+			return false;
+		}
+
         foreach ($required_inputs_array as $key => $value) {
             if (isset($data[$value])) {
                 $item = trim($data[$value]);
