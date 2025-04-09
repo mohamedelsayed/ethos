@@ -632,87 +632,89 @@ class RequestsController extends AuthController
             $this->redirect(array('action' => 'index'));
         }
     }
-    public function getAdmissionsCss()
-    {
-        $cssContent = '.altrow {
-        background: #f4f4f4;
-    }
-    .leftDiv{
-        width: 28%;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        float: left;
-        font-weight: bold;
-        padding-left: 1%;
-        padding-left: 1%;
-    }
-    .rightDiv{
-        width: 70%;
-        float: left;
-    }
-    .rightDiv img{
-        max-width: 100% !important;
-    }
-    .oneLine{
-        clear: both;
-        width: 99%;
-        margin: 1px;
-        padding: 4px;
-        line-height: 25px;
-    }
-    ul.tabs li{
-        width: 20%;
-    }
-    #tapss{
-        float: left;
-    }
-    ul.tabs a{
-        height: 40px;
-        font-size: 13px;
-        text-align: center;
-    }
-    .download_image{
-        width: 100%;
-        float: left;
-    }
+
+    // public function getAdmissionsCss()
+    // {
+    //     $cssContent = '.altrow {
+    //     background: #f4f4f4;
+    // }
+    // .leftDiv{
+    //     width: 28%;
+    //     overflow-wrap: break-word;
+    //     word-wrap: break-word;
+    //     float: left;
+    //     font-weight: bold;
+    //     padding-left: 1%;
+    //     padding-left: 1%;
+    // }
+    // .rightDiv{
+    //     width: 70%;
+    //     float: left;
+    // }
+    // .rightDiv img{
+    //     max-width: 100% !important;
+    // }
+    // .oneLine{
+    //     clear: both;
+    //     width: 99%;
+    //     margin: 1px;
+    //     padding: 4px;
+    //     line-height: 25px;
+    // }
+    // ul.tabs li{
+    //     width: 20%;
+    // }
+    // #tapss{
+    //     float: left;
+    // }
+    // ul.tabs a{
+    //     height: 40px;
+    //     font-size: 13px;
+    //     text-align: center;
+    // }
+    // .download_image{
+    //     width: 100%;
+    //     float: left;
+    // }
     
-    tr, tbody, table, td {
-        border: 0 none;
-    }
-    table, td {
-        border: 1px solid #dddddd;
-    }
-    table{
-        border-collapse: collapse;
-        border-spacing: 0;
-        width: 100%;
-    }
-    table tr:first-child td{
-        border-bottom: 5px solid #ffffff;
-        border-right: 5px solid #ffffff;
-        color: #ffffff;
-        padding: 1% 0;
-        text-decoration: none;
-    }
-    .admissions table tr td {
-        font-size: 16px !important;
-    }
-    .td_center {
-        text-align: center;
-    }
-    table tr td {
-        border-bottom: 5px solid #ffffff;
-        border-right: 5px solid #ffffff;
-        color: #414141;
-        font-size: 17px;
-        padding: 5px 0;
-        text-align: center;
-        text-decoration: none;
-    }
-    .section_title{
-        text-align: center;
-        clear: both;
-    }';
-        return $cssContent;
-    }
+    // tr, tbody, table, td {
+    //     border: 0 none;
+    // }
+    // table, td {
+    //     border: 1px solid #dddddd;
+    // }
+    // table{
+    //     border-collapse: collapse;
+    //     border-spacing: 0;
+    //     width: 100%;
+    // }
+    // table tr:first-child td{
+    //     border-bottom: 5px solid #ffffff;
+    //     border-right: 5px solid #ffffff;
+    //     color: #ffffff;
+    //     padding: 1% 0;
+    //     text-decoration: none;
+    // }
+    // .admissions table tr td {
+    //     font-size: 16px !important;
+    // }
+    // .td_center {
+    //     text-align: center;
+    // }
+    // table tr td {
+    //     border-bottom: 5px solid #ffffff;
+    //     border-right: 5px solid #ffffff;
+    //     color: #414141;
+    //     font-size: 17px;
+    //     padding: 5px 0;
+    //     text-align: center;
+    //     text-decoration: none;
+    // }
+    // .section_title{
+    //     text-align: center;
+    //     clear: both;
+    // }';
+    //     return $cssContent;
+    // }
+	
 }
