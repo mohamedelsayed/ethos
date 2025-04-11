@@ -566,7 +566,7 @@ class RequestsController extends AuthController
             $tmpDir= ROOT . DS . 'app' . DS . 'tmp' . DS . 'pdf';
             $options->setTempDir($tmpDir);
             $options->set('debugKeepTemp', TRUE);
-            $options->setIsHtml5ParserEnabled(true);
+            $options->setIsHtml5ParserEnabled(true);	
             $dompdf = new Dompdf\Dompdf();
             $dompdf->setOptions($options);
             $context = stream_context_create([
@@ -584,11 +584,13 @@ class RequestsController extends AuthController
             // $cssContent = $this->getAdmissionsCss();
             $style->load_css_file($cssFile);
             $dompdf->setCss($style);
-            $html .= '<html>
+            $html .= '<html> 
                     <head>
+					    <meta charset="UTF-8">
                         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-                    </head>'//.'<style>' . $cssContent 
-                    .'</style>
+                    </head>'
+					// .'<style>' . $cssContent 
+                    .'
                 <body>';
             $data = $request['Request']['data'];
             $dataIn = unserialize($data);
@@ -621,6 +623,29 @@ class RequestsController extends AuthController
             //     echo json_encode($dataout);
             //     exit;
             // }
+			
+			// Arabic text fix https://stackoverflow.com/questions/67462233/laravel-dompdf-arabic-characters-generate-pdf-error
+			$html =  str_replace("&nbsp;"," ",$html);
+			$arabic = new ArPHP\I18N\Arabic();
+			$p = $arabic->arIdentify($html);
+			$replacements = []; // store replacements as [start, length, new_text]
+			for ($i = 0; $i < count($p); $i += 2) {
+				$start = $p[$i];
+				$length = $p[$i + 1] - $p[$i];
+
+				$chunk = substr($html, $start, $length);
+				$chunk = html_entity_decode($chunk, ENT_QUOTES | ENT_HTML5, 'UTF-8'); // decode entities
+				$utf8ar = $arabic->utf8Glyphs($chunk); // shape Arabic
+
+				$replacements[] = [$start, $length, $utf8ar];
+			}
+
+			// Apply replacements in reverse order so offsets remain valid
+			for ($i = count($replacements) - 1; $i >= 0; $i--) {
+				list($start, $length, $text) = $replacements[$i];
+				$html = substr_replace($html, $text, $start, $length);
+			}
+			
             $dompdf->loadHtml($html);
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
