@@ -1,5 +1,5 @@
 <div class="requests form">
-    <?php echo $this->Form->create('Request', array('type' => 'file', 'action' => 'changeStatus/' . $request['Request']['id'] . '/ 2')); ?>
+    <?php echo $this->Form->create('Request', array('type' => 'file', 'action' => 'changeStatus/' . $request['Request']['id'] . '/2')); ?>
     <fieldset>
         <legend><?php __('Resubmit'); ?></legend>
         <?php
