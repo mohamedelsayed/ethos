@@ -150,7 +150,7 @@
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Will the pupil be exempted from the Egyptian Ministry exams?'); ?></div>
+    <div class="leftDiv "><?php echo __('Will the pupil be eligible for exemption from the Egyptian Ministry exams?'); ?></div>
     <div class="rightDiv ">
         <?php
         if (isset($dataIn['egyptian_ministry_exams'])) {

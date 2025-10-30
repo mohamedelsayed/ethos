@@ -103,7 +103,7 @@
             </div>
     </div>
     <div class="input_new">
-        <label for="egyptian_ministry_exams"><?php echo __('Will the pupil be exempted from the Egyptian Ministry exams?'); ?></label>
+        <label for="egyptian_ministry_exams"><?php echo __('Will the pupil be eligible for exemption from the Egyptian Ministry exams?'); ?></label>
             <div class="calendar_select">
                 <select class="select form-control form-select" id="egyptian_ministry_exams" name="egyptian_ministry_exams">
                     <option value=""></option>
