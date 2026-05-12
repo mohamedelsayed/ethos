@@ -120,10 +120,10 @@ class RequestsController extends AuthController
                     foreach ($dataResubmit['Request'] as $key => $value) {
                         if ($value == 1) {
                             if ($key == 'child_photo') {
-                                $message .= '<li>Child’s recent photo (passport size)</li>';
+                                $message .= '<li>Child\'s recent photo (passport size)</li>';
                             }
                             if ($key == 'child_birth_certificate') {
-                                $message .= '<li>Child’s birth certificate (electronic)</li>';
+                                $message .= '<li>Child\'s birth certificate (electronic)</li>';
                             }
                             if ($key == 'parents_ids') {
                                 $message .= '<li>Parents IDs</li>';
@@ -246,7 +246,12 @@ class RequestsController extends AuthController
                 'Application Number',
                 'Application Date',
                 //tab1
-                "Pupil's Name",
+                "First Name (EN)",
+                "Middle Name (EN)",
+                "Last Name (EN)",
+                "First Name (AR)",
+                "Middle Name (AR)",
+                "Last Name (AR)",
                 "Pupil's ID number",
                 'Date of Birth',
                 'Academic Year Entry',
@@ -262,30 +267,45 @@ class RequestsController extends AuthController
                 'If yes please write his/her name and year group',
                 'Siblings at Rukan',
                 'If yes please write his/her name and year group',
-                'Sibling applying at EIS',
-                'If yes, please give details',
                 'How did you hear about us',
                 'If other, please specify',
+                'Reason for applying',
                 //tab2
-                'Previous School',
-                'Years Attended',
-                'Year Group/ Form / Grade',
-                'Curriculum Followed (British, IB, American, National)',
-                'Has the pupil ever skipped a year',
-                'If yes, which year group, Please give details',
+                'Previous School 1 - Year From',
+                'Previous School 1 - Year To',
+                'Previous School 1 - Name',
+                'Previous School 1 - Curriculum',
+                'Previous School 1 - Country',
+                'Previous School 1 - Reason for leaving',
+                'Previous School 2 - Year From',
+                'Previous School 2 - Year To',
+                'Previous School 2 - Name',
+                'Previous School 2 - Curriculum',
+                'Previous School 2 - Country',
+                'Previous School 2 - Reason for leaving',
+                'Previous School 3 - Year From',
+                'Previous School 3 - Year To',
+                'Previous School 3 - Name',
+                'Previous School 3 - Curriculum',
+                'Previous School 3 - Country',
+                'Previous School 3 - Reason for leaving',
                 'Has the pupil ever been asked to repeat a year',
                 'If yes, which year group, Please give details',
+                'School Reference Name',
+                'School Reference Email',
                 'Has the pupil ever applied to Ethos International School',
-                'If yes, which year group, Please give details:	',
+                'If yes, which year group, Please give details',
                 //tab3
                 //Father
                 "Father's Name",
+                "Father's Religion",
                 "Father's Occupation",
                 "Father's Employer",
                 "Father's Work Address",
-                "Father's Qualifications",
-                "Father's University",
-                "Father's School",
+                "Father's Type of Business",
+                "Father's Business Website",
+                "Father's Education: University",
+                "Father's Education: School",
                 "Father's Nationality",
                 "Father's ID/ Passport Number",
                 "Father's Date of Birth",
@@ -294,12 +314,14 @@ class RequestsController extends AuthController
                 "Father's Email",
                 //Mother
                 "Mother's Name",
+                "Mother's Religion",
                 "Mother's Occupation",
                 "Mother's Employer",
                 "Mother's Work Address",
-                "Mother's Qualifications",
-                "Mother's University",
-                "Mother's School",
+                "Mother's Type of Business",
+                "Mother's Business Website",
+                "Mother's Education: University",
+                "Mother's Education: School",
                 "Mother's Nationality",
                 "Mother's ID/ Passport Number",
                 "Mother's Date of Birth",
@@ -309,21 +331,28 @@ class RequestsController extends AuthController
                 //Marital
                 "Marital Status",
                 "If divorced, custody with",
+                "Custody other details",
+                "Is there a step parent",
+                "Step Parent Name",
+                "Step Parent Address",
+                "Custodial Parent Name",
                 //tab4
-                "Emergancy Name 1",
-                "Emergancy Relationship to Pupil 1",
-                "Emergancy Mobile Number 1",
-                "Emergancy Name 2",
-                "Emergancy Relationship to Pupil 2",
-                "Emergancy Mobile Number 2",
+                "Emergency Name 1",
+                "Emergency Relationship to Pupil 1",
+                "Emergency Mobile Number 1",
+                "Emergency Name 2",
+                "Emergency Relationship to Pupil 2",
+                "Emergency Mobile Number 2",
                 //tab5
                 'Attention Deficit Disorder / Hyperactive',
-                'Speech & Language Disorder	',
+                'Speech & Language Disorder',
                 'Developmental Delay',
                 'Behavioural Issues',
                 'Has your child been diagnosed/ assessed for any learning disabilities / challenges',
                 'Other/s (please specify)',
                 'Medical History',
+                'Learning Support Services',
+                'Learning Support Details',
                 //application status
                 "Online Applications Status",
             ];
@@ -339,89 +368,127 @@ class RequestsController extends AuthController
                     $statusIn = '---';
                 }
                 $how_did_you_hear_about_us = $GLOBALS['how_did_you_hear_about_us'];
+                $d = function($key, $default = '') use ($dataIn) {
+                    return isset($dataIn[$key]) ? $dataIn[$key] : $default;
+                };
+                $language = $d('language');
+                if (is_array($language)) {
+                    $language = implode(', ', $language);
+                }
+                $how_did_val = $d('how_did_you_hear_about_us');
+                $how_did_text = isset($how_did_you_hear_about_us[$how_did_val]) ? $how_did_you_hear_about_us[$how_did_val] : $how_did_val;
                 $data[] = [
                     //application info
                     $request['Request']['application_number'],
                     date('d-m-Y', strtotime($request['Request']['created'])),
                     //tab1
-                    $request['Request']['title'],
-                    $dataIn['child_id_number'],
-                    $dataIn['birth_date'],
-                    $terms[$dataIn['academic_year_entry_input']],
-                    $yearGroups[$dataIn['year_group_applying_to_input']],
+                    $d('first_name_en', $request['Request']['title']),
+                    $d('middle_name_en'),
+                    $d('last_name_en'),
+                    $d('first_name_ar'),
+                    $d('middle_name_ar'),
+                    $d('last_name_ar'),
+                    $d('child_id_number'),
+                    $d('birth_date'),
+                    isset($terms[$d('academic_year_entry_input')]) ? $terms[$d('academic_year_entry_input')] : '',
+                    isset($yearGroups[$d('year_group_applying_to_input')]) ? $yearGroups[$d('year_group_applying_to_input')] : '',
                     $current_year_group_input,
-                    $dataIn['gender_input'],
-                    $dataIn['nationality'],
-                    $dataIn['religion'],
-                    $dataIn['language'],
-                    $dataIn['require_bus'],
-                    $dataIn['egyptian_ministry_exams'],
-                    $this->haveAnySibling[$dataIn['have_any_sibling_at_EIS']],
-                    $dataIn['have_any_sibling_at_EIS_pupil'],
-                    $this->haveAnySibling[$dataIn['have_any_sibling_at_rukan']],
-                    $dataIn['have_any_sibling_at_rukan_pupil'],
-                    $dataIn['are_you_applying_for_any_siblings'],
-                    $dataIn['are_you_applying_for_any_siblings_details'],
-                    $how_did_you_hear_about_us[$dataIn['how_did_you_hear_about_us']],
-                    $dataIn['how_did_you_hear_about_us_other'],
+                    $d('gender_input'),
+                    $d('nationality'),
+                    $d('religion'),
+                    $language,
+                    $d('require_bus'),
+                    $d('egyptian_ministry_exams'),
+                    isset($this->haveAnySibling[$d('have_any_sibling_at_EIS')]) ? $this->haveAnySibling[$d('have_any_sibling_at_EIS')] : $d('have_any_sibling_at_EIS'),
+                    $d('have_any_sibling_at_EIS_pupil'),
+                    isset($this->haveAnySibling[$d('have_any_sibling_at_rukan')]) ? $this->haveAnySibling[$d('have_any_sibling_at_rukan')] : $d('have_any_sibling_at_rukan'),
+                    $d('have_any_sibling_at_rukan_pupil'),
+                    $how_did_text,
+                    $d('how_did_you_hear_about_us_other'),
+                    $d('reason_for_applying'),
                     //tab2
-                    $dataIn['previous_schools_nursery_1_1'],
-                    $dataIn['previous_schools_nursery_1_2'],
-                    $dataIn['previous_schools_nursery_1_3'],
-                    $dataIn['previous_schools_nursery_1_4'],
-                    $dataIn['has_the_pupil_ever_skipped_year'],
-                    $dataIn['has_the_pupil_ever_skipped_year_details'],
-                    $dataIn['has_the_pupil_ever_been_asked_to_repeat_year'],
-                    $dataIn['has_the_pupil_ever_been_asked_to_repeat_year_details'],
-                    $dataIn['has_the_pupil_ever_applied_to_EIS'],
-                    $dataIn['has_the_pupil_ever_applied_to_EIS_details'],
+                    $d('prev_school_year_from_1'),
+                    $d('prev_school_year_to_1'),
+                    $d('prev_school_name_1'),
+                    $d('prev_school_curriculum_1'),
+                    $d('prev_school_country_1'),
+                    $d('prev_school_reason_1'),
+                    $d('prev_school_year_from_2'),
+                    $d('prev_school_year_to_2'),
+                    $d('prev_school_name_2'),
+                    $d('prev_school_curriculum_2'),
+                    $d('prev_school_country_2'),
+                    $d('prev_school_reason_2'),
+                    $d('prev_school_year_from_3'),
+                    $d('prev_school_year_to_3'),
+                    $d('prev_school_name_3'),
+                    $d('prev_school_curriculum_3'),
+                    $d('prev_school_country_3'),
+                    $d('prev_school_reason_3'),
+                    $d('has_the_pupil_ever_been_asked_to_repeat_year'),
+                    $d('has_the_pupil_ever_been_asked_to_repeat_year_details'),
+                    $d('school_reference_name'),
+                    $d('school_reference_email'),
+                    $d('has_the_pupil_ever_applied_to_EIS'),
+                    $d('has_the_pupil_ever_applied_to_EIS_details'),
                     //tab3
                     //Father
-                    $dataIn['parent_informations1'],
-                    $dataIn['parent_informations3'],
-                    $dataIn['parent_informations5'],
-                    $dataIn['parent_informations25'],
-                    $dataIn['parent_informations7'],
-                    $dataIn['parent_informations9'],
-                    $dataIn['parent_informations11'],
-                    $dataIn['parent_informations13'],
-                    $dataIn['parent_informations15'],
-                    $dataIn['parent_informations17'],
-                    $dataIn['parent_informations19'],
-                    $dataIn['parent_informations21'],
-                    $dataIn['parent_informations23'],
+                    $d('parent_informations1'),
+                    $d('parent_religion_father'),
+                    $d('parent_informations3'),
+                    $d('parent_informations5'),
+                    $d('parent_informations25'),
+                    $d('parent_type_of_business_father'),
+                    $d('parent_business_website_father'),
+                    $d('parent_informations9'),
+                    $d('parent_informations11'),
+                    $d('parent_informations13'),
+                    $d('parent_informations15'),
+                    $d('parent_informations17'),
+                    $d('parent_informations19'),
+                    $d('parent_informations21'),
+                    $d('parent_informations23'),
                     //Mother
-                    $dataIn['parent_informations2'],
-                    $dataIn['parent_informations4'],
-                    $dataIn['parent_informations6'],
-                    $dataIn['parent_informations26'],
-                    $dataIn['parent_informations8'],
-                    $dataIn['parent_informations10'],
-                    $dataIn['parent_informations12'],
-                    $dataIn['parent_informations14'],
-                    $dataIn['parent_informations16'],
-                    $dataIn['parent_informations18'],
-                    $dataIn['parent_informations20'],
-                    $dataIn['parent_informations22'],
-                    $dataIn['parent_informations24'],
+                    $d('parent_informations2'),
+                    $d('parent_religion_mother'),
+                    $d('parent_informations4'),
+                    $d('parent_informations6'),
+                    $d('parent_informations26'),
+                    $d('parent_type_of_business_mother'),
+                    $d('parent_business_website_mother'),
+                    $d('parent_informations10'),
+                    $d('parent_informations12'),
+                    $d('parent_informations14'),
+                    $d('parent_informations16'),
+                    $d('parent_informations18'),
+                    $d('parent_informations20'),
+                    $d('parent_informations22'),
+                    $d('parent_informations24'),
                     //Marital
-                    $dataIn['parental_marital_status'],
-                    $dataIn['parental_marital_status_details'],
+                    $d('parental_marital_status'),
+                    $d('parental_marital_status_details'),
+                    $d('custody_other_details'),
+                    $d('is_step_parent'),
+                    $d('step_parent_name'),
+                    $d('step_parent_address'),
+                    $d('custodial_parent_name'),
                     //tab4
-                    $dataIn['emergency1'],
-                    $dataIn['emergency3'],
-                    $dataIn['emergency5'],
-                    $dataIn['emergency2'],
-                    $dataIn['emergency4'],
-                    $dataIn['emergency6'],
+                    $d('emergency1'),
+                    $d('emergency3'),
+                    $d('emergency5'),
+                    $d('emergency2'),
+                    $d('emergency4'),
+                    $d('emergency6'),
                     //tab5
-                    $dataIn['developmental_history0'] ? "Yes" : "No",
-                    $dataIn['developmental_history1'] ? "Yes" : "No",
-                    $dataIn['developmental_history2'] ? "Yes" : "No",
-                    $dataIn['developmental_history3'] ? "Yes" : "No",
-                    $dataIn['developmental_history4'] ? "Yes" : "No",
-                    $dataIn['developmental_history5'],
-                    $dataIn['medical_history'],
+                    $d('developmental_history0') ? "Yes" : "No",
+                    $d('developmental_history1') ? "Yes" : "No",
+                    $d('developmental_history2') ? "Yes" : "No",
+                    $d('developmental_history3') ? "Yes" : "No",
+                    $d('developmental_history4') ? "Yes" : "No",
+                    $d('developmental_history5'),
+                    $d('medical_history'),
+                    $d('learning_support_services'),
+                    $d('learning_support_details'),
                     //application status
                     $statusIn,
                 ];
@@ -598,14 +665,14 @@ class RequestsController extends AuthController
             $userImage = $base_url . '/' . $dataIn['filesData']['child_photo'];
             $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
             $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
-            $html .= '<h3 class="section_title">1. Pupil’s Information</h3>';
+            $html .= '<h3 class="section_title">1. Parents Information</h3>';
+            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab3.ctp';
+            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
+            $html .= '<h3 class="section_title">2. Pupil\'s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
-            $html .= '<h3 class="section_title">2. Previous School(s) / Nursery</h3>';
+            $html .= '<h3 class="section_title">3. Previous School(s) / Nursery</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab2.ctp';
-            $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
-            $html .= '<h3 class="section_title">3. Parents Information</h3>';
-            $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab3.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups);
             $html .= '<h3 class="section_title">4. Emergency Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab4.ctp';

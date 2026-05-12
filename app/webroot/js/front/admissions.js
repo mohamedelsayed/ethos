@@ -41,7 +41,7 @@ jQuery(function () {
     //        event.preventDefault();
     //        validate_admissions_form();
     //    });
-    jQuery(document).on("change paste keyup", "input." + required_input_class + ", select." + required_input_class + "", function () {
+    jQuery(document).on("change paste keyup", "input." + required_input_class + ", select." + required_input_class + ", textarea." + required_input_class + "", function () {
         validate_required_input(jQuery(this));
     });
     //    jQuery(':file').change(function () {
@@ -50,24 +50,19 @@ jQuery(function () {
     jQuery(document).on("change", "#year_group_applying_to_input", function () {
         var val = jQuery(this).val();
         var item1 = jQuery("#current_year_group_input");
-        var previous_schools_nursery = 'previous_schools_nursery_1_';
         var item2 = jQuery('#previous_school_report');
-        var i = 1;
+        var prevSchoolName = jQuery('#prev_school_name_1');
         if (val >= 3) {
             item1.addClass(required_input_class);
             item2.addClass(required_input_class);
-            for (i = 1; i <= 4; i++) {
-                jQuery('#' + previous_schools_nursery + i).addClass(required_input_class);
-            }
+            prevSchoolName.addClass(required_input_class);
         } else {
             item1.removeClass(required_input_class);
             item1.removeClass(required_class);
             item2.removeClass(required_input_class);
             item2.removeClass(required_class);
-            for (i = 1; i <= 4; i++) {
-                jQuery('#' + previous_schools_nursery + i).removeClass(required_input_class);
-                jQuery('#' + previous_schools_nursery + i).removeClass(required_class);
-            }
+            prevSchoolName.removeClass(required_input_class);
+            prevSchoolName.removeClass(required_class);
         }
     });
     jQuery(document).on("change", "#have_any_sibling_at_EIS", function () {
@@ -78,17 +73,19 @@ jQuery(function () {
         var id_val = jQuery(this).attr('id');
         show_textbox_if_value_selected("#" + id_val, '#have_any_sibling_at_rukan_pupil', 'yes');
     });
-    jQuery(document).on("change", "#are_you_applying_for_any_siblings", function () {
+    jQuery(document).on("change", "#religion", function () {
         var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#" + id_val, '#are_you_applying_for_any_siblings_details', 'yes');
+        show_textbox_if_value_selected("#" + id_val, '#religion_other', 'other');
     });
+    if (jQuery('#language').length) {
+        jQuery('#language').select2({
+            placeholder: 'Select languages',
+            allowClear: true,
+        });
+    }
     jQuery(document).on("change", "#how_did_you_hear_about_us", function () {
         var id_val = jQuery(this).attr('id');
         show_textbox_if_value_selected("#" + id_val, '#how_did_you_hear_about_us_other', 'other');
-    });
-    jQuery(document).on("change", "#has_the_pupil_ever_skipped_year", function () {
-        var id_val = jQuery(this).attr('id');
-        show_textbox_if_value_selected("#" + id_val, '#has_the_pupil_ever_skipped_year_details', 'yes');
     });
     jQuery(document).on("change", "#has_the_pupil_ever_been_asked_to_repeat_year", function () {
         var id_val = jQuery(this).attr('id');
@@ -98,17 +95,73 @@ jQuery(function () {
         var id_val = jQuery(this).attr('id');
         show_textbox_if_value_selected("#" + id_val, '#has_the_pupil_ever_applied_to_EIS_details', 'yes');
     });
-    jQuery(document).on("change", "#parental_marital_status", function () {
-        var id_val = jQuery(this).attr('id');
-        var divorced_value = 'divorced';
-        show_textbox_if_value_selected("#" + id_val, '#parental_marital_status_details', divorced_value);
-        var val = jQuery("#" + id_val).val();
-        var item = jQuery('#father_national_id');
-        if (val.toLowerCase() == divorced_value) {
-            item.removeClass(required_input_class);
-            item.removeClass(required_class);
+    jQuery(document).on("change", "#parent_religion_father", function () {
+        var val = jQuery(this).val();
+        var otherInput = jQuery('#parent_religion_father_other');
+        if (val.toLowerCase() == 'other') {
+            otherInput.removeClass(hiddendiv_class);
         } else {
-            item.addClass(required_input_class);
+            otherInput.addClass(hiddendiv_class);
+            otherInput.val('');
+        }
+    });
+    jQuery(document).on("change", "#parent_religion_mother", function () {
+        var val = jQuery(this).val();
+        var otherInput = jQuery('#parent_religion_mother_other');
+        if (val.toLowerCase() == 'other') {
+            otherInput.removeClass(hiddendiv_class);
+        } else {
+            otherInput.addClass(hiddendiv_class);
+            otherInput.val('');
+        }
+    });
+    jQuery(document).on("change", "#parental_marital_status", function () {
+        var val = jQuery(this).val().toLowerCase();
+        var divorced_value = 'divorced';
+        var custodySection = jQuery('#custody_section');
+        if (val == divorced_value) {
+            custodySection.removeClass(hiddendiv_class);
+        } else {
+            custodySection.addClass(hiddendiv_class);
+            jQuery('#parental_marital_status_details').val('');
+            jQuery('#custody_other_details').val('').addClass(hiddendiv_class);
+        }
+        var fatherIdFront = jQuery('#father_id_front');
+        var fatherIdBack = jQuery('#father_id_back');
+        if (val == divorced_value) {
+            fatherIdFront.removeClass(required_input_class).removeClass(required_class);
+            fatherIdBack.removeClass(required_input_class).removeClass(required_class);
+        } else {
+            fatherIdFront.addClass(required_input_class);
+            fatherIdBack.addClass(required_input_class);
+        }
+    });
+    jQuery(document).on("change", "#parental_marital_status_details", function () {
+        var val = jQuery(this).val();
+        var otherInput = jQuery('#custody_other_details');
+        if (val == 'Other relatives') {
+            otherInput.removeClass(hiddendiv_class);
+        } else {
+            otherInput.addClass(hiddendiv_class);
+            otherInput.val('');
+        }
+    });
+    jQuery(document).on("change", "#is_step_parent", function () {
+        var val = jQuery(this).val().toLowerCase();
+        var section = jQuery('#step_parent_section');
+        if (val == 'yes') {
+            section.removeClass(hiddendiv_class);
+        } else {
+            section.addClass(hiddendiv_class);
+        }
+    });
+    jQuery(document).on("change", "#learning_support_services", function () {
+        var val = jQuery(this).val().toLowerCase();
+        var section = jQuery('#learning_support_section');
+        if (val == 'yes') {
+            section.removeClass(hiddendiv_class);
+        } else {
+            section.addClass(hiddendiv_class);
         }
     });
     jQuery("#mesagepopboxadmissiondisclaimerpopoup").on("click", ".closealert", function () {
@@ -182,6 +235,7 @@ function send_addmission_form() {
                 jQuery('#admissions_ajaxLoading').hide();
                 if (result.status == 'success') {
                     jQuery('#admissions_result').html(result.msg).show().removeClass('admissions_result_fail').addClass('admissions_result_success');
+                    jQuery('html, body').animate({ scrollTop: jQuery('#admissions_result').offset().top - 20 }, 500);
                     document.getElementById("admissionsform").reset();
                     currentTab = 0;
                     jQuery('.tabIn4').hide();
@@ -190,9 +244,10 @@ function send_addmission_form() {
 					setTimeout(function(){
                         window.location.href = 'https://www.ethosedu.com';
                      }, 5000);
-					 
+
                 } else {
                     jQuery('#admissions_result').html(result.msg).show().removeClass('admissions_result_success').addClass('admissions_result_fail');
+                    jQuery('html, body').animate({ scrollTop: jQuery('#admissions_result').offset().top - 20 }, 500);
                 }
             }
         });
@@ -206,11 +261,15 @@ function validate_required_input(obj) {
     var input_maxlength = obj.attr('maxlength');
     var input_minlength = obj.attr('minlength');
     var error = 0;
-    if (jQuery.trim(val).length !== 0 && !input_maxlength && !input_minlength || 
-        jQuery.trim(val).length <= input_maxlength && jQuery.trim(val).length >= input_minlength) {
-        error = 0;
-    } else {
+    var trimmedLength = jQuery.trim(val).length;
+    if (trimmedLength === 0) {
         error = 1;
+    } else if (input_maxlength && trimmedLength > input_maxlength) {
+        error = 1;
+    } else if (input_minlength && trimmedLength < input_minlength) {
+        error = 1;
+    } else {
+        error = 0;
     }
     if (input_type == 'email') {
         if (!isValidEmailAddress(val)) {

@@ -95,4 +95,34 @@
             </div>
         </div>
     <?php } ?>
+    <?php if (isset($dataIn['learning_support_services'])) { ?>
+        <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+            <div class="leftDiv "><?php echo __('Has your child received any learning support services?'); ?></div>
+            <div class="rightDiv ">
+                <?php echo $dataIn['learning_support_services']; ?>
+                &nbsp;
+            </div>
+        </div>
+        <?php if (strtolower($dataIn['learning_support_services']) == 'yes') { ?>
+            <?php if (isset($dataIn['learning_support_details']) && $dataIn['learning_support_details'] != '') { ?>
+                <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+                    <div class="leftDiv "><?php echo __('Learning Support Details'); ?></div>
+                    <div class="rightDiv ">
+                        <?php echo $dataIn['learning_support_details']; ?>
+                        &nbsp;
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if (isset($base_url) && isset($dataIn['filesData']['learning_support_attachment']) && $dataIn['filesData']['learning_support_attachment'] != '') { ?>
+                <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+                    <div class="leftDiv "><?php echo __('Support Learning Attachment'); ?></div>
+                    <div class="rightDiv ">
+                        <?php $img_url = $base_url . '/' . $dataIn['filesData']['learning_support_attachment']; ?>
+                        <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
+                        &nbsp;
+                    </div>
+                </div>
+            <?php } ?>
+        <?php } ?>
+    <?php } ?>
 </div>

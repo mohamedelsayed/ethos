@@ -5,6 +5,10 @@ if (isset($disclaimer)) {
 $tabsCount = 5;
 echo $this->Html->css(array('front/jquery-ui', 'front/admissions'));
 echo $this->Javascript->link(array('front/jquery-ui'));
+?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<?php
 $yes_no_options = array('Yes', 'No');
 $image_extensions = '.jpeg,.png,.gif,.jpg';
 $files_extensions = $image_extensions.',.pdf,.doc,.docx';
@@ -12,7 +16,19 @@ $selected = ' selected="selected" ';
 $checked = ' checked="checked" ';
 $gender_options = array('Male', 'Female');
 $parental_marital_status_options = array('Married', 'Divorced', 'Separated', 'Widowed');
+?>
+<div class="ajax_result_admissions">
+    <div id="admissions_ajaxLoading"></div>
+    <div id="admissions_result"></div>
+</div>
+<?php
 echo $this->Form->create('admissions', array('type' => 'file', 'id' => 'admissionsform', 'class' => 'admissions paddingAll', 'url' => $base_url . '/page/admissionsform/notajax'));
+echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab3', [
+    'yes_no_options' => $yes_no_options,
+    'image_extensions' => $image_extensions,
+    'selected' => $selected,
+    'parental_marital_status_options' => $parental_marital_status_options,
+]);
 echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab1', [
     'terms' => $terms,
     'yearGroups' => $yearGroups,
@@ -25,12 +41,6 @@ echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab2', [
     'yes_no_options' => $yes_no_options,
     'image_extensions' => $image_extensions,
     'selected' => $selected,
-]);
-echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab3', [
-    'yes_no_options' => $yes_no_options,
-    'image_extensions' => $image_extensions,
-    'selected' => $selected,
-    'parental_marital_status_options' => $parental_marital_status_options,
 ]);
 echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab4', [
     'yes_no_options' => $yes_no_options,
@@ -53,10 +63,6 @@ echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab5', [
         <?php } ?>
     </ul>
     <button class='btn_form_admissions' type="button" id="nextBtn" onclick="nextPrev(1)"><?php echo __('Next'); ?></button>
-</div>
-<div class="ajax_result_admissions">
-    <div id="admissions_ajaxLoading"></div>
-    <div id="admissions_result"></div>
 </div>
 <!-- <div style="width:100%;float:left;">
 </div> -->

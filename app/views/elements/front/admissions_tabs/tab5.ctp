@@ -75,6 +75,31 @@
         <label for="medical_history"><?php echo __('Medical History') ?>:</label>
         <input type="text" class="input3new admissions_input required_input" id="medical_history" name="medical_history" />
     </div>
+    <div class="input_new">
+        <label><?php echo __('Has your child received any learning support services in a previous school / Nursery or centre?'); ?></label>
+        <div class="calendar_select">
+            <select class="select form-control form-select" id="learning_support_services" name="learning_support_services">
+                <?php foreach ($yes_no_options as $key => $yes_no_option) {
+                    $item_selected = '';
+                    if (strtolower($yes_no_option) == 'no') {
+                        $item_selected = " " . $selected . " ";
+                    } ?>
+                    <option <?php echo $item_selected; ?> value="<?php echo $yes_no_option; ?>"><?php echo $yes_no_option; ?></option>;
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="input_new hiddendiv" id="learning_support_section">
+        <label for="learning_support_details"><?php echo __('Please provide details/reports'); ?>:</label>
+        <textarea class="input3new admissions_input" id="learning_support_details" name="learning_support_details" maxlength="500" rows="3" placeholder="..."></textarea>
+        <div class="input_description"><?php echo __('Maximum 500 characters'); ?></div>
+        <div class="input_new" style="margin-top: 10px;">
+            <label for="learning_support_attachment"><?php echo __('Support Learning Attachment') ?>:</label>
+            <div class="file-upload-wrapper" data-text="No file chosen">
+                <input id="learning_support_attachment" class="input3new admissions_input" type="file" name="learning_support_attachment" accept="<?php echo $files_extensions; ?>" />
+            </div>
+        </div>
+    </div>
     <div class="agree_out">
         <input id="i_agree" type="checkbox" name="i_agree" class="i_agree required_input" />
         <label class="i_agree_label" for="i_agree"><?php echo ('I confirm that the information provided is correct to the best of my knowledge. Failure to disclose relevant information may affect my child’s application.'); ?></label>

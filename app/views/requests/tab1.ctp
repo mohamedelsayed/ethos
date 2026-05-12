@@ -1,7 +1,24 @@
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo $titleLabel; ?>:</div>
+    <div class="leftDiv "><?php echo __('Child\'s Name (EN)'); ?>:</div>
     <div class="rightDiv ">
-        <?php echo $request['Request']['title']; ?>
+        <?php
+        if (isset($dataIn['first_name_en'])) {
+            echo $dataIn['first_name_en'] . ' ' . $dataIn['middle_name_en'] . ' ' . $dataIn['last_name_en'];
+        } else {
+            echo $request['Request']['title'];
+        }
+        ?>
+        &nbsp;
+    </div>
+</div>
+<div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+    <div class="leftDiv "><?php echo __('Child\'s Name (AR)'); ?>:</div>
+    <div class="rightDiv " dir="rtl">
+        <?php
+        if (isset($dataIn['first_name_ar'])) {
+            echo $dataIn['first_name_ar'] . ' ' . $dataIn['middle_name_ar'] . ' ' . $dataIn['last_name_ar'];
+        }
+        ?>
         &nbsp;
     </div>
 </div>
@@ -122,17 +139,24 @@
         <?php
         if (isset($dataIn['religion'])) {
             echo $dataIn['religion'];
+            if ($dataIn['religion'] == 'Other' && isset($dataIn['religion_other']) && $dataIn['religion_other'] != '') {
+                echo ' (' . $dataIn['religion_other'] . ')';
+            }
         }
         ?>
         &nbsp;
     </div>
 </div>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Language Spoken At Home'); ?>:</div>
+    <div class="leftDiv "><?php echo __('Language/s Spoken At Home'); ?>:</div>
     <div class="rightDiv">
         <?php
         if (isset($dataIn['language'])) {
-            echo $dataIn['language'];
+            if (is_array($dataIn['language'])) {
+                echo implode(', ', $dataIn['language']);
+            } else {
+                echo $dataIn['language'];
+            }
         }
         ?>
         &nbsp;
@@ -201,26 +225,6 @@
     </div>
 <?php } ?>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-    <div class="leftDiv "><?php echo __('Are you applying for any siblings?'); ?></div>
-    <div class="rightDiv ">
-        <?php
-        if (isset($dataIn['are_you_applying_for_any_siblings'])) {
-            echo $dataIn['are_you_applying_for_any_siblings'];
-        }
-        ?>
-        &nbsp;
-    </div>
-</div>
-<?php if (isset($dataIn['are_you_applying_for_any_siblings_details']) && $dataIn['are_you_applying_for_any_siblings_details'] != '') { ?>
-    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-        <div class="leftDiv "><?php echo __('If yes, please give details'); ?></div>
-        <div class="rightDiv ">
-            <?php echo $dataIn['are_you_applying_for_any_siblings_details']; ?>
-            &nbsp;
-        </div>
-    </div>
-<?php } ?>
-<div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
     <div class="leftDiv "><?php echo __('How did you hear about us?'); ?></div>
     <div class="rightDiv ">
         <?php
@@ -240,4 +244,12 @@
             &nbsp;
         </div>
     </div>
+<?php } ?>
+<?php if (isset($dataIn['reason_for_applying']) && $dataIn['reason_for_applying'] != '') { ?>
+<div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+    <div class="leftDiv "><?php echo __('Reason for applying'); ?>:</div>
+    <div class="rightDiv ">
+        <textarea readonly rows="3" style="width:100%; border:none; background:transparent; resize:none; font-size:inherit; font-family:inherit;"><?php echo htmlspecialchars($dataIn['reason_for_applying']); ?></textarea>
+    </div>
+</div>
 <?php } ?>

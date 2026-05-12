@@ -1,6 +1,6 @@
 <div class="tab tabIn3">
     <div class="pupil_details-title head_div orange_head"><?php echo __('4. Emergency Information') ?></div>
-    <div class="input_description"><?php echo __('In Case of emergency and the school is unable to contact the parents, Please Notify:');?></div>
+    <div class="input_description"><?php echo __('Please mention two contacts aside from the parents, i.e. relative, family friend, etc..');?></div>
     <div class="parent_informations-table">
         <table border="1">
             <tr>

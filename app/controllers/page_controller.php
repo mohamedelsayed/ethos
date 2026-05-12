@@ -321,7 +321,7 @@ class PageController extends AppController {
         $dataIn['msg'] = __('There was a problem sending the Email. Please try again.', true);
         if (!empty($data)) {
             $this->loadModel('Request');
-            $this->data['Request']['title'] = $data['child_name'];
+            $this->data['Request']['title'] = trim($data['first_name_en'] . ' ' . $data['middle_name_en'] . ' ' . $data['last_name_en']);
             if (isset($data['i_agree'])) {
                 unset($data['i_agree']);
             }
@@ -352,12 +352,18 @@ class PageController extends AppController {
             if (isset($data['parent_informations2'])) {
                 $parentName2 = $data['parent_informations2'];
             }
-            $required_inputs_array = ['birth_date', 'academic_year_entry_input',
+            $required_inputs_array = [
+                'first_name_en', 'middle_name_en', 'last_name_en',
+                'first_name_ar', 'middle_name_ar', 'last_name_ar',
+                'birth_date', 'academic_year_entry_input',
                 'year_group_applying_to_input', 'gender_input', 'nationality',
-                'religion', 'language', 'require_bus', 'parental_marital_status'
+                'religion', 'language', 'require_bus', 'parental_marital_status',
+                'parent_religion_father', 'parent_religion_mother',
+                'parent_type_of_business_father'
             ];
-            for ($i = 1; $i <= 24; $i++) {
-                $required_inputs_array[] = 'parent_informations' . $i;
+            $required_parent_fields = [1, 2, 3, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+            foreach ($required_parent_fields as $pi) {
+                $required_inputs_array[] = 'parent_informations' . $pi;
             }
             for ($i = 1; $i <= 6; $i++) {
                 $required_inputs_array[] = 'emergency' . $i;
@@ -500,9 +506,16 @@ class PageController extends AppController {
 
         foreach ($required_inputs_array as $key => $value) {
             if (isset($data[$value])) {
-                $item = trim($data[$value]);
-                if ($item == '' || is_null($item)) {
-                    return false;
+                $item = $data[$value];
+                if (is_array($item)) {
+                    if (empty($item)) {
+                        return false;
+                    }
+                } else {
+                    $item = trim($item);
+                    if ($item == '' || is_null($item)) {
+                        return false;
+                    }
                 }
             } else {
                 return false;
