@@ -3,11 +3,9 @@ if (isset($disclaimer)) {
     echo $this->element('front' . DS . 'disclaimer', array('disclaimer' => $disclaimer));
 }
 $tabsCount = 5;
-echo $this->Html->css(array('front/jquery-ui', 'front/admissions'));
-echo $this->Javascript->link(array('front/jquery-ui'));
+echo $this->Html->css(array('front/jquery-ui', 'front/select2.min', 'front/admissions'));
+echo $this->Javascript->link(array('front/jquery-ui', 'front/select2.min'));
 ?>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <?php
 $yes_no_options = array('Yes', 'No');
 $image_extensions = '.jpeg,.png,.gif,.jpg';
@@ -16,7 +14,14 @@ $selected = ' selected="selected" ';
 $checked = ' checked="checked" ';
 $gender_options = array('Male', 'Female');
 $parental_marital_status_options = array('Married', 'Divorced', 'Separated', 'Widowed');
+$yearGroupsOrdered = array();
+foreach ($yearGroups as $yg) {
+    $yearGroupsOrdered[] = array('id' => $yg['YearGroup']['id'], 'title' => $yg['YearGroup']['title']);
+}
 ?>
+<script type="text/javascript">
+    var yearGroupsOrdered = <?php echo json_encode($yearGroupsOrdered); ?>;
+</script>
 <div class="ajax_result_admissions">
     <div id="admissions_ajaxLoading"></div>
     <div id="admissions_result"></div>

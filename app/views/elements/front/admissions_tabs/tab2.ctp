@@ -7,57 +7,66 @@
         $countries = $GLOBALS['countries'];
         $reasons_for_leaving = $GLOBALS['reasons_for_leaving'];
         ?>
-        <table border="1">
-            <tr>
-                <td class="td_center"><?php echo __('Year from'); ?></td>
-                <td class="td_center"><?php echo __('Year to'); ?></td>
-                <td class="td_center"><?php echo __('Name Of Previous School / Nursery'); ?></td>
-                <td class="td_center"><?php echo __('Curriculum Followed'); ?></td>
-                <td class="td_center"><?php echo __('Country'); ?></td>
-                <td class="td_center"><?php echo __('Reason for leaving'); ?></td>
-            </tr>
-            <?php for ($i = 1; $i <= 5; $i++) { ?>
+        <script type="text/javascript">
+            var prev_school_curriculums = <?php echo json_encode($curriculums); ?>;
+            var prev_school_countries = <?php echo json_encode(array_values($countries)); ?>;
+            var prev_school_reasons = <?php echo json_encode($reasons_for_leaving); ?>;
+        </script>
+        <table border="1" id="prev_schools_table">
+            <thead>
                 <tr>
-                    <td>
-                        <input class="additional_pupils_informations input_in_table" id="prev_school_year_from_<?php echo $i; ?>" type="text" name="prev_school_year_from_<?php echo $i; ?>" value="" placeholder="...">
-                    </td>
-                    <td>
-                        <input class="additional_pupils_informations input_in_table" id="prev_school_year_to_<?php echo $i; ?>" type="text" name="prev_school_year_to_<?php echo $i; ?>" value="" placeholder="...">
-                    </td>
-                    <td>
-                        <input class="additional_pupils_informations input_in_table" id="prev_school_name_<?php echo $i; ?>" type="text" name="prev_school_name_<?php echo $i; ?>" value="" placeholder="...">
-                    </td>
-                    <td>
-                        <div class="calendar_select">
-                            <select class="select form-control form-select" id="prev_school_curriculum_<?php echo $i; ?>" name="prev_school_curriculum_<?php echo $i; ?>">
-                                <?php foreach ($curriculums as $key => $val) { ?>
-                                    <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="calendar_select">
-                            <select class="select form-control form-select" id="prev_school_country_<?php echo $i; ?>" name="prev_school_country_<?php echo $i; ?>">
-                                <?php foreach ($countries as $country) {
-                                    $country_selected = ($country == 'Egypt') ? $selected : '';
-                                ?>
-                                    <option <?php echo $country_selected; ?> value="<?php echo $country; ?>"><?php echo $country; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="calendar_select">
-                            <select class="select form-control form-select" id="prev_school_reason_<?php echo $i; ?>" name="prev_school_reason_<?php echo $i; ?>">
-                                <?php foreach ($reasons_for_leaving as $key => $val) { ?>
-                                    <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </td>
+                    <td class="td_center"><?php echo __('Year from'); ?></td>
+                    <td class="td_center"><?php echo __('Year to'); ?></td>
+                    <td class="td_center"><?php echo __('Name Of Previous School / Nursery'); ?></td>
+                    <td class="td_center"><?php echo __('Curriculum Followed'); ?></td>
+                    <td class="td_center"><?php echo __('Country'); ?></td>
+                    <td class="td_center"><?php echo __('Reason for leaving'); ?></td>
                 </tr>
-            <?php } ?>
+            </thead>
+            <tbody id="prev_schools_tbody">
+                <?php for ($i = 1; $i <= 5; $i++) { ?>
+                    <tr class="prev_school_row" data-row="<?php echo $i; ?>">
+                        <td>
+                            <input class="additional_pupils_informations input_in_table" id="prev_school_year_from_<?php echo $i; ?>" type="text" name="prev_school_year_from_<?php echo $i; ?>" value="" placeholder="...">
+                        </td>
+                        <td>
+                            <input class="additional_pupils_informations input_in_table" id="prev_school_year_to_<?php echo $i; ?>" type="text" name="prev_school_year_to_<?php echo $i; ?>" value="" placeholder="...">
+                        </td>
+                        <td>
+                            <input class="additional_pupils_informations input_in_table" id="prev_school_name_<?php echo $i; ?>" type="text" name="prev_school_name_<?php echo $i; ?>" value="" placeholder="...">
+                        </td>
+                        <td>
+                            <div class="calendar_select">
+                                <select class="select form-control form-select" id="prev_school_curriculum_<?php echo $i; ?>" name="prev_school_curriculum_<?php echo $i; ?>">
+                                    <?php foreach ($curriculums as $key => $val) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="calendar_select">
+                                <select class="select form-control form-select" id="prev_school_country_<?php echo $i; ?>" name="prev_school_country_<?php echo $i; ?>">
+                                    <?php foreach ($countries as $country) {
+                                        $country_selected = ($country == 'Egypt') ? $selected : '';
+                                    ?>
+                                        <option <?php echo $country_selected; ?> value="<?php echo $country; ?>"><?php echo $country; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="calendar_select">
+                                <select class="select form-control form-select" id="prev_school_reason_<?php echo $i; ?>" name="prev_school_reason_<?php echo $i; ?>">
+                                    <?php foreach ($reasons_for_leaving as $key => $val) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
         </table>
     </div>
     <div class="input_new">
@@ -86,7 +95,11 @@
         <input placeholder="<?php echo __(''); ?>..." id="has_the_pupil_ever_been_asked_to_repeat_year_details" class="input3new admissions_input take_placeholder " type="text" name="has_the_pupil_ever_been_asked_to_repeat_year_details" />
     </div>
     <div class="input_new">
-        <label><?php echo __('For the current school reference, please provide us with a name and email address'); ?>:</label>
+        <label><?php echo __('Please upload a reference letter from the current school'); ?>:</label>
+        <div class="input_description"><?php echo __('If not available, please provide a name and email address below.'); ?></div>
+        <div class="file-upload-wrapper" data-text="No file chosen" style="margin-top: 8px;">
+            <input id="school_reference_letter" class="input3new admissions_input" type="file" name="school_reference_letter" accept="<?php echo $image_extensions; ?>,.pdf,.doc,.docx" />
+        </div>
     </div>
     <div class="input_row_3col">
         <div class="input_new">

@@ -115,7 +115,7 @@
             <?php } ?>
             <?php if (isset($base_url) && isset($dataIn['filesData']['learning_support_attachment']) && $dataIn['filesData']['learning_support_attachment'] != '') { ?>
                 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
-                    <div class="leftDiv "><?php echo __('Support Learning Attachment'); ?></div>
+                    <div class="leftDiv "><?php echo __('Learning Support Attachment'); ?></div>
                     <div class="rightDiv ">
                         <?php $img_url = $base_url . '/' . $dataIn['filesData']['learning_support_attachment']; ?>
                         <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>

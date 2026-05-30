@@ -14,7 +14,7 @@ $has_old_fields = isset($dataIn['previous_schools_nursery_1_1']);
                     <td class="td_center"><?php echo __('Country'); ?></td>
                     <td class="td_center"><?php echo __('Reason for leaving'); ?></td>
                 </tr>
-                <?php for ($r = 1; $r <= 5; $r++) {
+                <?php for ($r = 1; $r <= 15; $r++) {
                     $name = isset($dataIn['prev_school_name_' . $r]) ? trim($dataIn['prev_school_name_' . $r]) : '';
                     if ($name == '') continue;
                 ?>
@@ -99,6 +99,16 @@ $has_old_fields = isset($dataIn['previous_schools_nursery_1_1']);
         <div class="leftDiv "><?php echo __('If yes, which year group, Please give details'); ?></div>
         <div class="rightDiv ">
             <?php echo $dataIn['has_the_pupil_ever_been_asked_to_repeat_year_details']; ?>
+            &nbsp;
+        </div>
+    </div>
+<?php } ?>
+<?php if (isset($base_url) && isset($dataIn['filesData']['school_reference_letter']) && $dataIn['filesData']['school_reference_letter'] != '') { ?>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv "><?php echo __('School Reference Letter'); ?></div>
+        <div class="rightDiv ">
+            <?php $img_url = $base_url . '/' . $dataIn['filesData']['school_reference_letter']; ?>
+            <a class="download_image" href="<?php echo $img_url; ?>" download><?php echo __('Download'); ?></a>
             &nbsp;
         </div>
     </div>

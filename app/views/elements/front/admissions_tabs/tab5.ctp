@@ -94,7 +94,7 @@
         <textarea class="input3new admissions_input" id="learning_support_details" name="learning_support_details" maxlength="500" rows="3" placeholder="..."></textarea>
         <div class="input_description"><?php echo __('Maximum 500 characters'); ?></div>
         <div class="input_new" style="margin-top: 10px;">
-            <label for="learning_support_attachment"><?php echo __('Support Learning Attachment') ?>:</label>
+            <label for="learning_support_attachment"><?php echo __('Learning Support Attachment') ?>:</label>
             <div class="file-upload-wrapper" data-text="No file chosen">
                 <input id="learning_support_attachment" class="input3new admissions_input" type="file" name="learning_support_attachment" accept="<?php echo $files_extensions; ?>" />
             </div>

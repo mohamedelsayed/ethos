@@ -4,6 +4,7 @@ var hiddendiv_class = 'hiddendiv';
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
 var ajax_work = 0;
+var prevSchoolRowCount = 5;
 open_admission_disclaimer_popup();
 jQuery(function () {
     jQuery(".datepicker").datepicker({
@@ -21,49 +22,21 @@ jQuery(function () {
         yearRange: '2000:c',
         minDate: new Date(1999, 10 - 1, 25),
     });
-    //    jQuery("#birth_date_input").change(function () {
-    //        var birth_date = jQuery(this).val();
-    //        jQuery('#pupil_details5').val(birth_date);
-    //    });
-    //    jQuery("#pupil_details5").change(function () {
-    //        var birth_date = jQuery(this).val();
-    //        jQuery('#birth_date_input').val(birth_date);
-    //    });
-    //    jQuery("form :input.take_placeholder").each(function (index, elem) {
-    //        var eId = jQuery(elem).attr("id");
-    //        var label = null;
-    //        if (eId && (label = jQuery(elem).parents("form").find("label[for=" + eId + "]")).length == 1) {
-    //            var label_data = jQuery(label).html().replace(":", "");
-    //            jQuery(elem).attr("placeholder", label_data);
-    //        }
-    //    });
-    //    jQuery("form#admissionsform").submit(function (event) {
-    //        event.preventDefault();
-    //        validate_admissions_form();
-    //    });
     jQuery(document).on("change paste keyup", "input." + required_input_class + ", select." + required_input_class + ", textarea." + required_input_class + "", function () {
         validate_required_input(jQuery(this));
     });
-    //    jQuery(':file').change(function () {
-    //        validate_required_input_image(jQuery(this), this);
-    //    });
     jQuery(document).on("change", "#year_group_applying_to_input", function () {
         var val = jQuery(this).val();
         var item1 = jQuery("#current_year_group_input");
         var item2 = jQuery('#previous_school_report');
-        var prevSchoolName = jQuery('#prev_school_name_1');
         if (val >= 3) {
             item1.addClass(required_input_class);
             item2.addClass(required_input_class);
-            prevSchoolName.addClass(required_input_class);
         } else {
-            item1.removeClass(required_input_class);
-            item1.removeClass(required_class);
-            item2.removeClass(required_input_class);
-            item2.removeClass(required_class);
-            prevSchoolName.removeClass(required_input_class);
-            prevSchoolName.removeClass(required_class);
+            item1.removeClass(required_input_class).removeClass(required_class);
+            item2.removeClass(required_input_class).removeClass(required_class);
         }
+        updatePrevSchoolRows(val);
     });
     jQuery(document).on("change", "#have_any_sibling_at_EIS", function () {
         var id_val = jQuery(this).attr('id');
@@ -188,32 +161,116 @@ jQuery(function () {
     jQuery(document).on("change", "#developmental_history5", function () {
         set_required_for_recent_report_if_needed();
     });
+    jQuery(document).on("change", "#school_reference_letter", function () {
+        updateSchoolReferenceValidation();
+    });
+    jQuery(document).on("change keyup", "#school_reference_name, #school_reference_email", function () {
+        updateSchoolReferenceValidation();
+    });
 });
-//function validate_admissions_form() {
-//    var error_flag = 0;
-//    var focused = 0;
-//    jQuery("input."+required_input_class+", select."+required_input_class+"").each(function () {
-//        validate_required_input(jQuery(this));
-//    });
-////    jQuery("input."+required_input_class+"[type='checkbox']").each(function () {
-////        validate_required_input_checkbox(jQuery(this).attr('id'));
-////    });
-////    jQuery("input."+required_input_class+"[type='file']").each(function () {
-////        validate_required_input_image(jQuery(this), this);
-////    });
-//    jQuery('input, select').each(function () {
-//        if (jQuery(this).hasClass(required_class)) {
-//            error_flag = 1;
-//            if (focused == 0) {
-//                focused = 1;
-//                jQuery(this).focus();
-//            }
-//        }
-//    });
-//    if (error_flag === 0) {
-//        send_addmission_form();
-//    }
-//}
+
+function getRequiredPrevSchoolRows(yearGroupId) {
+    if (!yearGroupId || typeof yearGroupsOrdered === 'undefined') return 0;
+    var index = -1;
+    for (var i = 0; i < yearGroupsOrdered.length; i++) {
+        if (yearGroupsOrdered[i].id == yearGroupId) {
+            index = i;
+            break;
+        }
+    }
+    if (index <= 0) return 0;
+    return Math.max(0, index - 1);
+}
+
+function updatePrevSchoolRows(yearGroupId) {
+    var requiredRows = getRequiredPrevSchoolRows(yearGroupId);
+    var minRows = Math.max(requiredRows, 1);
+
+    while (prevSchoolRowCount < minRows) {
+        addPrevSchoolRow(prevSchoolRowCount + 1);
+        prevSchoolRowCount++;
+    }
+
+    jQuery('.prev_school_row').each(function () {
+        var rowNum = parseInt(jQuery(this).attr('data-row'));
+        var nameField = jQuery('#prev_school_name_' + rowNum);
+        var reasonField = jQuery('#prev_school_reason_' + rowNum);
+        if (rowNum <= requiredRows) {
+            jQuery(this).show();
+            nameField.addClass(required_input_class);
+            reasonField.addClass(required_input_class);
+        } else if (rowNum <= prevSchoolRowCount) {
+            jQuery(this).show();
+            nameField.removeClass(required_input_class).removeClass(required_class);
+            reasonField.removeClass(required_input_class).removeClass(required_class);
+        }
+    });
+}
+
+function addPrevSchoolRow(rowNum) {
+    var curriculumOptions = '';
+    if (typeof prev_school_curriculums !== 'undefined') {
+        for (var key in prev_school_curriculums) {
+            curriculumOptions += '<option value="' + key + '">' + prev_school_curriculums[key] + '</option>';
+        }
+    }
+    var countryOptions = '';
+    if (typeof prev_school_countries !== 'undefined') {
+        for (var i = 0; i < prev_school_countries.length; i++) {
+            var sel = (prev_school_countries[i] === 'Egypt') ? ' selected="selected"' : '';
+            countryOptions += '<option' + sel + ' value="' + prev_school_countries[i] + '">' + prev_school_countries[i] + '</option>';
+        }
+    }
+    var reasonOptions = '';
+    if (typeof prev_school_reasons !== 'undefined') {
+        for (var key in prev_school_reasons) {
+            reasonOptions += '<option value="' + key + '">' + prev_school_reasons[key] + '</option>';
+        }
+    }
+    var html = '<tr class="prev_school_row" data-row="' + rowNum + '">'
+        + '<td><input class="additional_pupils_informations input_in_table" id="prev_school_year_from_' + rowNum + '" type="text" name="prev_school_year_from_' + rowNum + '" value="" placeholder="..."></td>'
+        + '<td><input class="additional_pupils_informations input_in_table" id="prev_school_year_to_' + rowNum + '" type="text" name="prev_school_year_to_' + rowNum + '" value="" placeholder="..."></td>'
+        + '<td><input class="additional_pupils_informations input_in_table" id="prev_school_name_' + rowNum + '" type="text" name="prev_school_name_' + rowNum + '" value="" placeholder="..."></td>'
+        + '<td><div class="calendar_select"><select class="select form-control form-select" id="prev_school_curriculum_' + rowNum + '" name="prev_school_curriculum_' + rowNum + '">' + curriculumOptions + '</select></div></td>'
+        + '<td><div class="calendar_select"><select class="select form-control form-select" id="prev_school_country_' + rowNum + '" name="prev_school_country_' + rowNum + '">' + countryOptions + '</select></div></td>'
+        + '<td><div class="calendar_select"><select class="select form-control form-select" id="prev_school_reason_' + rowNum + '" name="prev_school_reason_' + rowNum + '">' + reasonOptions + '</select></div></td>'
+        + '</tr>';
+    jQuery('#prev_schools_tbody').append(html);
+}
+
+function updateSchoolReferenceValidation() {
+    var hasFile = jQuery('#school_reference_letter').val() !== '';
+    var hasName = jQuery.trim(jQuery('#school_reference_name').val()).length > 0;
+    var hasEmail = jQuery.trim(jQuery('#school_reference_email').val()).length > 0;
+    if (hasFile || (hasName && hasEmail)) {
+        jQuery('#school_reference_letter').parent('.file-upload-wrapper').removeClass(required_class);
+        jQuery('#school_reference_name').removeClass(required_class);
+        jQuery('#school_reference_email').removeClass(required_class);
+    }
+}
+
+function validateSchoolReference() {
+    var hasFile = jQuery('#school_reference_letter').val() !== '';
+    var hasName = jQuery.trim(jQuery('#school_reference_name').val()).length > 0;
+    var hasEmail = jQuery.trim(jQuery('#school_reference_email').val()).length > 0 && isValidEmailAddress(jQuery('#school_reference_email').val());
+    if (hasFile || (hasName && hasEmail)) {
+        jQuery('#school_reference_letter').parent('.file-upload-wrapper').removeClass(required_class);
+        jQuery('#school_reference_name').removeClass(required_class);
+        jQuery('#school_reference_email').removeClass(required_class);
+        return true;
+    }
+    if (!hasFile && !hasName && !hasEmail) {
+        jQuery('#school_reference_letter').parent('.file-upload-wrapper').addClass(required_class);
+    }
+    if (!hasFile && !hasName) {
+        jQuery('#school_reference_name').addClass(required_class);
+    }
+    if (!hasFile && !hasEmail) {
+        jQuery('#school_reference_email').addClass(required_class);
+    }
+    return false;
+}
+
 function send_addmission_form() {
     var formData = new FormData($('form#admissionsform')[0]);
     if (ajax_work == 0) {
@@ -261,16 +318,24 @@ function validate_required_input(obj) {
     var input_maxlength = obj.attr('maxlength');
     var input_minlength = obj.attr('minlength');
     var error = 0;
-    var trimmedLength = jQuery.trim(val).length;
-    if (trimmedLength === 0) {
-        error = 1;
-    } else if (input_maxlength && trimmedLength > input_maxlength) {
-        error = 1;
-    } else if (input_minlength && trimmedLength < input_minlength) {
-        error = 1;
+
+    if (Array.isArray(val)) {
+        if (val.length === 0) {
+            error = 1;
+        }
     } else {
-        error = 0;
+        var trimmedLength = jQuery.trim(val).length;
+        if (trimmedLength === 0) {
+            error = 1;
+        } else if (input_maxlength && trimmedLength > input_maxlength) {
+            error = 1;
+        } else if (input_minlength && trimmedLength < input_minlength) {
+            error = 1;
+        } else {
+            error = 0;
+        }
     }
+
     if (input_type == 'email') {
         if (!isValidEmailAddress(val)) {
             error = 1;
@@ -307,7 +372,7 @@ function validate_required_input(obj) {
 }
 
 function isValidEmailAddress(emailAddress) {
-    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+    var pattern = /^[a-zA-Z0-9.!#$%&'"*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     return pattern.test(emailAddress);
 }
 
@@ -330,23 +395,7 @@ function validate_required_input_checkbox(obj) {
         return 0;
     }
 }
-//function validate_required_input_image(obj, objthis) {
-//    var file = objthis.files[0];
-//    if (typeof file !== typeof undefined && file !== false) {
-//        var name = file.name;
-////        var size = file.size;
-////        var type = file.type;
-//        var ext = name.substr(name.lastIndexOf('.') + 1);
-//        var ext = ext.toLowerCase();
-//        if (ext == 'jpeg' || ext == 'png' || ext == 'gif' || ext == 'jpg') {
-//            obj.removeClass(required_class);
-//        } else {
-//            obj.addClass(required_class);
-//        }
-//    } else {
-//        obj.addClass(required_class);
-//    }
-//}
+
 function showTab(n) {
     // This function will display the specified tab of the form ...
     var x = document.getElementsByClassName("tab");
@@ -396,18 +445,28 @@ function nextPrev(n) {
     }
 }
 
+function validatePrevSchoolReasons() {
+    var valid = true;
+    jQuery('.prev_school_row:visible').each(function () {
+        var rowNum = parseInt(jQuery(this).attr('data-row'));
+        var nameVal = jQuery.trim(jQuery('#prev_school_name_' + rowNum).val());
+        var reasonField = jQuery('#prev_school_reason_' + rowNum);
+        if (nameVal.length > 0 && jQuery.trim(reasonField.val()).length === 0) {
+            reasonField.addClass(required_class);
+            valid = false;
+        }
+    });
+    return valid;
+}
+
 function validateForm() {
-    // This function deals with validation of the form fields
     var x, y, i, valid = true;
     x = document.getElementsByClassName("tab");
-    //    y = x[currentTab].getElementsByTagName("input");
     y = x[currentTab].getElementsByClassName(required_input_class);
-    // A loop that checks every input field in the current tab:
     i = 0;
     var obj;
     var error = 0;
     var focused = 0;
-    //    console.log(".tabIn"+currentTab+" ."+required_input_class);
     jQuery(".tabIn" + currentTab + " ." + required_input_class).each(function (index) {
         obj = jQuery(this);
         error = validate_required_input(obj);
@@ -419,6 +478,21 @@ function validateForm() {
             }
         }
     });
+
+    // Tab 2 custom validations: school reference and reason for leaving
+    if (currentTab == 2) {
+        if (!validateSchoolReference()) {
+            valid = false;
+            if (focused == 0) {
+                jQuery('#school_reference_letter').focus();
+                focused = 1;
+            }
+        }
+        if (!validatePrevSchoolReasons()) {
+            valid = false;
+        }
+    }
+
     // If the valid status is true, mark the step as finished and valid:
     if (valid) {
         document.getElementsByClassName("step")[currentTab].className += " finish";
@@ -464,12 +538,6 @@ function set_required_for_recent_report_if_needed() {
     let dh3 = $('input[type=radio][name=developmental_history3]:checked').val();
     let dh4 = $('input[type=radio][name=developmental_history4]:checked').val();
     let dh5 = $('input[name=developmental_history5]').val();
-    // console.log(dh0);
-    // console.log(dh1);
-    // console.log(dh2);
-    // console.log(dh3);
-    // console.log(dh4);
-    // console.log(dh5);
     item=$('#recent_report');
     if (dh0 == 1 || dh1 == 1 || dh2 == 1 || dh3 == 1 || dh4 == 1 || dh5 != '') {
         item.addClass(required_input_class);
