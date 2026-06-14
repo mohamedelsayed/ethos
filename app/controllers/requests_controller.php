@@ -306,6 +306,7 @@ class RequestsController extends AuthController
                 'School Reference Letter',
                 'School Reference Name',
                 'School Reference Email',
+                'School Reference Phone Number',
                 'Has the pupil ever applied to Ethos International School',
                 'If yes, which year group, Please give details',
                 //tab3
@@ -455,6 +456,7 @@ class RequestsController extends AuthController
                     isset($dataIn['filesData']['school_reference_letter']) ? $dataIn['filesData']['school_reference_letter'] : '',
                     $d('school_reference_name'),
                     $d('school_reference_email'),
+                    $d('school_reference_phone'),
                     $d('has_the_pupil_ever_applied_to_EIS'),
                     $d('has_the_pupil_ever_applied_to_EIS_details'),
                     //tab3

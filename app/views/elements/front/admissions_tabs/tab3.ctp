@@ -1,6 +1,6 @@
-<div class="tab tabIn0">
+<div class="tab tabIn1">
     <div class="pupil_details-title head_div orange_head">
-        <?php echo __('1. Parents Information') ?>
+        <?php echo __('2. Parents Information') ?>
     </div>
     <div class="input_new">
         <label for="has_the_pupil_ever_applied_to_EIS"><?php echo __('Has the pupil ever applied to Ethos International School?'); ?></label>

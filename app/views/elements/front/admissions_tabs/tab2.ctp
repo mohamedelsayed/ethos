@@ -96,7 +96,7 @@
     </div>
     <div class="input_new">
         <label><?php echo __('Please upload a reference letter from the current school'); ?>:</label>
-        <div class="input_description"><?php echo __('If not available, please provide a name and email address below.'); ?></div>
+        <div class="input_description"><?php echo __('Please also provide the reference name, email address and phone number below (required).'); ?></div>
         <div class="file-upload-wrapper" data-text="No file chosen" style="margin-top: 8px;">
             <input id="school_reference_letter" class="input3new admissions_input" type="file" name="school_reference_letter" accept="<?php echo $image_extensions; ?>,.pdf,.doc,.docx" />
         </div>
@@ -104,11 +104,15 @@
     <div class="input_row_3col">
         <div class="input_new">
             <label for="school_reference_name"><?php echo __('Name'); ?>:</label>
-            <input placeholder="<?php echo __(''); ?>..." id="school_reference_name" class="input3new admissions_input take_placeholder" type="text" name="school_reference_name" />
+            <input placeholder="<?php echo __(''); ?>..." id="school_reference_name" class="input3new admissions_input take_placeholder required_input" type="text" name="school_reference_name" />
         </div>
         <div class="input_new">
             <label for="school_reference_email"><?php echo __('Email Address'); ?>:</label>
-            <input placeholder="<?php echo __(''); ?>..." id="school_reference_email" class="input3new admissions_input take_placeholder" type="email" name="school_reference_email" />
+            <input placeholder="<?php echo __(''); ?>..." id="school_reference_email" class="input3new admissions_input take_placeholder required_input" type="email" name="school_reference_email" />
+        </div>
+        <div class="input_new">
+            <label for="school_reference_phone"><?php echo __('Phone Number'); ?>:</label>
+            <input placeholder="<?php echo __(''); ?>..." id="school_reference_phone" class="input3new admissions_input take_placeholder required_input" type="text" name="school_reference_phone" />
         </div>
     </div>
 </div>

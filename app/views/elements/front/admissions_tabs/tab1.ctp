@@ -1,5 +1,5 @@
-<div class="tab tabIn1">
-    <div class="pupil_details-title head_div orange_head"><?php echo __('2. Pupil\'s Information') ?></div>
+<div class="tab tabIn0">
+    <div class="pupil_details-title head_div orange_head"><?php echo __('1. Pupil\'s Information') ?></div>
     <div class="input_description"><?php echo __('Note: Please give the exact spelling as it appears on the birth certificate or passport.'); ?></div>
     <div class="input_row_3col">
         <div class="input_new">

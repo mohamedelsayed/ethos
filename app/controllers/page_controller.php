@@ -359,7 +359,8 @@ class PageController extends AppController {
                 'year_group_applying_to_input', 'gender_input', 'nationality',
                 'religion', 'language', 'require_bus', 'parental_marital_status',
                 'parent_religion_father', 'parent_religion_mother',
-                'parent_type_of_business_father'
+                'parent_type_of_business_father',
+                'school_reference_name', 'school_reference_email', 'school_reference_phone'
             ];
             $required_parent_fields = [1, 2, 3, 5, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
             foreach ($required_parent_fields as $pi) {

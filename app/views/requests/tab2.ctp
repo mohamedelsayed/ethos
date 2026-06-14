@@ -131,3 +131,12 @@ $has_old_fields = isset($dataIn['previous_schools_nursery_1_1']);
         </div>
     </div>
 <?php } ?>
+<?php if (isset($dataIn['school_reference_phone']) && $dataIn['school_reference_phone'] != '') { ?>
+    <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
+        <div class="leftDiv "><?php echo __('School Reference Phone Number'); ?></div>
+        <div class="rightDiv ">
+            <?php echo $dataIn['school_reference_phone']; ?>
+            &nbsp;
+        </div>
+    </div>
+<?php } ?>

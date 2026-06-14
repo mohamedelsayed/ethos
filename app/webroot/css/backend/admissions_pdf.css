@@ -83,3 +83,16 @@ table tr td {
     text-align: center;
     clear: both;
 }
+/* Previous School(s) table: keep all 6 columns (incl. "Reason for leaving")
+   within the page width so long text wraps instead of overflowing off the page. */
+.additional_pupils_informations-table table {
+    table-layout: fixed;
+    width: 100%;
+}
+.additional_pupils_informations-table table tr td {
+    font-size: 12px;
+    padding: 5px 3px;
+    border-right-width: 2px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

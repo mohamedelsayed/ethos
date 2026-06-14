@@ -161,12 +161,6 @@ jQuery(function () {
     jQuery(document).on("change", "#developmental_history5", function () {
         set_required_for_recent_report_if_needed();
     });
-    jQuery(document).on("change", "#school_reference_letter", function () {
-        updateSchoolReferenceValidation();
-    });
-    jQuery(document).on("change keyup", "#school_reference_name, #school_reference_email", function () {
-        updateSchoolReferenceValidation();
-    });
 });
 
 function getRequiredPrevSchoolRows(yearGroupId) {
@@ -236,39 +230,6 @@ function addPrevSchoolRow(rowNum) {
         + '<td><div class="calendar_select"><select class="select form-control form-select" id="prev_school_reason_' + rowNum + '" name="prev_school_reason_' + rowNum + '">' + reasonOptions + '</select></div></td>'
         + '</tr>';
     jQuery('#prev_schools_tbody').append(html);
-}
-
-function updateSchoolReferenceValidation() {
-    var hasFile = jQuery('#school_reference_letter').val() !== '';
-    var hasName = jQuery.trim(jQuery('#school_reference_name').val()).length > 0;
-    var hasEmail = jQuery.trim(jQuery('#school_reference_email').val()).length > 0;
-    if (hasFile || (hasName && hasEmail)) {
-        jQuery('#school_reference_letter').parent('.file-upload-wrapper').removeClass(required_class);
-        jQuery('#school_reference_name').removeClass(required_class);
-        jQuery('#school_reference_email').removeClass(required_class);
-    }
-}
-
-function validateSchoolReference() {
-    var hasFile = jQuery('#school_reference_letter').val() !== '';
-    var hasName = jQuery.trim(jQuery('#school_reference_name').val()).length > 0;
-    var hasEmail = jQuery.trim(jQuery('#school_reference_email').val()).length > 0 && isValidEmailAddress(jQuery('#school_reference_email').val());
-    if (hasFile || (hasName && hasEmail)) {
-        jQuery('#school_reference_letter').parent('.file-upload-wrapper').removeClass(required_class);
-        jQuery('#school_reference_name').removeClass(required_class);
-        jQuery('#school_reference_email').removeClass(required_class);
-        return true;
-    }
-    if (!hasFile && !hasName && !hasEmail) {
-        jQuery('#school_reference_letter').parent('.file-upload-wrapper').addClass(required_class);
-    }
-    if (!hasFile && !hasName) {
-        jQuery('#school_reference_name').addClass(required_class);
-    }
-    if (!hasFile && !hasEmail) {
-        jQuery('#school_reference_email').addClass(required_class);
-    }
-    return false;
 }
 
 function send_addmission_form() {
@@ -479,15 +440,9 @@ function validateForm() {
         }
     });
 
-    // Tab 2 custom validations: school reference and reason for leaving
+    // Tab 2 custom validation: reason for leaving
+    // (School reference name/email/phone are enforced via the required_input class.)
     if (currentTab == 2) {
-        if (!validateSchoolReference()) {
-            valid = false;
-            if (focused == 0) {
-                jQuery('#school_reference_letter').focus();
-                focused = 1;
-            }
-        }
         if (!validatePrevSchoolReasons()) {
             valid = false;
         }

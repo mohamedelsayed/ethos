@@ -28,12 +28,6 @@ foreach ($yearGroups as $yg) {
 </div>
 <?php
 echo $this->Form->create('admissions', array('type' => 'file', 'id' => 'admissionsform', 'class' => 'admissions paddingAll', 'url' => $base_url . '/page/admissionsform/notajax'));
-echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab3', [
-    'yes_no_options' => $yes_no_options,
-    'image_extensions' => $image_extensions,
-    'selected' => $selected,
-    'parental_marital_status_options' => $parental_marital_status_options,
-]);
 echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab1', [
     'terms' => $terms,
     'yearGroups' => $yearGroups,
@@ -41,6 +35,12 @@ echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab1', [
     'yes_no_options' => $yes_no_options,
     'image_extensions' => $image_extensions,
     'selected' => $selected,
+]);
+echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab3', [
+    'yes_no_options' => $yes_no_options,
+    'image_extensions' => $image_extensions,
+    'selected' => $selected,
+    'parental_marital_status_options' => $parental_marital_status_options,
 ]);
 echo $this->element('front' . DS . 'admissions_tabs' . DS . 'tab2', [
     'yes_no_options' => $yes_no_options,
