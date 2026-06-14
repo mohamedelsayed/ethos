@@ -36,18 +36,18 @@ echo $this->Html->css(array('backend/admissions'));
     </div>
     <div id="tapss">
         <ul class="tabs">
-            <li data-tab='tab3' class="current"><a><?php __('Parents Information') ?></a></li>
-            <li data-tab='tab2'><a><?php __('Pupil\'s Information') ?></a></li>
+            <li data-tab='tab2' class="current"><a><?php __('Pupil\'s Information') ?></a></li>
+            <li data-tab='tab3'><a><?php __('Parents Information') ?></a></li>
             <li data-tab='tab1'><a><?php __('Previous School(s) / Nursery') ?></a></li>
             <li data-tab='tab4'><a><?php __('Emergency Information') ?></a></li>
             <li data-tab='tab5'><a><?php __('Developmental History') ?></a></li>
         </ul>
         <div class="panes">
-            <div class="tabdiv" id="tab3" style="display: block;">
-                <?php require_once 'tab3.ctp'; ?>
-            </div>
-            <div class="tabdiv" id="tab2">
+            <div class="tabdiv" id="tab2" style="display: block;">
                 <?php require_once 'tab1.ctp'; ?>
+            </div>
+            <div class="tabdiv" id="tab3">
+                <?php require_once 'tab3.ctp'; ?>
             </div>
             <div class="tabdiv" id="tab1">
                 <?php require_once 'tab2.ctp'; ?>
