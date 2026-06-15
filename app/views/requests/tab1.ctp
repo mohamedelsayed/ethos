@@ -248,8 +248,9 @@
 <?php if (isset($dataIn['reason_for_applying']) && $dataIn['reason_for_applying'] != '') { ?>
 <div class="oneLine <?php if ($i++ % 2 == 0) echo $class; ?>">
     <div class="leftDiv "><?php echo __('Reason for applying'); ?>:</div>
-    <div class="rightDiv ">
-        <textarea readonly rows="3" style="width:100%; border:none; background:transparent; resize:none; font-size:inherit; font-family:inherit;"><?php echo htmlspecialchars($dataIn['reason_for_applying']); ?></textarea>
+    <div class="rightDiv " style="white-space:pre-wrap; overflow-wrap:break-word; word-wrap:break-word; line-height:1.4;">
+        <?php echo nl2br(htmlspecialchars($dataIn['reason_for_applying'])); ?>
+        &nbsp;
     </div>
 </div>
 <?php } ?>
