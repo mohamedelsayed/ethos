@@ -693,6 +693,10 @@ class RequestsController extends AuthController
             $userImage = $base_url . '/' . $dataIn['filesData']['child_photo'];
             $html .= '<img style="float:right; position:absolute;" height="150" src="' . $userImage . '" />';
             $html .= '<img width="200" style="margin-top:20px;" src="' . $imgpath . 'admissionLogo.jpg" />';
+            $applicationDate = !empty($request['Request']['created']) ? date('d-m-Y', strtotime($request['Request']['created'])) : '';
+            if ($applicationDate) {
+                $html .= '<p class="application_date"><strong>Application Date:</strong> ' . $applicationDate . '</p>';
+            }
             $html .= '<h3 class="section_title">1. Pupil\'s Information</h3>';
             $path = ROOT . DS . APP_DIR . DS . 'views' . DS . 'requests' . DS . 'tab1.ctp';
             $html .= $this->render_php_file_for_pdf($path, $request, $this->titleLabel, $terms, $yearGroups, $haveAnySibling);
